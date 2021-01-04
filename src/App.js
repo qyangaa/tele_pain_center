@@ -4,9 +4,9 @@ import { ToastContainer } from "react-toastify";
 import Calendar from "./components/pages/calendar";
 import Chat from "./components/pages/chat";
 import Registration from "./components/pages/registration";
-import Search from "./components/pages/search";
+import Providers from "./components/pages/providers";
 import Tracking from "./components/pages/tracking";
-import NavBar from "./components/tools/navBar";
+import NavBar from "./components/UI/navBar";
 import authService from "./services/authService";
 import NotFound from "./components/pages/notFound";
 
@@ -33,7 +33,7 @@ class App extends Component {
             <Route path="/calendar" component={Calendar} />
             <Route path="/chat" component={Chat} />
             <Route path="/registration" component={Registration} />
-            <Route path="/search" component={Search} />
+            <Route path="/search" component={Providers} />
             <Route path="/tracking" component={Tracking} />
             <Route path="/records" component={Records} />
             <Route path="/not-found" component={NotFound} />
