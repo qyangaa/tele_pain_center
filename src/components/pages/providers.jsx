@@ -10,20 +10,47 @@ class Providers extends Component {
   state = {
     providers: getProviders(),
     filters: getFilters(),
+    smallWindow: false,
   };
 
+  updateDimensions() {
+    if (window.innerWidth < 1000) {
+      this.setState({ smallWindow: true });
+    } else {
+      this.setState({ smallWindow: false });
+    }
+  }
+
+  componentDidMount() {
+    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions.bind(this));
+  }
+
   render() {
-    const { providers, filters } = this.state;
+    const { providers, filters, smallWindow } = this.state;
     providers.map((provider) => (provider.photo = exampleImg));
     return (
       <div className="container-fluid">
-        <div className="row">
-          <div className="col-2">{CollapsibleList(filters, "options")}</div>
-          <div className="col">
+        {!smallWindow && (
+          <div className="row">
+            <div className={"col-3"}>{CollapsibleList(filters, "options")}</div>
+            <div className="col">
+              <SearchBox />
+              {CardDeck(providers)}
+            </div>
+          </div>
+        )}
+        {smallWindow && (
+          <div>
+            {CollapsibleList(filters, "options")}
             <SearchBox />
             {CardDeck(providers)}
           </div>
-        </div>
+        )}
       </div>
     );
   }
