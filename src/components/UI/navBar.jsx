@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import Tracking from "../pages/tracking";
 
 const NavBar = ({ user }) => {
-  // TODO: NavBar not display in small windows
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Brand href="#home">Tele Pain Center</Navbar.Brand>
