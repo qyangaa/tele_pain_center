@@ -27,8 +27,8 @@ export const providers = [
   },
   {
     _id: "00002",
-    name: "Fake One",
-    email: "fake1@example.com",
+    name: "Fake Two",
+    email: "fake2@example.com",
     specialty: "fibromyalgia",
     description:
       "20 years of experience in chronic pain treatment and management",
