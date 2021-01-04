@@ -1,30 +1,25 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import "bootstrap/dist/css/bootstrap.css";
+import Tracking from "../pages/tracking";
 
 const NavBar = ({ user }) => {
   // TODO: NavBar not display in small windows
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div className="navbar-nav">
-          <NavLink className="nav-item nav-link" to="/tracking">
-            Tracking
-          </NavLink>
-          <NavLink className="nav-item nav-link" to="/search">
-            Search Medical Providers
-          </NavLink>
-          <NavLink className="nav-item nav-link" to="/calendar">
-            Calendar
-          </NavLink>
-          <NavLink className="nav-item nav-link" to="/records">
-            Records
-          </NavLink>
-          <NavLink className="nav-item nav-link" to="/chat">
-            Chat
-          </NavLink>
-        </div>
-      </div>
-    </nav>
+    <Navbar bg="light" expand="lg">
+      <Navbar.Brand href="#home">Tele Pain Center</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <Nav.Link href="/tracking">Tracking</Nav.Link>
+          <Nav.Link href="/search">Search Providers</Nav.Link>
+          <Nav.Link href="/calendar">Calendar</Nav.Link>
+          <Nav.Link href="/Records">Records</Nav.Link>
+          <Nav.Link href="/Chat">Chat</Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
