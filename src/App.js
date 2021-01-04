@@ -12,6 +12,7 @@ import NotFound from "./components/pages/notFound";
 
 import "./App.css";
 import Records from "./components/pages/records";
+import { Container } from "react-bootstrap";
 
 class App extends Component {
   state = {};
@@ -28,7 +29,7 @@ class App extends Component {
       <BrowserRouter>
         <ToastContainer />
         <NavBar user={user} />
-        <main className="container">
+        <Container fluid>
           <Switch>
             <Route path="/calendar" component={Calendar} />
             <Route path="/chat" component={Chat} />
@@ -40,7 +41,7 @@ class App extends Component {
             <Redirect from="/" exact to="/tracking" />
             <Redirect to="/not-found" />
           </Switch>
-        </main>
+        </Container>
       </BrowserRouter>
     );
   }
