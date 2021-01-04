@@ -42,8 +42,12 @@ class Providers extends Component {
     );
   };
   render() {
-    const provider = this.state.providers[0];
-    return this.renderProvider(provider);
+    const { providers } = this.state;
+    return (
+      <div class="card-columns">
+        {providers.map((provider) => this.renderProvider(provider))};
+      </div>
+    );
   }
 }
 
