@@ -2,7 +2,7 @@ import React from "react";
 
 const CardItem = (item) => {
   return (
-    <div className="card" style={{ width: 18 + "em" }}>
+    <div className="card" style={{ width: 18 + "em" }} key={item._id}>
       <img
         className="card-img-fluid"
         src={item.photo}
