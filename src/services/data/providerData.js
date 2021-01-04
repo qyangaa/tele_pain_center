@@ -4,6 +4,8 @@ export const providers = [
     name: "Fake Zero",
     email: "fake0@example.com",
     specialty: "fibromyalgia",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Fremont",
     address: "1000 Pine St",
     zip: "94539",
@@ -15,6 +17,8 @@ export const providers = [
     name: "Fake One",
     email: "fake1@example.com",
     specialty: "fibromyalgia",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Fremont",
     address: "1000 Pine St",
     zip: "94539",
@@ -26,6 +30,8 @@ export const providers = [
     name: "Fake One",
     email: "fake1@example.com",
     specialty: "fibromyalgia",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Fremont",
     address: "1000 Pine St",
     zip: "94539",
@@ -37,6 +43,8 @@ export const providers = [
     name: "Fake Three",
     email: "fake3@example.com",
     specialty: "fibromyalgia",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Fremont",
     address: "47300 Rancho Higuera Rd",
     zip: "94539",
@@ -48,6 +56,8 @@ export const providers = [
     name: "Fake Four",
     email: "fake4@example.com",
     specialty: "arthritis",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Mountain View",
     address: "680 Barbara Ave",
     zip: "94040",
@@ -59,6 +69,8 @@ export const providers = [
     name: "Fake Five",
     email: "fake5@example.com",
     specialty: "arthritis",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Mountain View",
     address: "680 Barbara Ave",
     zip: "94040",
@@ -70,6 +82,8 @@ export const providers = [
     name: "Fake six",
     email: "fake6@example.com",
     specialty: "fibromyalgia",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Mountain View",
     address: "460 Thompson Ave",
     zip: "94040",
@@ -81,6 +95,8 @@ export const providers = [
     name: "Fake Seven",
     email: "fake7@example.com",
     specialty: "arthritis",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Mountain View",
     address: "680 Barbara Ave",
     zip: "94040",
@@ -92,6 +108,8 @@ export const providers = [
     name: "Fake Eight",
     email: "fake8@example.com",
     specialty: "Pain Psychology",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Mountain View",
     address: "680 Barbara Ave",
     zip: "94040",
@@ -103,6 +121,8 @@ export const providers = [
     name: "Fake Nine",
     email: "fake9@example.com",
     specialty: "Occupational Therapy",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Fremont",
     address: " 1000 Pine St",
     zip: "94539",
@@ -114,6 +134,8 @@ export const providers = [
     name: "Fake Ten",
     email: "fake10@example.com",
     specialty: "Physical Therapy",
+    description:
+      "20 years of experience in chronic pain treatment and management",
     city: "Fremont",
     address: " 1000 Pine St",
     zip: "94539",
