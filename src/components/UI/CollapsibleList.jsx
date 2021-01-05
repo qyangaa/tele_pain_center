@@ -20,7 +20,7 @@ class CollapsibleList extends Component {
               <Accordion.Collapse eventKey={group._id} key={item._id}>
                 <Card.Body
                   key={item._id}
-                  onClick={() => onSelect(group._id + ":" + item._id)}
+                  onClick={() => onSelect(`${group._id}:${item._id}`)}
                 >
                   {item.name}
                 </Card.Body>

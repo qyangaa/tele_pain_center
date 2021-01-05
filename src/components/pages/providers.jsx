@@ -32,34 +32,44 @@ class Providers extends Component {
   }
 
   handleSelect = (item) => {
+    // item: "filter_id:item_id"
     let selected = [...this.state.selectedFilters];
     if (!selected.includes(item)) {
       selected.push(item);
     } else {
-      console.log("deleting");
       selected = this.state.selectedFilters.filter((i) => i !== item);
     }
     this.setState({ selectedFilters: selected });
   };
 
   getPagedData = () => {
+    // provider: group_id: name
     const { providers: allProviders, selectedFilters } = this.state;
     let filteredProviders = allProviders;
-    for (let filter in selectedFilters) {
-      filteredProviders = filteredProviders.filter();
+    for (const filterKey of selectedFilters) {
+      const { group, item } = this.obtainFilter(filterKey);
+      filteredProviders = filteredProviders.filter(
+        (provider) => provider[group._id] === item.name
+      );
     }
+    return { data: filteredProviders };
   };
 
-  obtainField = (key) => {
+  obtainFilter = (key) => {
     const { filters } = this.state;
     const splitKey = key.split(":");
-    return splitKey;
+
+    const group = filters.filter((group) => group._id === splitKey[0])[0];
+    const item = group.options.filter((item) => item._id === splitKey[1])[0];
+    console.log(group);
+    return { group, item };
   };
 
   render() {
-    const { providers, filters, smallWindow } = this.state;
+    const { filters, smallWindow } = this.state;
+    const { data: providers } = this.getPagedData();
     providers.map((provider) => (provider.photo = exampleImg));
-    // console.log(this.obtainField());
+
     return (
       <div className="container-fluid">
         {!smallWindow && (
