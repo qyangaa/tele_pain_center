@@ -10,6 +10,7 @@ class Providers extends Component {
   state = {
     providers: getProviders(),
     filters: getFilters(),
+    selectedFilters: [],
     smallWindow: false,
   };
 
@@ -30,6 +31,25 @@ class Providers extends Component {
     window.removeEventListener("resize", this.updateDimensions.bind(this));
   }
 
+  handleSelect = (item) => {
+    const selected = [...this.state.selectedFilters];
+    if (!selected.includes(item)) {
+      selected.push(item);
+    }
+    this.setState({ selectedFilters: selected });
+  };
+
+  handleDeleteSelect = (item) => {
+    const selected = [...this.state.selectedFilters];
+    const index = selected.indexOf(item);
+    if (index > -1) {
+      selected.splice(index, 1);
+    } else {
+      console.log("item not selected");
+    }
+    this.setState({ selectedFilters: selected });
+  };
+
   render() {
     const { providers, filters, smallWindow } = this.state;
     providers.map((provider) => (provider.photo = exampleImg));
@@ -37,7 +57,9 @@ class Providers extends Component {
       <div className="container-fluid">
         {!smallWindow && (
           <div className="row">
-            <div className={"col-3"}>{CollapsibleList(filters, "options")}</div>
+            <div className={"col-3"}>
+              <CollapsibleList groups={filters} itemKey="options" />
+            </div>
             <div className="col">
               <SearchBox />
               {CardDeck(providers, smallWindow)}
