@@ -32,33 +32,44 @@ class Providers extends Component {
   }
 
   handleSelect = (item) => {
-    const selected = [...this.state.selectedFilters];
+    let selected = [...this.state.selectedFilters];
     if (!selected.includes(item)) {
       selected.push(item);
+    } else {
+      console.log("deleting");
+      selected = this.state.selectedFilters.filter((i) => i !== item);
     }
     this.setState({ selectedFilters: selected });
   };
 
-  handleDeleteSelect = (item) => {
-    const selected = [...this.state.selectedFilters];
-    const index = selected.indexOf(item);
-    if (index > -1) {
-      selected.splice(index, 1);
-    } else {
-      console.log("item not selected");
+  getPagedData = () => {
+    const { providers: allProviders, selectedFilters } = this.state;
+    let filteredProviders = allProviders;
+    for (let filter in selectedFilters) {
+      filteredProviders = filteredProviders.filter();
     }
-    this.setState({ selectedFilters: selected });
+  };
+
+  obtainField = (key) => {
+    const { filters } = this.state;
+    const splitKey = key.split(":");
+    return splitKey;
   };
 
   render() {
     const { providers, filters, smallWindow } = this.state;
     providers.map((provider) => (provider.photo = exampleImg));
+    // console.log(this.obtainField());
     return (
       <div className="container-fluid">
         {!smallWindow && (
           <div className="row">
             <div className={"col-3"}>
-              <CollapsibleList groups={filters} itemKey="options" />
+              <CollapsibleList
+                groups={filters}
+                itemKey="options"
+                onSelect={this.handleSelect}
+              />
             </div>
             <div className="col">
               <SearchBox />

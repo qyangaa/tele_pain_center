@@ -4,7 +4,7 @@ import Accordion from "react-bootstrap/Accordion";
 
 class CollapsibleList extends Component {
   render() {
-    const { groups, itemKey } = this.props;
+    const { groups, itemKey, onSelect } = this.props;
     return (
       <Accordion defaultActiveKey="0">
         {groups.map((group) => (
@@ -18,7 +18,12 @@ class CollapsibleList extends Component {
             </Accordion.Toggle>
             {group[itemKey].map((item) => (
               <Accordion.Collapse eventKey={group._id} key={item._id}>
-                <Card.Body key={item._id}>{item.name}</Card.Body>
+                <Card.Body
+                  key={item._id}
+                  onClick={() => onSelect(group._id + ":" + item._id)}
+                >
+                  {item.name}
+                </Card.Body>
               </Accordion.Collapse>
             ))}
           </Card>
