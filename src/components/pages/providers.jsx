@@ -14,7 +14,7 @@ class Providers extends Component {
   };
 
   updateDimensions() {
-    if (window.innerWidth < 1000) {
+    if (window.innerWidth < 800) {
       this.setState({ smallWindow: true });
     } else {
       this.setState({ smallWindow: false });
@@ -40,7 +40,7 @@ class Providers extends Component {
             <div className={"col-3"}>{CollapsibleList(filters, "options")}</div>
             <div className="col">
               <SearchBox />
-              {CardDeck(providers)}
+              {CardDeck(providers, smallWindow)}
             </div>
           </div>
         )}
@@ -48,7 +48,7 @@ class Providers extends Component {
           <div>
             {CollapsibleList(filters, "options")}
             <SearchBox />
-            {CardDeck(providers)}
+            {CardDeck(providers, smallWindow)}
           </div>
         )}
       </div>

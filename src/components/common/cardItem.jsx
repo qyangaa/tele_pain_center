@@ -1,25 +1,46 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
-const CardItem = (item) => {
+const CardItem = (item, smallWindow) => {
   return (
-    <Card>
-      <div className="row">
-        <div className="col-2">
-          <Card.Img variant="top" src={item.photo} />
-        </div>
-        <div className="col">
+    <Card key={item._id}>
+      <Row className="align-items-center">
+        {!smallWindow && (
+          <Col
+            xs={0}
+            md={3}
+            lg={3}
+            className="align-items-center"
+            style={{ margin: 20 }}
+          >
+            <div>
+              <Image
+                src={item.photo}
+                roundedCircle
+                fluid="true"
+                className="m-auto"
+                style={{ alignSelf: "center" }}
+              />
+            </div>
+          </Col>
+        )}
+        <Col>
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </Card.Text>
-            <Button variant="primary">Go somewhere</Button>
+            <Card.Title>{item.name}</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">
+              {item.specialty}
+            </Card.Subtitle>
+            <Card.Text>{item.description}</Card.Text>
+            <Card.Text>{`${item.address}, ${item.city}, ${item.state}, ${item.zip}`}</Card.Text>
+            <Button variant="primary">Appointment</Button>{" "}
+            <Button variant="primary">Message</Button>
           </Card.Body>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </Card>
   );
 };
