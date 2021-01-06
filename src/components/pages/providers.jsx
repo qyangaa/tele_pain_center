@@ -111,10 +111,6 @@ class Providers extends Component {
     for (const group in groupedFilters) {
       let curProviders = [];
       for (const item of groupedFilters[group]) {
-        let newProvider = filteredProviders.filter(
-          (provider) => provider[group] === item.name
-        );
-
         curProviders = curProviders.concat(
           filteredProviders.filter((provider) => provider[group] === item.name)
         );
