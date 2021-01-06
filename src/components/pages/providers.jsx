@@ -7,6 +7,7 @@ import SearchBox from "../UI/searchBox";
 import getFilters from "../../services/FilterService";
 import CollapsibleList from "../UI/CollapsibleList";
 import { providers } from "../../services/data/providerData";
+import Pagination from "../UI/Pagination";
 class Providers extends Component {
   state = {
     providers: getProviders(),
@@ -112,6 +113,7 @@ class Providers extends Component {
             <div className="col">
               <SearchBox onChange={this.handleSearch}/>
               {CardDeck(providers, smallWindow)}
+              <Pagination />
             </div>
           </div>
         )}
