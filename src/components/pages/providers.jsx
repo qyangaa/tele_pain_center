@@ -124,7 +124,13 @@ class Providers extends Component {
   };
 
   render() {
-    const { filters, smallWindow, currentPage, pageSize } = this.state;
+    const {
+      filters,
+      smallWindow,
+      currentPage,
+      pageSize,
+      selectedFilters,
+    } = this.state;
     const { itemsCount, data: providers } = this.getPagedData();
     providers.map((provider) => (provider.photo = exampleImg));
 
@@ -137,6 +143,7 @@ class Providers extends Component {
                 groups={filters}
                 itemKey="options"
                 onSelect={this.handleSelect}
+                selectedItems={selectedFilters}
               />
             </div>
             <div className="col">
@@ -157,6 +164,7 @@ class Providers extends Component {
               groups={filters}
               itemKey="options"
               onSelect={this.handleSelect}
+              selectedItems={selectedFilters}
             />
             <SearchBox onChange={this.handleSearch} />
             {CardDeck(providers, smallWindow)}
