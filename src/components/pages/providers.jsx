@@ -8,13 +8,16 @@ import getFilters from "../../services/FilterService";
 import CollapsibleList from "../UI/CollapsibleList";
 import { providers } from "../../services/data/providerData";
 import Pagination from "../UI/Pagination";
+import { paginate } from "../../utils/paginate";
 class Providers extends Component {
   state = {
     providers: getProviders(),
     filters: getFilters(),
     selectedFilters: [],
     smallWindow: false,
-    searchQuery:""
+    searchQuery: "",
+    currentPage: 1,
+    pageSize: 5,
   };
 
   updateDimensions() {
@@ -45,58 +48,78 @@ class Providers extends Component {
     this.setState({ selectedFilters: selected });
   };
 
-  handleSearch = query=>{
-    if (query!= this.state.searchQuery){
-      this.setState({searchQuery: query})
+  handleSearch = (query) => {
+    if (query != this.state.searchQuery) {
+      this.setState({ searchQuery: query });
     }
-  }
+  };
+
+  handlePageChange = (page) => {
+    this.setState({ currentPage: page });
+  };
 
   obtainFilter = (key) => {
     const { filters } = this.state;
     const splitKey = key.split(":");
-    
+
     const group = filters.filter((group) => group._id === splitKey[0])[0];
     const item = group.options.filter((item) => item._id === splitKey[1])[0];
     console.log(group);
     return { group, item };
   };
-  
-  filterSearch = (searchQuery, provider) =>{
-    if(!searchQuery){
-      return true
-    } 
-    const searchFields= ["address","city","description","name","specialty"]
-    for(const field of searchFields){
-      if(provider[field].toLowerCase().includes(searchQuery.toLowerCase())){
-        console.log("true")
-        return true
+
+  filterSearch = (searchQuery, provider) => {
+    if (!searchQuery) {
+      return true;
+    }
+    const searchFields = [
+      "address",
+      "city",
+      "description",
+      "name",
+      "specialty",
+    ];
+    for (const field of searchFields) {
+      if (provider[field].toLowerCase().includes(searchQuery.toLowerCase())) {
+        console.log("true");
+        return true;
       }
     }
-    console.log("false")
-    return false
-  }
-
+    console.log("false");
+    return false;
+  };
 
   getPagedData = () => {
     // provider: group_id: name
-    const { providers: allProviders, selectedFilters, searchQuery } = this.state;
+    const {
+      providers: allProviders,
+      selectedFilters,
+      searchQuery,
+      currentPage,
+      pageSize,
+    } = this.state;
     let filteredProviders = allProviders;
-    if(searchQuery){
-      filteredProviders = filteredProviders.filter((provider)=>this.filterSearch(searchQuery,provider))
+    if (searchQuery) {
+      filteredProviders = filteredProviders.filter((provider) =>
+        this.filterSearch(searchQuery, provider)
+      );
     }
-    
+
     for (const filterKey of selectedFilters) {
       const { group, item } = this.obtainFilter(filterKey);
       filteredProviders = filteredProviders.filter(
         (provider) => provider[group._id] === item.name
       );
     }
-    return { data: filteredProviders };
+    const itemsCount = filteredProviders.length;
+    filteredProviders = paginate(filteredProviders, currentPage, pageSize);
+
+    return { itemsCount, data: filteredProviders };
   };
 
   render() {
-    const { filters, smallWindow } = this.state;
-    const { data: providers } = this.getPagedData();
+    const { filters, smallWindow, currentPage, pageSize } = this.state;
+    const { itemsCount, data: providers } = this.getPagedData();
     providers.map((provider) => (provider.photo = exampleImg));
 
     return (
@@ -111,20 +134,25 @@ class Providers extends Component {
               />
             </div>
             <div className="col">
-              <SearchBox onChange={this.handleSearch}/>
+              <SearchBox onChange={this.handleSearch} />
               {CardDeck(providers, smallWindow)}
-              <Pagination />
+              <Pagination
+                itemsCount={itemsCount}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={this.handlePageChange}
+              />
             </div>
           </div>
         )}
         {smallWindow && (
           <div>
-              <CollapsibleList
-                groups={filters}
-                itemKey="options"
-                onSelect={this.handleSelect}
-              />
-            <SearchBox onChange={this.handleSearch}/>
+            <CollapsibleList
+              groups={filters}
+              itemKey="options"
+              onSelect={this.handleSelect}
+            />
+            <SearchBox onChange={this.handleSearch} />
             {CardDeck(providers, smallWindow)}
           </div>
         )}
