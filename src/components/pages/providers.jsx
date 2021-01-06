@@ -6,12 +6,14 @@ import CardDeck from "../common/cardDeck";
 import SearchBox from "../UI/searchBox";
 import getFilters from "../../services/FilterService";
 import CollapsibleList from "../UI/CollapsibleList";
+import { providers } from "../../services/data/providerData";
 class Providers extends Component {
   state = {
     providers: getProviders(),
     filters: getFilters(),
     selectedFilters: [],
     smallWindow: false,
+    searchQuery:""
   };
 
   updateDimensions() {
@@ -42,10 +44,46 @@ class Providers extends Component {
     this.setState({ selectedFilters: selected });
   };
 
+  handleSearch = query=>{
+    if (query!= this.state.searchQuery){
+      this.setState({searchQuery: query})
+    }
+  }
+
+  obtainFilter = (key) => {
+    const { filters } = this.state;
+    const splitKey = key.split(":");
+    
+    const group = filters.filter((group) => group._id === splitKey[0])[0];
+    const item = group.options.filter((item) => item._id === splitKey[1])[0];
+    console.log(group);
+    return { group, item };
+  };
+  
+  filterSearch = (searchQuery, provider) =>{
+    if(!searchQuery){
+      return true
+    } 
+    const searchFields= ["address","city","description","name","specialty"]
+    for(const field of searchFields){
+      if(provider[field].toLowerCase().includes(searchQuery.toLowerCase())){
+        console.log("true")
+        return true
+      }
+    }
+    console.log("false")
+    return false
+  }
+
+
   getPagedData = () => {
     // provider: group_id: name
-    const { providers: allProviders, selectedFilters } = this.state;
+    const { providers: allProviders, selectedFilters, searchQuery } = this.state;
     let filteredProviders = allProviders;
+    if(searchQuery){
+      filteredProviders = filteredProviders.filter((provider)=>this.filterSearch(searchQuery,provider))
+    }
+    
     for (const filterKey of selectedFilters) {
       const { group, item } = this.obtainFilter(filterKey);
       filteredProviders = filteredProviders.filter(
@@ -53,16 +91,6 @@ class Providers extends Component {
       );
     }
     return { data: filteredProviders };
-  };
-
-  obtainFilter = (key) => {
-    const { filters } = this.state;
-    const splitKey = key.split(":");
-
-    const group = filters.filter((group) => group._id === splitKey[0])[0];
-    const item = group.options.filter((item) => item._id === splitKey[1])[0];
-    console.log(group);
-    return { group, item };
   };
 
   render() {
@@ -82,15 +110,19 @@ class Providers extends Component {
               />
             </div>
             <div className="col">
-              <SearchBox />
+              <SearchBox onChange={this.handleSearch}/>
               {CardDeck(providers, smallWindow)}
             </div>
           </div>
         )}
         {smallWindow && (
           <div>
-            {CollapsibleList(filters, "options")}
-            <SearchBox />
+              <CollapsibleList
+                groups={filters}
+                itemKey="options"
+                onSelect={this.handleSelect}
+              />
+            <SearchBox onChange={this.handleSearch}/>
             {CardDeck(providers, smallWindow)}
           </div>
         )}
