@@ -58,14 +58,20 @@ class Providers extends Component {
     this.setState({ currentPage: page });
   };
 
-  obtainFilter = (key) => {
-    const { filters } = this.state;
-    const splitKey = key.split(":");
-
-    const group = filters.filter((group) => group._id === splitKey[0])[0];
-    const item = group.options.filter((item) => item._id === splitKey[1])[0];
-    console.log(group);
-    return { group, item };
+  obtainFilters = () => {
+    const { filters, selectedFilters } = this.state;
+    const groupedFilters = {};
+    for (const key of selectedFilters) {
+      const splitKey = key.split(":");
+      const group = filters.filter((group) => group._id === splitKey[0])[0];
+      const item = group.options.filter((item) => item._id === splitKey[1])[0];
+      if (group._id in groupedFilters) {
+        groupedFilters[group._id].push(item);
+      } else {
+        groupedFilters[group._id] = [item];
+      }
+    }
+    return groupedFilters;
   };
 
   filterSearch = (searchQuery, provider) => {
@@ -81,11 +87,9 @@ class Providers extends Component {
     ];
     for (const field of searchFields) {
       if (provider[field].toLowerCase().includes(searchQuery.toLowerCase())) {
-        console.log("true");
         return true;
       }
     }
-    console.log("false");
     return false;
   };
 
@@ -93,7 +97,6 @@ class Providers extends Component {
     // provider: group_id: name
     const {
       providers: allProviders,
-      selectedFilters,
       searchQuery,
       currentPage,
       pageSize,
@@ -104,12 +107,19 @@ class Providers extends Component {
         this.filterSearch(searchQuery, provider)
       );
     }
+    const groupedFilters = this.obtainFilters();
+    for (const group in groupedFilters) {
+      let curProviders = [];
+      for (const item of groupedFilters[group]) {
+        let newProvider = filteredProviders.filter(
+          (provider) => provider[group] === item.name
+        );
 
-    for (const filterKey of selectedFilters) {
-      const { group, item } = this.obtainFilter(filterKey);
-      filteredProviders = filteredProviders.filter(
-        (provider) => provider[group._id] === item.name
-      );
+        curProviders = curProviders.concat(
+          filteredProviders.filter((provider) => provider[group] === item.name)
+        );
+      }
+      filteredProviders = curProviders;
     }
     const itemsCount = filteredProviders.length;
     filteredProviders = paginate(filteredProviders, currentPage, pageSize);
@@ -154,6 +164,12 @@ class Providers extends Component {
             />
             <SearchBox onChange={this.handleSearch} />
             {CardDeck(providers, smallWindow)}
+            <Pagination
+              itemsCount={itemsCount}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={this.handlePageChange}
+            />
           </div>
         )}
       </div>
