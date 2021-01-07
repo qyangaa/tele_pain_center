@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Calendar from "./components/pages/calendar";
 import Chat from "./components/pages/chat";
-import Registration from "./components/pages/registration";
+import Registration from "./components/pages/Registration";
 import Providers from "./components/pages/providers";
 import Tracking from "./components/pages/tracking";
 import NavBar from "./components/UI/navBar";

@@ -16,6 +16,7 @@ const NavBar = ({ user }) => {
           <Nav.Link href="/calendar">Calendar</Nav.Link>
           <Nav.Link href="/Records">Records</Nav.Link>
           <Nav.Link href="/Chat">Chat</Nav.Link>
+          <Nav.Link href="/registration">Registration</Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
