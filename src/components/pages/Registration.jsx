@@ -22,11 +22,12 @@ export default function Registration() {
       setError("");
       setLoading(true); //disable sign up button when waiting
       await signup(emailRef.current.value, passwordRef.current.value);
+      setLoading(false);
       history.push("/");
     } catch {
       setError("Failed to create an account");
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (

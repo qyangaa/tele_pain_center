@@ -32,16 +32,17 @@ export default function UpdateProfile() {
     Promise.all(promises)
       .then(() => {
         //successful
+        setLoading(false);
+        setError("");
         history.push("/");
       })
       .catch(() => {
         //error
         setError("Failed to create an account");
-      })
-      .finally(() => {
         setError("");
         setLoading(false);
-      });
+      })
+      .finally(() => {});
   }
 
   return (
