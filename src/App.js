@@ -14,6 +14,7 @@ import "./App.css";
 import Records from "./components/pages/records";
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "./contexts/AuthContext";
+import Login from "./components/pages/Login";
 
 class App extends Component {
   state = {};
@@ -22,16 +23,17 @@ class App extends Component {
     const { user } = this.state;
 
     return (
-      <AuthProvider>
-        <BrowserRouter>
-          {console.log(".env test:", process.env.REACT_APP_TEST)}
-          <ToastContainer />
-          <NavBar user={user} />
-          <Container fluid>
+      <BrowserRouter>
+        {console.log(".env test:", process.env.REACT_APP_TEST)}
+        <ToastContainer />
+        <NavBar user={user} />
+        <Container fluid>
+          <AuthProvider>
             <Switch>
               <Route path="/calendar" component={Calendar} />
               <Route path="/chat" component={Chat} />
               <Route path="/registration" component={Registration} />
+              <Route path="/login" component={Login} />
               <Route path="/search" component={Providers} />
               <Route path="/tracking" component={Tracking} />
               <Route path="/records" component={Records} />
@@ -39,9 +41,9 @@ class App extends Component {
               <Redirect from="/" exact to="/tracking" />
               <Redirect to="/not-found" />
             </Switch>
-          </Container>
-        </BrowserRouter>
-      </AuthProvider>
+          </AuthProvider>
+        </Container>
+      </BrowserRouter>
     );
   }
 }
