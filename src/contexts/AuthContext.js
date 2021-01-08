@@ -19,9 +19,27 @@ export function AuthProvider({ children }) {
     // line to change if change authentication method
     auth.signInWithEmailAndPassword(email, password);
   }
+
+  function logout() {
+    return auth.signOut();
+  }
+
+  function resetPassword(email) {
+    return auth.sendPasswordResetEmail(email);
+  }
+
+  function updateEmail(email) {
+    return currentUser.updateEmail(email);
+  }
+
+  function updatePassword(password) {
+    return currentUser.updatePassword(password);
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
+
       setLoading(false); // do not render until have set current user
     });
     return unsubscribe;
@@ -31,6 +49,10 @@ export function AuthProvider({ children }) {
     currentUser,
     login,
     signup,
+    logout,
+    resetPassword,
+    updateEmail,
+    updatePassword,
   };
   return (
     <AuthContext.Provider value={value}>

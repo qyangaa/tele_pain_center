@@ -7,14 +7,17 @@ import Registration from "./components/pages/Registration";
 import Providers from "./components/pages/providers";
 import Tracking from "./components/pages/tracking";
 import NavBar from "./components/UI/navBar";
-import authService from "./services/authService";
 import NotFound from "./components/pages/notFound";
+import Dashboard from "./components/pages/Dashboard";
+import ForgotPassword from "./components/pages/ForgotPassword";
 
 import "./App.css";
 import Records from "./components/pages/records";
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "./contexts/AuthContext";
 import Login from "./components/pages/Login";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import UpdateProfile from "./components/pages/UpdateProfile";
 
 class App extends Component {
   state = {};
@@ -33,6 +36,12 @@ class App extends Component {
               <Route path="/calendar" component={Calendar} />
               <Route path="/chat" component={Chat} />
               <Route path="/registration" component={Registration} />
+              <ProtectedRoute path="/dashboard" component={Dashboard} />
+              <ProtectedRoute
+                path="/update-profile"
+                component={UpdateProfile}
+              />
+              <Route path="/forgot-password" component={ForgotPassword} />
               <Route path="/login" component={Login} />
               <Route path="/search" component={Providers} />
               <Route path="/tracking" component={Tracking} />

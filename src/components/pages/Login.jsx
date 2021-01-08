@@ -6,7 +6,6 @@ import { useAuth } from "../../contexts/AuthContext";
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  console.log("useAuth:", useAuth);
   const { login } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,7 +20,7 @@ export default function Login() {
       await login(emailRef.current.value, passwordRef.current.value);
       history.push("/");
     } catch {
-      setError("Failed to log in");
+      setError(`Failed to log in`);
     }
     setLoading(false);
   }
@@ -49,8 +48,12 @@ export default function Login() {
                 Log in
               </Button>
             </Form>
+            <div className="w-100 text-center mt-2">
+              <Link to="/forgot-password">Forgot Password</Link>
+            </div>
           </Card.Body>
         </Card>
+
         <div className="w-100 text-center mt-2">
           {"Need an account? "}
           <Link to="/registration">Sign up</Link>
