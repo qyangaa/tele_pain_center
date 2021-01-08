@@ -1,10 +1,32 @@
-import React, { useRef } from "react";
-import { Card, Button, Form, Container } from "react-bootstrap";
+import React, { useRef, useState } from "react";
+import { Card, Button, Form, Container, Alert } from "react-bootstrap";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function Registration() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
+  console.log("useAuth:", useAuth);
+  const { signup } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      return setError("Password do not match");
+    }
+
+    try {
+      setError("");
+      setLoading(true); //disable sign up button when waiting
+      await signup(emailRef.current.value, passwordRef.current.value);
+    } catch {
+      setError("Failed to create an account");
+    }
+    setLoading(false);
+  }
+
   return (
     <Container
       className="d-flex align-items-center justify-content-center"
@@ -14,7 +36,8 @@ export default function Registration() {
         <Card>
           <Card.Body>
             <h2 className="text-center mb-4"> Sign Up</h2>
-            <Form>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
               <Form.Group id="email">
                 <Form.Label>Email</Form.Label>
                 <Form.Control type="email" ref={emailRef} required />
@@ -31,7 +54,7 @@ export default function Registration() {
                   required
                 />
               </Form.Group>
-              <Button className="w-100" type="submit">
+              <Button disabled={loading} className="w-100" type="submit">
                 Sign Up
               </Button>
             </Form>

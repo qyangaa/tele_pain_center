@@ -13,36 +13,35 @@ import NotFound from "./components/pages/notFound";
 import "./App.css";
 import Records from "./components/pages/records";
 import { Container } from "react-bootstrap";
+import { AuthProvider } from "./contexts/AuthContext";
 
 class App extends Component {
   state = {};
-
-  componentDidMount() {
-    const user = authService.getCurrentUser();
-    this.setState({ user });
-  }
 
   render() {
     const { user } = this.state;
 
     return (
-      <BrowserRouter>
-        <ToastContainer />
-        <NavBar user={user} />
-        <Container fluid>
-          <Switch>
-            <Route path="/calendar" component={Calendar} />
-            <Route path="/chat" component={Chat} />
-            <Route path="/registration" component={Registration} />
-            <Route path="/search" component={Providers} />
-            <Route path="/tracking" component={Tracking} />
-            <Route path="/records" component={Records} />
-            <Route path="/not-found" component={NotFound} />
-            <Redirect from="/" exact to="/tracking" />
-            <Redirect to="/not-found" />
-          </Switch>
-        </Container>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          {console.log(".env test:", process.env.REACT_APP_TEST)}
+          <ToastContainer />
+          <NavBar user={user} />
+          <Container fluid>
+            <Switch>
+              <Route path="/calendar" component={Calendar} />
+              <Route path="/chat" component={Chat} />
+              <Route path="/registration" component={Registration} />
+              <Route path="/search" component={Providers} />
+              <Route path="/tracking" component={Tracking} />
+              <Route path="/records" component={Records} />
+              <Route path="/not-found" component={NotFound} />
+              <Redirect from="/" exact to="/tracking" />
+              <Redirect to="/not-found" />
+            </Switch>
+          </Container>
+        </BrowserRouter>
+      </AuthProvider>
     );
   }
 }
