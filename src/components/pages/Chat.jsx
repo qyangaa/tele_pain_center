@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, FormControl } from "react-bootstrap";
 import Message from "../common/Message";
+import { db } from "../../services/Firebase/firebase";
+import firebase from "firebase/app";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -8,15 +10,26 @@ export default function Chat() {
     { username: "asdas", text: "asdasd" },
     { username: "asdas", text: "asdasd" },
   ]);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("Temp2");
 
   useEffect(() => {
-    setUsername(prompt("Please enter your name"));
+    db.collection("messages")
+      .orderBy("timestamp", "asc")
+      .limitToLast(10)
+      .onSnapshot((snapshot) => {
+        setMessages(snapshot.docs.map((doc) => doc.data()));
+      });
   }, []);
 
-  const submit = (event) => {
+  const sendMessage = (event) => {
     event.preventDefault();
-    setMessages([...messages, { username: username, text: input }]);
+    db.collection("messages").add({
+      username: username,
+      text: input,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    // setMessages([...messages, { username: username, text: input }]);
     setInput("");
   };
   return (
@@ -37,7 +50,7 @@ export default function Chat() {
           value={input}
           onChange={(event) => setInput(event.target.value)}
         />
-        <Button disabled={!input} type="submit" onClick={submit}>
+        <Button disabled={!input} type="submit" onClick={sendMessage}>
           Submit
         </Button>
       </Form>

@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 
 //TODO: .env file doesn't work
 
@@ -24,4 +25,5 @@ const firebaseApp = firebase.initializeApp({
 });
 
 export const auth = firebaseApp.auth();
+export const db = firebaseApp.firestore();
 export default firebaseApp;

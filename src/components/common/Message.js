@@ -8,7 +8,7 @@ export default function Message(props) {
   return (
     <div>
       <Card className={`message ${isUser && "message__user"}`}>
-        {message.text} [{username}]
+        {message.text} [{message.username}]
       </Card>
     </div>
   );
