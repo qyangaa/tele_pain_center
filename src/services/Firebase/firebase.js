@@ -13,7 +13,7 @@ import "firebase/auth";
 //   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 // });
 
-const app = firebase.initializeApp({
+const firebaseApp = firebase.initializeApp({
   apiKey: "AIzaSyBma-7xsUDmj2BnM5VMlO4xGplw0wTHdqI",
   authDomain: "telepaincenter.firebaseapp.com",
   projectId: "telepaincenter",
@@ -23,5 +23,5 @@ const app = firebase.initializeApp({
   measurementId: "G-CQKP9F6YMW",
 });
 
-export const auth = app.auth();
-export default app;
+export const auth = firebaseApp.auth();
+export default firebaseApp;

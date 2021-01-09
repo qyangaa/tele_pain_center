@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Calendar from "./components/pages/calendar";
-import Chat from "./components/pages/chat";
+import Chat from "./components/pages/Chat";
 import Registration from "./components/pages/Registration";
 import Providers from "./components/pages/providers";
 import Tracking from "./components/pages/tracking";
