@@ -8,9 +8,12 @@ export default function Message(props) {
   const isUser = uid === message.uid;
   return (
     <div>
-      <Card className={`message ${isUser && "message__user"}`}>
-        {message.text} [{nameDict[message.uid]}]
-      </Card>
+      <p className={`message ${isUser && "message__user"}`}>
+        {nameDict[message.uid] || "Anonymous"}
+        <Card className={`message__card ${isUser && "message__card__user"}`}>
+          {message.text}
+        </Card>
+      </p>
     </div>
   );
 }
