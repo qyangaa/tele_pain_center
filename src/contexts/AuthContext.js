@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { auth } from "../services/Firebase/firebase";
+import { auth, db } from "../services/Firebase/firebase";
 
 const AuthContext = React.createContext();
 
@@ -9,6 +9,8 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState("");
+  const [uid, setuid] = useState("");
 
   function signup(email, password) {
     // line to change if change authentication method
@@ -36,10 +38,21 @@ export function AuthProvider({ children }) {
     return currentUser.updatePassword(password);
   }
 
+  function getUsername(uid) {
+    db.collection("users")
+      .doc(uid)
+      .get()
+      .then((doc) => {
+        setUsername(doc.data().username);
+      });
+    return;
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
-
+      setuid(user.uid);
+      getUsername(user.uid);
       setLoading(false); // do not render until have set current user
     });
     return unsubscribe;
@@ -53,6 +66,8 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
+    uid,
+    username,
   };
   return (
     <AuthContext.Provider value={value}>

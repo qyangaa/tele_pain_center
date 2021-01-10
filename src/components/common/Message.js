@@ -3,12 +3,13 @@ import { Card } from "react-bootstrap";
 import "./Message.css";
 
 export default function Message(props) {
-  const { message, username } = props;
-  const isUser = username === message.username;
+  const { message, nameDict, uid } = props;
+  console.log(nameDict);
+  const isUser = uid === message.uid;
   return (
     <div>
       <Card className={`message ${isUser && "message__user"}`}>
-        {message.text} [{message.username}]
+        {message.text} [{nameDict[message.uid]}]
       </Card>
     </div>
   );

@@ -3,6 +3,7 @@ import { Button, Form, FormControl } from "react-bootstrap";
 import Message from "../common/Message";
 import { db } from "../../services/Firebase/firebase";
 import firebase from "firebase/app";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -10,10 +11,35 @@ export default function Chat() {
     { username: "asdas", text: "asdasd" },
     { username: "asdas", text: "asdasd" },
   ]);
-  const [username, setUsername] = useState("Temp2");
+  const { uid, username } = useAuth();
+  const groupid = "cndh7Tr86fjKTKL09Rkx";
+  const groupRef = db.collection("groups").doc(groupid);
+  const usersRef = db.collection("users");
+  const messagesRef = groupRef.collection("messages");
+
+  const [nameDict, setNameDict] = useState({});
+
+  const getUserInfo = (uid) => {
+    usersRef
+      .doc(uid)
+      .get()
+      .then((doc) => {
+        setNameDict({ ...nameDict, [uid]: doc.data().username });
+      });
+  };
 
   useEffect(() => {
-    db.collection("messages")
+    groupRef.get().then((doc) => {
+      doc.data().users.map((uid) => {
+        getUserInfo(uid);
+      });
+    });
+  }, []);
+
+  //  TODO: problem with asynchronous update of nameDict. See how to execute async function sequentialy
+  //https://medium.com/@wereHamster/beware-react-setstate-is-asynchronous-ce87ef1a9cf3
+  useEffect(() => {
+    messagesRef
       .orderBy("timestamp", "asc")
       .limitToLast(10)
       .onSnapshot((snapshot) => {
@@ -23,7 +49,7 @@ export default function Chat() {
 
   const sendMessage = (event) => {
     event.preventDefault();
-    db.collection("messages").add({
+    messagesRef.add({
       username: username,
       text: input,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -39,7 +65,7 @@ export default function Chat() {
       {/* Message */}
       <div>
         {messages.map((message) => (
-          <Message message={message} username={username} />
+          <Message message={message} nameDict={nameDict} uid={uid} />
         ))}
       </div>
       {/* Input */}
