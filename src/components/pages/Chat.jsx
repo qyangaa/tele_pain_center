@@ -4,6 +4,7 @@ import Message from "../common/Message";
 import { db } from "../../services/Firebase/firebase";
 import firebase from "firebase/app";
 import { useAuth } from "../../contexts/AuthContext";
+import "./Chat.css";
 
 export default function Chat() {
   const [input, setInput] = useState("");
@@ -59,27 +60,33 @@ export default function Chat() {
     setInput("");
   };
   return (
-    <div>
-      {/* Header */}
-      <h2>Welcome {username}! </h2>
-      {/* Message */}
-      <div>
-        {messages.map((message) => (
-          <Message message={message} nameDict={nameDict} uid={uid} />
-        ))}
+    <>
+      <div className="Chat">
+        {/* Header */}
+        <header>Welcome {username}! </header>
+        {/* Message */}
+        <main>
+          <section>
+            {messages.map((message) => (
+              <Message message={message} nameDict={nameDict} uid={uid} />
+            ))}
+          </section>
+        </main>
+
+        {/* Input */}
+        <form>
+          <FormControl
+            id="userInpuut"
+            placeholder="Enter Message"
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            className="UserInput"
+          />
+          <Button disabled={!input} type="submit" onClick={sendMessage}>
+            Submit
+          </Button>
+        </form>
       </div>
-      {/* Input */}
-      <Form inline>
-        <FormControl
-          id="userInpuut"
-          placeholder="Enter Message"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-        />
-        <Button disabled={!input} type="submit" onClick={sendMessage}>
-          Submit
-        </Button>
-      </Form>
-    </div>
+    </>
   );
 }
