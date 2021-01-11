@@ -14,12 +14,12 @@
 .message__card {
   padding: 8px;
   width: fit-content;
-  background-color: rgb(143, 141, 141) !important;
+  background-color: lightslategrey !important;
   color: white;
   font-size: medium;
 }
 
 .message__card__user {
   margin-left: auto;
-  background-color: cornflowerblue !important;
+  background-color: lightsteelblue !important;
 }

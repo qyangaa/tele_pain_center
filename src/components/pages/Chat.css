@@ -1,23 +1,86 @@
-.Chat {
-  text-align: center;
-  max-width: 720px;
+.container {
+  /* max-width: 728px; */
   margin: 0 auto;
+  padding: 0px;
+  border-radius: 7px;
 }
-.Chat header {
-  background-color: #8ca9c9;
+
+.tight {
+  padding: 0 !important;
+}
+
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.settings-tray {
   height: 3vh;
-  min-height: 40px;
-  color: white;
+  min-height: 50px;
   /* position: fixed; */
   width: 100%;
-  max-width: 728px;
+  /* max-width: 728px; */
   /* top: 60px; */
   display: flex;
   align-items: center;
   justify-content: space-between;
   z-index: 99;
-  padding: 10px;
   box-sizing: border-box;
+
+  background: rgb(240, 235, 225);
+
+  padding: 10px 10%;
+  border-radius: 7px;
+}
+
+.settings-tray .no-gutters {
+  padding: 0%;
+}
+
+.settings-tray .alignright {
+  float: right;
+}
+
+.settings-tray i {
+  margin-top: 10px;
+  font-size: 25px;
+  color: grey;
+  margin-left: 14px;
+  transition: 0.3s;
+}
+
+.contact-drawer {
+  padding: 5px 5px;
+  display: flex;
+  vertical-align: baseline;
+  background: #fff;
+  transition: 0.3s ease;
+}
+
+.contact-drawer .text {
+  margin-left: 4%;
+  width: 90%;
+  margin-bottom: 0%;
+}
+
+.contact-drawer .text h6 {
+  margin: 0%;
+}
+
+.contact-drawer .text p {
+  margin: 0%;
+}
+
+hr {
+  margin: 0;
+  height: 0;
+}
+
+.Chat {
+  text-align: center;
+  /* max-width: 720px; */
+  margin: 0;
 }
 
 .Chat section {
@@ -28,25 +91,25 @@
   background-color: rgb(255, 255, 255);
 }
 
-main {
+.message-window {
   padding: 0;
-  height: 65vh;
+  height: 70vh;
   margin: 0 0 2vh;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
 }
 
-main::-webkit-scrollbar {
+.message-window::-webkit-scrollbar {
   width: 0.5rem;
 }
 
-main::-webkit-scrollbar-track {
-  background: #cbcbd6;
+.message-window::-webkit-scrollbar-track {
+  background: #fff;
 }
 
-main::-webkit-scrollbar-thumb {
-  background: #4975b8;
+.message-window::-webkit-scrollbar-thumb {
+  background: lightsteelblue;
 }
 
 form {
@@ -54,7 +117,6 @@ form {
   bottom: 0;
   background-color: rgba(24, 23, 23, 0);
   width: 100%;
-  max-width: 728px;
   display: flex;
   font-size: 1.5rem;
 }
@@ -62,12 +124,25 @@ form {
 form button {
   width: 15%;
   height: 40px;
-  background-color: rgb(130, 164, 238);
+  background-color: lightskyblue !important;
   margin-left: 1vh;
+  text-align: center;
+  border: none !important;
+}
+a .input-bar {
+  padding: 0%;
+  height: 0;
+}
+.input-box {
   text-align: center;
 }
 
-.UserInput {
-  height: 40px !important;
-  text-align: center;
+.chat-box-tray {
+  background: #eee;
+  display: flex;
+  align-items: baseline;
+  padding: 10px 15px;
+  align-items: center;
+  margin-top: 19px;
+  bottom: 0;
 }

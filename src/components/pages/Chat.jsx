@@ -60,33 +60,63 @@ export default function Chat() {
     setInput("");
   };
   return (
-    <>
-      <div className="Chat">
-        {/* Header */}
-        <header>Welcome {username}! </header>
-        {/* Message */}
-        <main>
-          <section>
-            {messages.map((message) => (
-              <Message message={message} nameDict={nameDict} uid={uid} />
-            ))}
-          </section>
-        </main>
+    <div className="main">
+      <div className="container">
+        <div className="row no_gutters">
+          <div className="col-md-3 border-right tight">
+            <div className="settings-tray">
+              <img
+                src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                alt="Profile Image"
+                className="profile-image"
+              />
+              <span className="alignright">icon</span>
+            </div>
+            <div className="contact-drawer">
+              <img
+                src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                alt="Profile Image"
+                className="profile-image"
+              />
+              <div className="text">
+                <h6>Doctor Name</h6>
 
-        {/* Input */}
-        <form>
-          <FormControl
-            id="userInpuut"
-            placeholder="Enter Message"
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            className="UserInput"
-          />
-          <Button disabled={!input} type="submit" onClick={sendMessage}>
-            Submit
-          </Button>
-        </form>
+                <p className="text-muted">Last meassage sent</p>
+              </div>
+            </div>
+            <hr />
+          </div>
+
+          <div className="col-md-9 tight">
+            <div className="Chat">
+              {/* Header */}
+              <header className="settings-tray">Welcome {username}! </header>
+              {/* Message */}
+              <div className="message-window">
+                <section>
+                  {messages.map((message) => (
+                    <Message message={message} nameDict={nameDict} uid={uid} />
+                  ))}
+                </section>
+              </div>
+
+              {/* Input */}
+              <form className="input-bar">
+                <FormControl
+                  id="userInpuut"
+                  placeholder="Enter Message"
+                  value={input}
+                  onChange={(event) => setInput(event.target.value)}
+                  className="input-box"
+                />
+                <Button disabled={!input} type="submit" onClick={sendMessage}>
+                  Submit
+                </Button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
