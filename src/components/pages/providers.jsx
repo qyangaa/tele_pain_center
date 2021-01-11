@@ -18,6 +18,14 @@ class Providers extends Component {
     searchQuery: "",
     currentPage: 1,
     pageSize: 5,
+    button2: {
+      text: "Message",
+      onClick: (item) => () => this.handleMessage(item),
+    },
+  };
+
+  handleMessage = (item) => {
+    console.log("clicked:", item);
   };
 
   updateDimensions() {
@@ -130,6 +138,7 @@ class Providers extends Component {
       currentPage,
       pageSize,
       selectedFilters,
+      button2,
     } = this.state;
     const { itemsCount, data: providers } = this.getPagedData();
     providers.map((provider) => (provider.photo = exampleImg));
@@ -148,7 +157,7 @@ class Providers extends Component {
             </div>
             <div className="col">
               <SearchBox onChange={this.handleSearch} />
-              {CardDeck(providers, smallWindow)}
+              {CardDeck(providers, smallWindow, button2)}
               <Pagination
                 itemsCount={itemsCount}
                 pageSize={pageSize}
@@ -167,7 +176,7 @@ class Providers extends Component {
               selectedItems={selectedFilters}
             />
             <SearchBox onChange={this.handleSearch} />
-            {CardDeck(providers, smallWindow)}
+            {CardDeck(providers, smallWindow, button2)}
             <Pagination
               itemsCount={itemsCount}
               pageSize={pageSize}
