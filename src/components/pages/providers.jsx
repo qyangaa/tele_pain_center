@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 
 import getProviders from "../../services/providerService";
 import exampleImg from "../../services/data/pictures/exampleImg.jpeg";
@@ -9,65 +9,69 @@ import CollapsibleList from "../UI/CollapsibleList";
 import { providers } from "../../services/data/providerData";
 import Pagination from "../UI/Pagination";
 import { paginate } from "../../utils/paginate";
-class Providers extends Component {
-  state = {
-    providers: getProviders(),
-    filters: getFilters(),
-    selectedFilters: [],
-    smallWindow: false,
-    searchQuery: "",
-    currentPage: 1,
-    pageSize: 5,
-    button2: {
-      text: "Message",
-      onClick: (item) => () => this.handleMessage(item),
-    },
-  };
 
-  handleMessage = (item) => {
+export default function Providers() {
+  const [providers, setProviders] = useState(getProviders());
+  const [filters, setFilters] = useState(getFilters());
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [smallWindow, setSmallWindow] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [button2, setButton2] = useState({
+    text: "Message",
+    onClick: (item) => () => handleMessage(item),
+  });
+
+  useEffect(() => {
+    //componentDidMount
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+  }, []);
+
+  useEffect(() => {
+    //componnetWillUnmount
+
+    return () => {
+      window.removeEventListener("resize", updateDimensions);
+    };
+  }, []);
+
+  const handleMessage = (item) => {
     console.log("clicked:", item);
   };
 
-  updateDimensions() {
+  const updateDimensions = () => {
+    console.log(window.innerWidth);
     if (window.innerWidth < 800) {
-      this.setState({ smallWindow: true });
+      setSmallWindow(true);
     } else {
-      this.setState({ smallWindow: false });
+      setSmallWindow(false);
     }
-  }
+  };
 
-  componentDidMount() {
-    this.updateDimensions();
-    window.addEventListener("resize", this.updateDimensions.bind(this));
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateDimensions.bind(this));
-  }
-
-  handleSelect = (item) => {
+  const handleSelect = (item) => {
     // item: "filter_id:item_id"
-    let selected = [...this.state.selectedFilters];
+    let selected = [...selectedFilters];
     if (!selected.includes(item)) {
       selected.push(item);
     } else {
-      selected = this.state.selectedFilters.filter((i) => i !== item);
+      selected = selectedFilters.filter((i) => i !== item);
     }
-    this.setState({ selectedFilters: selected });
+    setSelectedFilters(selected);
   };
 
-  handleSearch = (query) => {
-    if (query != this.state.searchQuery) {
-      this.setState({ searchQuery: query });
+  const handleSearch = (query) => {
+    if (query != searchQuery) {
+      setSearchQuery(query);
     }
   };
 
-  handlePageChange = (page) => {
-    this.setState({ currentPage: page });
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
-  obtainFilters = () => {
-    const { filters, selectedFilters } = this.state;
+  const obtainFilters = () => {
     const groupedFilters = {};
     for (const key of selectedFilters) {
       const splitKey = key.split(":");
@@ -82,7 +86,7 @@ class Providers extends Component {
     return groupedFilters;
   };
 
-  filterSearch = (searchQuery, provider) => {
+  const filterSearch = (searchQuery, provider) => {
     if (!searchQuery) {
       return true;
     }
@@ -101,21 +105,15 @@ class Providers extends Component {
     return false;
   };
 
-  getPagedData = () => {
+  const getPagedData = () => {
     // provider: group_id: name
-    const {
-      providers: allProviders,
-      searchQuery,
-      currentPage,
-      pageSize,
-    } = this.state;
-    let filteredProviders = allProviders;
+    let filteredProviders = providers;
     if (searchQuery) {
       filteredProviders = filteredProviders.filter((provider) =>
-        this.filterSearch(searchQuery, provider)
+        filterSearch(searchQuery, provider)
       );
     }
-    const groupedFilters = this.obtainFilters();
+    const groupedFilters = obtainFilters();
     for (const group in groupedFilters) {
       let curProviders = [];
       for (const item of groupedFilters[group]) {
@@ -131,63 +129,51 @@ class Providers extends Component {
     return { itemsCount, data: filteredProviders };
   };
 
-  render() {
-    const {
-      filters,
-      smallWindow,
-      currentPage,
-      pageSize,
-      selectedFilters,
-      button2,
-    } = this.state;
-    const { itemsCount, data: providers } = this.getPagedData();
-    providers.map((provider) => (provider.photo = exampleImg));
+  const { itemsCount, data: pagedProviders } = getPagedData();
+  pagedProviders.map((provider) => (provider.photo = exampleImg));
 
-    return (
-      <div className="container-fluid">
-        {!smallWindow && (
-          <div className="row">
-            <div className={"col-3"}>
-              <CollapsibleList
-                groups={filters}
-                itemKey="options"
-                onSelect={this.handleSelect}
-                selectedItems={selectedFilters}
-              />
-            </div>
-            <div className="col">
-              <SearchBox onChange={this.handleSearch} />
-              {CardDeck(providers, smallWindow, button2)}
-              <Pagination
-                itemsCount={itemsCount}
-                pageSize={pageSize}
-                currentPage={currentPage}
-                onPageChange={this.handlePageChange}
-              />
-            </div>
-          </div>
-        )}
-        {smallWindow && (
-          <div>
+  return (
+    <div className="container-fluid">
+      {!smallWindow && (
+        <div className="row">
+          <div className={"col-3"}>
             <CollapsibleList
               groups={filters}
               itemKey="options"
-              onSelect={this.handleSelect}
+              onSelect={handleSelect}
               selectedItems={selectedFilters}
             />
-            <SearchBox onChange={this.handleSearch} />
-            {CardDeck(providers, smallWindow, button2)}
+          </div>
+          <div className="col">
+            <SearchBox onChange={handleSearch} />
+            {CardDeck(pagedProviders, smallWindow, button2)}
             <Pagination
               itemsCount={itemsCount}
               pageSize={pageSize}
               currentPage={currentPage}
-              onPageChange={this.handlePageChange}
+              onPageChange={handlePageChange}
             />
           </div>
-        )}
-      </div>
-    );
-  }
+        </div>
+      )}
+      {smallWindow && (
+        <div>
+          <CollapsibleList
+            groups={filters}
+            itemKey="options"
+            onSelect={handleSelect}
+            selectedItems={selectedFilters}
+          />
+          <SearchBox onChange={handleSearch} />
+          {CardDeck(pagedProviders, smallWindow, button2)}
+          <Pagination
+            itemsCount={itemsCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
+    </div>
+  );
 }
-
-export default Providers;
