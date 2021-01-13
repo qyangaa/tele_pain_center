@@ -28,9 +28,7 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    GetProviders(setProviders).then(function () {
-      return;
-    });
+    GetProviders(setProviders);
   }, []);
 
   useEffect(() => {
