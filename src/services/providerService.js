@@ -1,8 +1,20 @@
-import React from "react";
-import { providers } from "./data/providerData";
+import React, { useEffect, useState } from "react";
+import { db } from "./Firebase/firebase";
 
-const getProviders = () => {
-  return providers;
+const GetProviders = async (setProviders) => {
+  var providersRef = db.collection("providers");
+  let data = [];
+  try {
+    var providersSnapShot = await providersRef.get();
+    providersSnapShot.forEach((doc) => {
+      const curObject = doc.data();
+      curObject._id = doc.id;
+      data.push(curObject);
+      setProviders(data);
+    });
+  } catch (err) {
+    console.log("provider not retrieved");
+  }
 };
 
-export default getProviders;
+export default GetProviders;

@@ -35,7 +35,7 @@ const CardItem = (item, smallWindow, button2) => {
               {item.specialty}
             </Card.Subtitle>
             <Card.Text>{item.description}</Card.Text>
-            <Card.Text>{`${item.address}, ${item.city}, ${item.state}, ${item.zip}`}</Card.Text>
+            <Card.Text>{`${item.address.address}, ${item.address.city}, ${item.address.state}, ${item.address.zip}`}</Card.Text>
             <Button variant="primary">Appointment</Button>{" "}
             <Button variant="primary" onClick={button2.onClick(item._id)}>
               {button2.text}

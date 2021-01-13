@@ -1,17 +1,18 @@
 import React, { Component, useEffect, useState } from "react";
 
-import getProviders from "../../services/providerService";
+import GetProviders from "../../services/providerService";
 import exampleImg from "../../services/data/pictures/exampleImg.jpeg";
 import CardDeck from "../common/cardDeck";
 import SearchBox from "../UI/searchBox";
 import getFilters from "../../services/FilterService";
 import CollapsibleList from "../UI/CollapsibleList";
-import { providers } from "../../services/data/providerData";
 import Pagination from "../UI/Pagination";
 import { paginate } from "../../utils/paginate";
+import { db } from "../../services/Firebase/firebase";
 
 export default function Providers() {
-  const [providers, setProviders] = useState(getProviders());
+  const [providers, setProviders] = useState([]);
+
   const [filters, setFilters] = useState(getFilters());
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [smallWindow, setSmallWindow] = useState(false);
@@ -27,6 +28,9 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
+    GetProviders(setProviders).then(function () {
+      return;
+    });
   }, []);
 
   useEffect(() => {
@@ -42,7 +46,6 @@ export default function Providers() {
   };
 
   const updateDimensions = () => {
-    console.log(window.innerWidth);
     if (window.innerWidth < 800) {
       setSmallWindow(true);
     } else {
@@ -134,6 +137,7 @@ export default function Providers() {
 
   return (
     <div className="container-fluid">
+      <h1>{console.log(providers)}</h1>
       {!smallWindow && (
         <div className="row">
           <div className={"col-3"}>

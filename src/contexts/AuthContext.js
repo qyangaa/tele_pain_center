@@ -12,6 +12,8 @@ export function AuthProvider({ children }) {
   const [username, setUsername] = useState("");
   const [uid, setuid] = useState("");
 
+  const [providers, setproviders] = useState([]);
+
   function signup(email, password) {
     // line to change if change authentication method
     auth.createUserWithEmailAndPassword(email, password);
@@ -48,6 +50,19 @@ export function AuthProvider({ children }) {
     return;
   }
 
+  function getProvider() {
+    const providersRef = db.collection("providers");
+
+    providersRef.get().then(function (querySnapshot) {
+      let data = [];
+      querySnapshot.forEach(function (doc) {
+        // doc.data() is never undefined for query doc snapshots
+        data.push(doc.data());
+      });
+      setproviders(data);
+    });
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -68,6 +83,8 @@ export function AuthProvider({ children }) {
     updatePassword,
     uid,
     username,
+    getProvider,
+    providers,
   };
   return (
     <AuthContext.Provider value={value}>

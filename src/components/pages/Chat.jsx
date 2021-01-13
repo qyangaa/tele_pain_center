@@ -6,13 +6,14 @@ import firebase from "firebase/app";
 import { useAuth } from "../../contexts/AuthContext";
 import "./Chat.css";
 
-export default function Chat() {
+export default function Chat(props) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
     { username: "asdas", text: "asdasd" },
     { username: "asdas", text: "asdasd" },
   ]);
   const { uid, username } = useAuth();
+  const [receiver, setReceiver] = useState(props.receiver);
   const groupid = "cndh7Tr86fjKTKL09Rkx";
   const groupRef = db.collection("groups").doc(groupid);
   const usersRef = db.collection("users");
