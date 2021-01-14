@@ -31,5 +31,10 @@ export default function Chat(props) {
     console.log(input);
     setInput("");
   };
-  return <div>{console.log(messages)}</div>;
+  return (
+    <div>
+      {console.log(messages)}
+      {messages.map((message) => message.text + ";")}
+    </div>
+  );
 }

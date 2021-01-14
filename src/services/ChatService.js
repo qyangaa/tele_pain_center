@@ -31,22 +31,15 @@ export const GetGroup = async (userId, setGroup) => {
   }
 };
 
-export const GetMessages = async (groupId, setMessages) => {
+export const GetMessages = (groupId, setMessages) => {
   var groupRef = db.collection("groups").doc(groupId).collection("messages");
   let messages = [];
-
-  try {
-    var groupSnapShot = await groupRef
-      .orderBy("timestamp", "asc")
-      .onSnapshot((snapshot) => {
-        snapshot.docs.map((doc) => {
-          const curObject = doc.data();
-          curObject._id = doc.id;
-          messages.push(curObject);
-          setMessages(messages);
-        });
-      });
-  } catch (err) {
-    console.log("Group not retrieved:", err);
-  }
+  groupRef.orderBy("timestamp", "asc").onSnapshot((snapshot) => {
+    snapshot.docs.map((doc) => {
+      const curObject = doc.data();
+      curObject._id = doc.id;
+      messages.push(curObject);
+    });
+    setMessages(messages);
+  });
 };
