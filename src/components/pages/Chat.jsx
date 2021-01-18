@@ -9,26 +9,47 @@ import "./Chat.css";
 
 export default function Chat(props) {
   const [input, setInput] = useState("");
-  const [groups, setGroups] = useState([]);
-  const [curGroup, setCurGroup] = useState({});
-  const [users, setUsers] = useState({});
-  const [messages, setMessages] = useState([{}]);
+  const [groups, setGroups] = useState();
+  const [curGroup, setCurGroup] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [messages, setMessages] = useState();
   // const { currentUid, currentUsername } = useAuth();
   const currentUid = "NGZPqSUZnPWKNBnb1cqZOopv4R33";
   const currentUsername = "Fake";
   let curGroupId = "cndh7Tr86fjKTKL09Rkx";
 
-  useEffect(async () => {
-    const { groups, curGroup } = await GetGroup(currentUid, curGroupId);
-    console.log(curGroup);
-    setCurGroup(curGroup);
-    setGroups(groups);
-  }, []);
+  // useEffect(() => {
+  //   GetGroup(currentUid, curGroupId).then((groups, curGroup) => {
+  //     setCurGroup(curGroup);
+  //     setGroups(groups);
+  //     GetMessages(curGroupId).then((messages) => {
+  //       setMessages(messages);
+  //       setIsLoading(false);
+  //     });
+  //   });
+  // }, []);
 
   useEffect(async () => {
-    const messages = await GetMessages(curGroupId);
-    setMessages(messages);
-    console.log(messages);
+    let didCancel = false;
+    async function fetchData() {
+      !didCancel && setIsLoading(true);
+      let groupResults, messageResults;
+      try {
+        groupResults = await GetGroup(currentUid, curGroupId);
+        messageResults = await GetMessages(curGroupId);
+        setCurGroup(groupResults.curGroup);
+        setGroups(groupResults.groups);
+        setMessages(messageResults);
+      } catch (error) {
+        console.log("Error loading groups and mesages:", error);
+      } finally {
+        !didCancel && setIsLoading(false);
+      }
+    }
+    await fetchData();
+    return () => {
+      didCancel = true;
+    };
   }, []);
 
   const sendMessage = (event) => {
@@ -36,6 +57,25 @@ export default function Chat(props) {
     console.log(input);
     setInput("");
   };
+
+  const renderMessage = (messages) => {
+    return (
+      <section>
+        Message Length:
+        {console.log(messages)}
+        {messages.length}
+        {messages &&
+          messages.map((message) => (
+            <Message
+              message={message}
+              nameDict={curGroup.users}
+              currentUid={currentUid}
+            />
+          ))}
+      </section>
+    );
+  };
+
   return (
     <div className="col-md-9 tight">
       <div className="Chat">
@@ -43,15 +83,7 @@ export default function Chat(props) {
         <header className="settings-tray">Welcome {currentUsername}! </header>
         {/* Message */}
         <div className="message-window">
-          <section>
-            {messages.map((message) => (
-              <Message
-                message={message}
-                nameDict={curGroup.users}
-                currentUid={currentUid}
-              />
-            ))}
-          </section>
+          {isLoading ? "Retrieving Messages" : renderMessage(messages)}
         </div>
 
         {/* Input */}
