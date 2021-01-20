@@ -18,6 +18,10 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Login from "./components/pages/Login";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import UpdateProfile from "./components/pages/UpdateProfile";
+import { Provider } from "react-redux";
+import { ConfigureStore } from "./redux/configureStore";
+
+const store = ConfigureStore();
 
 class App extends Component {
   state = {};
@@ -26,33 +30,35 @@ class App extends Component {
     const { user } = this.state;
 
     return (
-      <BrowserRouter>
-        {console.log(".env test:", process.env.REACT_APP_TEST)}
-        <ToastContainer />
-        <NavBar user={user} />
-        <Container fluid>
-          <AuthProvider>
-            <Switch>
-              <Route path="/calendar" component={Calendar} />
-              <Route path="/chat" component={Chat} />
-              <Route path="/registration" component={Registration} />
-              <ProtectedRoute path="/dashboard" component={Dashboard} />
-              <ProtectedRoute
-                path="/update-profile"
-                component={UpdateProfile}
-              />
-              <Route path="/forgot-password" component={ForgotPassword} />
-              <Route path="/login" component={Login} />
-              <Route path="/search" component={Providers} />
-              <Route path="/tracking" component={Tracking} />
-              <Route path="/records" component={Records} />
-              <Route path="/not-found" component={NotFound} />
-              <Redirect from="/" exact to="/tracking" />
-              <Redirect to="/not-found" />
-            </Switch>
-          </AuthProvider>
-        </Container>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          {console.log(".env test:", process.env.REACT_APP_TEST)}
+          <ToastContainer />
+          <NavBar user={user} />
+          <Container fluid>
+            <AuthProvider>
+              <Switch>
+                <Route path="/calendar" component={Calendar} />
+                <Route path="/chat" component={Chat} />
+                <Route path="/registration" component={Registration} />
+                <ProtectedRoute path="/dashboard" component={Dashboard} />
+                <ProtectedRoute
+                  path="/update-profile"
+                  component={UpdateProfile}
+                />
+                <Route path="/forgot-password" component={ForgotPassword} />
+                <Route path="/login" component={Login} />
+                <Route path="/search" component={Providers} />
+                <Route path="/tracking" component={Tracking} />
+                <Route path="/records" component={Records} />
+                <Route path="/not-found" component={NotFound} />
+                <Redirect from="/" exact to="/tracking" />
+                <Redirect to="/not-found" />
+              </Switch>
+            </AuthProvider>
+          </Container>
+        </BrowserRouter>
+      </Provider>
     );
   }
 }

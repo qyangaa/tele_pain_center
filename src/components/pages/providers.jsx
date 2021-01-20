@@ -10,8 +10,11 @@ import Pagination from "../UI/Pagination";
 import { paginate } from "../../utils/paginate";
 import { db } from "../../services/Firebase/firebase";
 
+import { useSelector } from "react-redux";
+
 export default function Providers() {
-  const [providers, setProviders] = useState([]);
+  // const [providers, setProviders] = useState([]);
+  const providers = useSelector((state) => state.providers);
 
   const [filters, setFilters] = useState(getFilters());
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -26,9 +29,10 @@ export default function Providers() {
 
   useEffect(() => {
     //componentDidMount
+    console.log(providers);
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    GetProviders(setProviders);
+    // GetProviders(setProviders);
   }, []);
 
   useEffect(() => {

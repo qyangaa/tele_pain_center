@@ -1,4 +1,4 @@
-export const providers = [
+export const PROVIDERS = [
   {
     _id: "00000",
     name: "Fake Zero",
