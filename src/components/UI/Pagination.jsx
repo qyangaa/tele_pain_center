@@ -11,14 +11,14 @@ const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
     <nav>
       <ul className="pagination">
         {currentPage > 1 && (
-          <li class="page-item">
+          <li className="page-item">
             <a
-              class="page-link"
+              className="page-link"
               aria-label="Previous"
               onClick={() => onPageChange(currentPage - 1)}
             >
               <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
+              <span className="sr-only">Previous</span>
             </a>
           </li>
         )}
@@ -33,14 +33,14 @@ const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
           </li>
         ))}
         {currentPage < pagesCount && (
-          <li class="page-item">
+          <li className="page-item">
             <a
-              class="page-link"
+              className="page-link"
               aria-label="Previous"
               onClick={() => onPageChange(currentPage + 1)}
             >
               <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
+              <span className="sr-only">Next</span>
             </a>
           </li>
         )}
