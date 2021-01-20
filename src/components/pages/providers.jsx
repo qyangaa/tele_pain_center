@@ -16,8 +16,10 @@ export default function Providers() {
   // const [providers, setProviders] = useState([]);
   const providers = useSelector((state) => state.providers);
 
-  const [filters, setFilters] = useState(getFilters());
+  // const [filters, setFilters] = useState(getFilters());
+  const filters = useSelector((state) => state.filters);
   const [selectedFilters, setSelectedFilters] = useState([]);
+
   const [smallWindow, setSmallWindow] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +31,6 @@ export default function Providers() {
 
   useEffect(() => {
     //componentDidMount
-    console.log(providers);
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
     // GetProviders(setProviders);
@@ -139,7 +140,6 @@ export default function Providers() {
 
   return (
     <div className="container-fluid">
-      <h1>{console.log(providers)}</h1>
       {!smallWindow && (
         <div className="row">
           <div className={"col-3"}>
