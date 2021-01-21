@@ -1,7 +1,10 @@
 import { PROVIDERS } from "../services/data/providerData";
+import * as ActionTypes from "./ActionTypes";
 
-export const providersReducer = (state = PROVIDERS, action) => {
+export const providersReducer = (state = [], action) => {
   switch (action.type) {
+    case ActionTypes.ADD_PROVIDERS:
+      return action.payload;
     default:
       return state;
   }

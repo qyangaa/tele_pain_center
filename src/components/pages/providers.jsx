@@ -9,8 +9,10 @@ import CollapsibleList from "../UI/CollapsibleList";
 import Pagination from "../UI/Pagination";
 import { paginate } from "../../utils/paginate";
 import { db } from "../../services/Firebase/firebase";
+import allActions from "../../redux/AllActions";
+import { useSelector, useDispatch } from "react-redux";
 
-import { useSelector } from "react-redux";
+import { PROVIDERS } from "../../services/data/providerData";
 
 export default function Providers() {
   // const [providers, setProviders] = useState([]);
@@ -18,6 +20,8 @@ export default function Providers() {
 
   // const [filters, setFilters] = useState(getFilters());
   const filters = useSelector((state) => state.filters);
+  const dispatch = useDispatch();
+
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   const [smallWindow, setSmallWindow] = useState(false);
@@ -33,6 +37,7 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
+    dispatch(allActions.addProviders(PROVIDERS));
     // GetProviders(setProviders);
   }, []);
 
