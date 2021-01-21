@@ -37,7 +37,7 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    dispatch(allActions.addProviders(PROVIDERS));
+    dispatch(allActions.fetchProviders(PROVIDERS));
     // GetProviders(setProviders);
   }, []);
 

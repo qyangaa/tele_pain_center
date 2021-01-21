@@ -1,7 +1,7 @@
-import { addProviders } from "./ActionCreators";
+import { fetchProviders } from "./ActionCreators";
 
 const allActions = {
-  addProviders,
+  fetchProviders,
 };
 
 export default allActions;
