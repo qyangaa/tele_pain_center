@@ -16,7 +16,7 @@ import { PROVIDERS } from "../../services/data/providerData";
 
 export default function Providers() {
   // const [providers, setProviders] = useState([]);
-  const providers = useSelector((state) => state.providers);
+  const providersState = useSelector((state) => state.providersState);
 
   // const [filters, setFilters] = useState(getFilters());
   const filters = useSelector((state) => state.filters);
@@ -118,7 +118,7 @@ export default function Providers() {
 
   const getPagedData = () => {
     // provider: group_id: name
-    let filteredProviders = providers;
+    let filteredProviders = providersState.providers;
     if (searchQuery) {
       filteredProviders = filteredProviders.filter((provider) =>
         filterSearch(searchQuery, provider)
