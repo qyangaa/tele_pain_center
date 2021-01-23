@@ -3,6 +3,7 @@ import { PROVIDERS } from "../services/data/providerData";
 
 import GetProviders from "../services/providerService";
 
+// TODO: should we call servce from action or call action from service?
 export const fetchProviders = async (dispatch) => {
   dispatch(providersLoading(true));
   GetProviders().then((providers) => dispatch(addProviders(providers)));
