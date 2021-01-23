@@ -9,9 +9,12 @@ export default function Message(props) {
   console.log("Rendering message:", message);
   return (
     <div>
-      <p className={`message ${isUser && "message__user"}`}>
+      <p id={message._id} className={`message ${isUser && "message__user"}`}>
         {nameDict && nameDict[message.uid]}
-        <Card className={`message__card ${isUser && "message__card__user"}`}>
+        <Card
+          id={message._id}
+          className={`message__card ${isUser && "message__card__user"}`}
+        >
           {message.text}
         </Card>
       </p>

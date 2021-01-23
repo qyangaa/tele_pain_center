@@ -42,8 +42,9 @@ export const GetGroup = async (userId, curGroupId) => {
 export const GetMessages = async (groupId) => {
   var groupRef = db.collection("groups").doc(groupId).collection("messages");
   let messages = [];
+  console.log({ messages });
   try {
-    groupRef.orderBy("timestamp", "asc").onSnapshot((snapshot) => {
+    await groupRef.orderBy("timestamp", "asc").onSnapshot((snapshot) => {
       snapshot.docs.map((doc) => {
         const curObject = doc.data();
         curObject._id = doc.id;
@@ -53,5 +54,6 @@ export const GetMessages = async (groupId) => {
   } catch (err) {
     console.log("Message not retrieved, ", err);
   }
+
   return messages;
 };

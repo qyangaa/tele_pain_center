@@ -30,9 +30,8 @@ export default function Chat(props) {
   // }, []);
 
   useEffect(async () => {
-    let didCancel = false;
-    async function fetchData() {
-      !didCancel && setIsLoading(true);
+    const fetchData = async () => {
+      setIsLoading(true);
       let groupResults, messageResults;
       try {
         groupResults = await GetGroup(currentUid, curGroupId);
@@ -43,13 +42,17 @@ export default function Chat(props) {
       } catch (error) {
         console.log("Error loading groups and mesages:", error);
       } finally {
-        !didCancel && setIsLoading(false);
+        setIsLoading(false);
+        // console.log("finally:", {
+        //   isLoading,
+        //   messages,
+        //   messageResults,
+        //   messageResultsLength: messageResults.length,
+        // });
       }
-    }
-    await fetchData();
-    return () => {
-      didCancel = true;
     };
+    await fetchData();
+    // console.log({ isLoading, messages });
   }, []);
 
   const sendMessage = (event) => {
@@ -58,13 +61,19 @@ export default function Chat(props) {
     setInput("");
   };
 
-  const renderMessage = (messages) => {
+  const renderMessage = () => {
+    // console.log({
+    //   messages,
+    //   length: messages.length,
+    //   type: typeof messages,
+    //   test: messages[0],
+    // });
+
     return (
       <section>
         Message Length:
-        {console.log(messages)}
         {messages.length}
-        {messages &&
+        {messages.length !== 0 &&
           messages.map((message) => (
             <Message
               message={message}
@@ -83,7 +92,7 @@ export default function Chat(props) {
         <header className="settings-tray">Welcome {currentUsername}! </header>
         {/* Message */}
         <div className="message-window">
-          {isLoading ? "Retrieving Messages" : renderMessage(messages)}
+          {isLoading ? "Retrieving Messages" : renderMessage()}
         </div>
 
         {/* Input */}
