@@ -17,13 +17,13 @@ export const providersReducer = (state = PROVIDERSSTATE, action) => {
         providers: action.payload,
       };
     case ActionTypes.PROVIDERS_LOADING:
-      return { ...state, isLoading: true, err: null, providers: null };
+      return { ...state, isLoading: true, err: null, providers: [] };
     case ActionTypes.PROVIDERS_FAILED:
       return {
         ...state,
         isLoading: false,
         err: action.payload,
-        providers: null,
+        providers: [],
       };
     default:
       return state;

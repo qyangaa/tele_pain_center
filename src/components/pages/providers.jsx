@@ -1,12 +1,13 @@
 import React, { Component, useEffect, useState } from "react";
 
-import GetProviders from "../../services/providerService";
 import exampleImg from "../../services/data/pictures/exampleImg.jpeg";
 import CardDeck from "../common/cardDeck";
 import SearchBox from "../UI/searchBox";
 import getFilters from "../../services/FilterService";
 import CollapsibleList from "../UI/CollapsibleList";
 import Pagination from "../UI/Pagination";
+import Loading from "../common/Loading";
+
 import { paginate } from "../../utils/paginate";
 import { db } from "../../services/Firebase/firebase";
 import allActions from "../../redux/AllActions";
@@ -37,7 +38,7 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    dispatch(allActions.fetchProviders(PROVIDERS));
+    allActions.fetchProviders(dispatch);
     // GetProviders(setProviders);
   }, []);
 
@@ -119,6 +120,9 @@ export default function Providers() {
   const getPagedData = () => {
     // provider: group_id: name
     let filteredProviders = providersState.providers;
+    if (filteredProviders == null) {
+      return { itemsCount: 0, data: [] };
+    }
     if (searchQuery) {
       filteredProviders = filteredProviders.filter((provider) =>
         filterSearch(searchQuery, provider)
@@ -143,20 +147,42 @@ export default function Providers() {
   const { itemsCount, data: pagedProviders } = getPagedData();
   pagedProviders.map((provider) => (provider.photo = exampleImg));
 
-  return (
-    <div className="container-fluid">
-      {!smallWindow && (
-        <div className="row">
-          <div className={"col-3"}>
+  const renderProviders = (pagedProviders) => {
+    return (
+      <div>
+        {!smallWindow && (
+          <div className="row">
+            <div className={"col-3"}>
+              <CollapsibleList
+                groups={filters}
+                itemKey="options"
+                onSelect={handleSelect}
+                selectedItems={selectedFilters}
+              />
+            </div>
+            <div className="col">
+              <SearchBox onChange={handleSearch} />
+              {providersState.isLoading && Loading()}
+              {CardDeck(pagedProviders, smallWindow, button2)}
+              <Pagination
+                itemsCount={itemsCount}
+                pageSize={pageSize}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          </div>
+        )}
+        {smallWindow && (
+          <div>
             <CollapsibleList
               groups={filters}
               itemKey="options"
               onSelect={handleSelect}
               selectedItems={selectedFilters}
             />
-          </div>
-          <div className="col">
             <SearchBox onChange={handleSearch} />
+            {providersState.isLoading && Loading()}
             {CardDeck(pagedProviders, smallWindow, button2)}
             <Pagination
               itemsCount={itemsCount}
@@ -165,26 +191,14 @@ export default function Providers() {
               onPageChange={handlePageChange}
             />
           </div>
-        </div>
-      )}
-      {smallWindow && (
-        <div>
-          <CollapsibleList
-            groups={filters}
-            itemKey="options"
-            onSelect={handleSelect}
-            selectedItems={selectedFilters}
-          />
-          <SearchBox onChange={handleSearch} />
-          {CardDeck(pagedProviders, smallWindow, button2)}
-          <Pagination
-            itemsCount={itemsCount}
-            pageSize={pageSize}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        </div>
-      )}
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="container-fluid">
+      {pagedProviders && renderProviders(pagedProviders)}
     </div>
   );
 }

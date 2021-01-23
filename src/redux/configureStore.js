@@ -1,6 +1,8 @@
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { filtersReducer } from "./filtersReducer";
 import { providersReducer } from "./providersReducer";
+import thunk from "redux-thunk";
+import logger from "redux-logger";
 
 export const ConfigureStore = () => {
   const store = createStore(
@@ -10,5 +12,6 @@ export const ConfigureStore = () => {
     }),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   );
+  applyMiddleware(thunk, logger);
   return store;
 };
