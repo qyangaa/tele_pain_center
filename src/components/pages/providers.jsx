@@ -10,8 +10,9 @@ import Loading from "../common/Loading";
 
 import { paginate } from "../../utils/paginate";
 import { db } from "../../services/Firebase/firebase";
-import allActions from "../../redux/AllActions";
+import providerActions from "../../redux/ProvidersActions";
 import { useSelector, useDispatch } from "react-redux";
+import GetProviders from "../../services/providerService";
 
 import { PROVIDERS } from "../../services/data/providerData";
 
@@ -38,8 +39,8 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    allActions.fetchProviders(dispatch);
-    // GetProviders(setProviders);
+    providerActions.fetchProviders(dispatch);
+    GetProviders(dispatch);
   }, []);
 
   useEffect(() => {

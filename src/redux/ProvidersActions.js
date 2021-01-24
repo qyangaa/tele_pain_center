@@ -3,13 +3,13 @@ import {
   addProviders,
   providersLoading,
   providersFailed,
-} from "./ActionCreators";
+} from "./ProvidersActionCreators";
 
-const allActions = {
+const providerActions = {
   fetchProviders,
   addProviders,
   providersLoading,
   providersFailed,
 };
 
-export default allActions;
+export default providerActions;

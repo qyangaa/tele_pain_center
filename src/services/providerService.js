@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { db } from "./Firebase/firebase";
 import { useDispatch } from "react-redux";
-import * as ActionTypes from "../redux/ActionTypes";
+import providerActions from "../redux/ProvidersActions";
 
-const GetProviders = async () => {
+const GetProviders = async (dispatch) => {
   var providersRef = db.collection("providers");
   let data = [];
   try {
@@ -13,6 +13,7 @@ const GetProviders = async () => {
       curObject._id = doc.id;
       data.push(curObject);
     });
+    providerActions.fetchProviders(dispatch, data);
   } catch (err) {
     console.log("provider not retrieved");
   }
