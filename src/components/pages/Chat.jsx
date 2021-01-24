@@ -13,6 +13,7 @@ export default function Chat(props) {
   const [curGroup, setCurGroup] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [messages, setMessages] = useState();
+  const [messagesAsync, setMessagesAsync] = useState();
   // const { currentUid, currentUsername } = useAuth();
   const currentUid = "NGZPqSUZnPWKNBnb1cqZOopv4R33";
   const currentUsername = "Fake";
@@ -38,22 +39,21 @@ export default function Chat(props) {
         messageResults = await GetMessages(curGroupId);
         setCurGroup(groupResults.curGroup);
         setGroups(groupResults.groups);
-        setMessages(messageResults);
+        console.log({ messageResults });
+        setMessagesAsync([...messageResults]);
       } catch (error) {
         console.log("Error loading groups and mesages:", error);
       } finally {
         setIsLoading(false);
-        // console.log("finally:", {
-        //   isLoading,
-        //   messages,
-        //   messageResults,
-        //   messageResultsLength: messageResults.length,
-        // });
       }
     };
     await fetchData();
-    // console.log({ isLoading, messages });
   }, []);
+
+  useEffect(() => {
+    setMessages(messagesAsync);
+    console.log({ messagesAsync, messages });
+  }, [messagesAsync]);
 
   const sendMessage = (event) => {
     event.preventDefault();
