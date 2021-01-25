@@ -13,7 +13,7 @@ export const chatGroupsReducer = (state = GROUPSSTATE, action) => {
         ...state,
         isLoading: false,
         err: null,
-        groups: action.payload,
+        groups: { ...action.payload },
       };
     case ActionTypes.GROUPS_LOADING:
       return { ...state, isLoading: true, err: null, groups: {} };

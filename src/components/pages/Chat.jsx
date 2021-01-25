@@ -16,11 +16,10 @@ import "./Chat.css";
 export default function Chat(props) {
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messagesState.messages);
-  const messagesState = useSelector((state) => state.messagesState);
   const messagesLoading = useSelector((state) => state.messagesState.isLoading);
   const groups = useSelector((state) => state.chatGroupsState);
   const curGroup = useSelector((state) => state.curGroup);
-
+  const [nameDict, setNameDict] = useState({});
   const [input, setInput] = useState("");
   // const { currentUid, currentUsername } = useAuth();
   const currentUid = "NGZPqSUZnPWKNBnb1cqZOopv4R33";
@@ -29,20 +28,13 @@ export default function Chat(props) {
 
   useEffect(() => {
     GetGroups(dispatch, currentUid);
-    SetCurGroup(dispatch, groups, curGroupId);
+    SetCurGroup(dispatch, curGroupId);
     GetMessages(dispatch, curGroupId);
   }, []);
 
   useEffect(() => {
-    console.log("Messages changed, length:", {
-      length: messagesState.messages,
-    });
-  }, [messagesState]);
-
-  useEffect(() => {
-    console.log("Groups changed, length:", {
-      groups,
-    });
+    groups && groups[curGroup] && setNameDict(groups[curGroup].users);
+    console.log({ groups, nameDict });
   }, [groups]);
 
   const sendMessage = (event) => {
@@ -54,14 +46,15 @@ export default function Chat(props) {
   const renderMessage = () => {
     return (
       <section>
-        Message Length:
-        {messages.length}
         {messages.length !== 0 &&
           messages.map((message) => (
             <Message
               message={message}
-              nameDict={curGroup.users}
-              currentUid={currentUid}
+              name={
+                groups.groups[curGroupId] &&
+                groups.groups[curGroupId].users[message.uid]
+              }
+              isUser={currentUid == message.uid}
             />
           ))}
       </section>

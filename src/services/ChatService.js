@@ -25,8 +25,8 @@ export const GetGroups = async (dispatch, userId) => {
         users[userId] = await GetUser(userId);
       }
       groups[doc.id] = { users, _id: doc.id, data: doc.data() };
+      chatActions.fetchGroups(dispatch, groups);
     });
-    chatActions.fetchGroups(dispatch, groups);
   } catch (err) {
     console.log("Group not retrieved:", err);
   }
@@ -34,7 +34,7 @@ export const GetGroups = async (dispatch, userId) => {
   return groups;
 };
 
-export const SetCurGroup = (dispatch, groups, curGroupId) => {
+export const SetCurGroup = (dispatch, curGroupId) => {
   chatActions.fetchCurGroup(dispatch, curGroupId);
 };
 
@@ -47,11 +47,12 @@ export const GetMessages = async (dispatch, groupId) => {
         const curObject = doc.data();
         curObject._id = doc.id;
         messages.push(curObject);
+        chatActions.fetchMessages(dispatch, messages);
       });
     });
   } catch (err) {
     console.log("Message not retrieved, ", err);
   }
-  chatActions.fetchMessages(dispatch, messages);
+
   return [...messages];
 };
