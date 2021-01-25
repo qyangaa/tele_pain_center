@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, FormControl } from "react-bootstrap";
 import Message from "../common/Message";
-import { db } from "../../services/Firebase/firebase";
-import firebase from "firebase/app";
-import { useAuth } from "../../contexts/AuthContext";
 import {
   GetGroups,
   GetMessages,
@@ -20,13 +17,15 @@ export default function Chat(props) {
   const messagesLoading = useSelector((state) => state.messagesState.isLoading);
   const groups = useSelector((state) => state.chatGroupsState);
   const curGroup = useSelector((state) => state.curGroup);
+  const displayName = useSelector((state) => state.firebase.auth.displayname);
+  const curUid = useSelector((state) => state.firebase.auth.uid);
+
   const [input, setInput] = useState("");
-  const { currentUid, currentUsername } = useAuth();
+
   let curGroupId = "cndh7Tr86fjKTKL09Rkx";
 
   useEffect(() => {
-    console.log(currentUid);
-    GetGroups(dispatch, currentUid);
+    GetGroups(dispatch, curUid);
     SetCurGroup(dispatch, curGroupId);
     GetMessages(dispatch, curGroupId);
   }, []);
@@ -34,7 +33,7 @@ export default function Chat(props) {
   const sendMessage = (event) => {
     event.preventDefault();
     console.log(input);
-    SendMessages(dispatch, curGroupId, currentUid, input);
+    SendMessages(dispatch, curGroupId, curUid, input);
     setInput("");
   };
 
@@ -49,7 +48,7 @@ export default function Chat(props) {
                 groups.groups[curGroupId] &&
                 groups.groups[curGroupId].users[message.uid]
               }
-              isUser={currentUid == message.uid}
+              isUser={curUid == message.uid}
             />
           ))}
       </section>
@@ -87,9 +86,7 @@ export default function Chat(props) {
           <div className="col-md-9 tight">
             <div className="Chat">
               {/* Header */}
-              <header className="settings-tray">
-                Welcome {currentUsername}!{" "}
-              </header>
+              <header className="settings-tray">Welcome {displayName}! </header>
               {/* Message */}
               <div className="message-window">
                 <section>

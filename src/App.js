@@ -21,11 +21,13 @@ import UpdateProfile from "./components/pages/UpdateProfile";
 import { Provider } from "react-redux";
 import { ConfigureStore } from "./redux/configureStore";
 
+import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import { getRrfProps } from "./services/Firebase/firebase";
+
 const store = ConfigureStore();
 
 class App extends Component {
   state = {};
-
   render() {
     const { user } = this.state;
 
@@ -33,10 +35,11 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           {console.log(".env test:", process.env.REACT_APP_TEST)}
+          {console.log({ ...getRrfProps(store) })}
           <ToastContainer />
           <NavBar user={user} />
           <Container fluid>
-            <AuthProvider>
+            <ReactReduxFirebaseProvider {...getRrfProps(store)}>
               <Switch>
                 <Route path="/calendar" component={Calendar} />
                 <Route path="/chat" component={Chat} />
@@ -55,7 +58,7 @@ class App extends Component {
                 <Redirect from="/" exact to="/tracking" />
                 <Redirect to="/not-found" />
               </Switch>
-            </AuthProvider>
+            </ReactReduxFirebaseProvider>
           </Container>
         </BrowserRouter>
       </Provider>

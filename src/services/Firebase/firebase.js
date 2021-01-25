@@ -24,6 +24,13 @@ const firebaseApp = firebase.initializeApp({
   measurementId: "G-CQKP9F6YMW",
 });
 
+export const getRrfProps = (store) => ({
+  firebase,
+  config: { userProfile: "users" },
+  dispatch: store.dispatch,
+  // createFirestoreInstance // <- needed if using firestore
+});
+
 export const auth = firebaseApp.auth();
 export const db = firebaseApp.firestore();
 export default firebaseApp;

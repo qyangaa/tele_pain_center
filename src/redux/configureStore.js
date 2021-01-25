@@ -1,9 +1,10 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { filtersReducer } from "./filtersReducer";
 import { providersReducer } from "./providersReducer";
 import { messagesReducer } from "./messagesReducer";
 import { chatGroupsReducer } from "./chatGroupsReducer";
 import { curGroupReducer } from "./curGroupReducer";
+import { firebaseReducer } from "react-redux-firebase";
 import thunk from "redux-thunk";
 import logger from "redux-logger";
 
@@ -15,6 +16,7 @@ export const ConfigureStore = () => {
       messagesState: messagesReducer,
       chatGroupsState: chatGroupsReducer,
       curGroup: curGroupReducer,
+      firebase: firebaseReducer,
     }),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   );
