@@ -26,7 +26,7 @@ const firebaseApp = firebase.initializeApp({
 
 export const getRrfProps = (store) => ({
   firebase,
-  config: { userProfile: "users" },
+  config: {},
   dispatch: store.dispatch,
   // createFirestoreInstance // <- needed if using firestore
 });

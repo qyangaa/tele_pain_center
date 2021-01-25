@@ -1,13 +1,14 @@
 import React, { useRef, useState } from "react";
 import { Card, Button, Form, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useSelector, useDispatch } from "react-redux";
+import { createNewUser } from "../../services/authService";
 
 export default function Registration() {
   const emailRef = useRef();
   const passwordRef = useRef();
+  const nameRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -21,11 +22,15 @@ export default function Registration() {
     try {
       setError("");
       setLoading(true); //disable sign up button when waiting
-      await signup(emailRef.current.value, passwordRef.current.value);
+      await createNewUser({
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+        username: nameRef.current.value,
+      });
       setLoading(false);
       history.push("/");
-    } catch {
-      setError("Failed to create an account");
+    } catch (err) {
+      setError("Failed to create an account:", err); //,
       setLoading(false);
     }
   }
@@ -44,6 +49,10 @@ export default function Registration() {
               <Form.Group id="email">
                 <Form.Label>Email</Form.Label>
                 <Form.Control type="email" ref={emailRef} required />
+              </Form.Group>
+              <Form.Group id="name">
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="name" ref={nameRef} required />
               </Form.Group>
               <Form.Group id="password">
                 <Form.Label>Password</Form.Label>
