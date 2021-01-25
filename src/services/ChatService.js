@@ -1,28 +1,29 @@
 import { db } from "./Firebase/firebase";
 import chatActions from "../redux/ChatActions";
+import firebase from "firebase/app";
 
-export const GetUser = async (userId) => {
+export const GetUser = async (uid) => {
   const usersRef = db.collection("users");
   let data = {};
   try {
-    const snapshot = await usersRef.doc(userId).get();
+    const snapshot = await usersRef.doc(uid).get();
     data = snapshot.data();
     return data.username;
   } catch (err) {}
 };
 
-export const GetGroups = async (dispatch, userId) => {
+export const GetGroups = async (dispatch, uid) => {
   const groupsRef = db.collection("groups");
   let groups = {};
 
   try {
     const groupsSnapShot = await groupsRef
-      .where("users", "array-contains-any", [userId])
+      .where("users", "array-contains-any", [uid])
       .get();
     groupsSnapShot.forEach(async (doc) => {
       const users = {};
-      for (const userId of doc.data().users) {
-        users[userId] = await GetUser(userId);
+      for (const uid of doc.data().users) {
+        users[uid] = await GetUser(uid);
       }
       groups[doc.id] = { users, _id: doc.id, data: doc.data() };
       chatActions.fetchGroups(dispatch, groups);
@@ -55,4 +56,20 @@ export const GetMessages = async (dispatch, groupId) => {
   }
 
   return [...messages];
+};
+
+export const SendMessages = async (dispatch, groupId, uid, text) => {
+  var groupRef = db.collection("groups").doc(groupId).collection("messages");
+  try {
+    const message = {
+      uid: uid,
+      text: text,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    groupRef.add(message);
+  } catch (err) {
+    console.log("Message not sent, ", err);
+  }
+
+  return;
 };
