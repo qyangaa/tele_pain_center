@@ -39,9 +39,12 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    providerActions.fetchProviders(dispatch);
     GetProviders(dispatch);
   }, []);
+
+  useEffect(() => {
+    console.log("providers:", { providers: providersState.providers });
+  }, [providersState]);
 
   useEffect(() => {
     //componnetWillUnmount

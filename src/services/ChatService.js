@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { db } from "./Firebase/firebase";
+import chatActions from "../redux/ChatActions";
 
 export const GetUser = async (userId) => {
   const usersRef = db.collection("users");
@@ -7,39 +7,38 @@ export const GetUser = async (userId) => {
   try {
     const snapshot = await usersRef.doc(userId).get();
     data = snapshot.data();
+    return data.username;
   } catch (err) {}
-  return data.username;
 };
 
-export const GetGroup = async (userId, curGroupId) => {
+export const GetGroups = async (dispatch, userId) => {
   const groupsRef = db.collection("groups");
-  const users = {};
-  const curGroup = {};
-  const groups = [];
-  let groupsSnapShot = [];
+  let groups = {};
 
   try {
-    groupsSnapShot = await groupsRef
+    const groupsSnapShot = await groupsRef
       .where("users", "array-contains-any", [userId])
       .get();
+    groupsSnapShot.forEach(async (doc) => {
+      const users = {};
+      for (const userId of doc.data().users) {
+        users[userId] = await GetUser(userId);
+      }
+      groups[doc.id] = { users, _id: doc.id, data: doc.data() };
+    });
+    chatActions.fetchGroups(dispatch, groups);
   } catch (err) {
     console.log("Group not retrieved:", err);
   }
 
-  groupsSnapShot.forEach(async (doc) => {
-    groups.push(doc.data());
-    for (const userId of doc.data().users) {
-      users[userId] = await GetUser(userId);
-    }
-    curGroup.users = users;
-    curGroup.id = doc.id;
-  });
-
-  groups[curGroup.id] = curGroup;
-  return { groups, curGroup };
+  return groups;
 };
 
-export const GetMessages = async (groupId) => {
+export const SetCurGroup = (dispatch, groups, curGroupId) => {
+  chatActions.fetchCurGroup(dispatch, curGroupId);
+};
+
+export const GetMessages = async (dispatch, groupId) => {
   var groupRef = db.collection("groups").doc(groupId).collection("messages");
   let messages = [];
   try {
@@ -53,6 +52,6 @@ export const GetMessages = async (groupId) => {
   } catch (err) {
     console.log("Message not retrieved, ", err);
   }
-
+  chatActions.fetchMessages(dispatch, messages);
   return [...messages];
 };

@@ -7,7 +7,7 @@ const GetProviders = async (dispatch) => {
   var providersRef = db.collection("providers");
   let data = [];
   try {
-    var providersSnapShot = await providersRef.get();
+    const providersSnapShot = await providersRef.get();
     providersSnapShot.forEach((doc) => {
       const curObject = doc.data();
       curObject._id = doc.id;
