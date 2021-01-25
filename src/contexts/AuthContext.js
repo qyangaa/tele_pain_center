@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth, db } from "../services/Firebase/firebase";
+import * as userActions from "../redux/UserActions";
 
 const AuthContext = React.createContext();
 

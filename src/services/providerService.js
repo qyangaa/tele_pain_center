@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
 import { db } from "./Firebase/firebase";
-import { useDispatch } from "react-redux";
 import providerActions from "../redux/ProvidersActions";
 
 const GetProviders = async (dispatch) => {
