@@ -16,6 +16,7 @@ export const GetGroups = async (dispatch, uid) => {
   const groupsRef = db.collection("groups");
   let groups = {};
 
+  console.log(uid);
   try {
     const groupsSnapShot = await groupsRef
       .where("users", "array-contains-any", [uid])

@@ -28,7 +28,7 @@ export default function Chat(props) {
     GetGroups(dispatch, curUid);
     SetCurGroup(dispatch, curGroupId);
     GetMessages(dispatch, curGroupId);
-  }, []);
+  }, [curUid]);
 
   const sendMessage = (event) => {
     event.preventDefault();

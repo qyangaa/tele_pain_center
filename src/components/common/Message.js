@@ -10,7 +10,7 @@ export default function Message(props) {
         key={`div_${message._id}`}
         className={`message ${isUser && "message__user"}`}
       >
-        {name ? name : "Anonymous"}
+        {name && name}
         <Card
           key={`card_${message._id}`}
           className={`message__card ${isUser && "message__card__user"}`}
