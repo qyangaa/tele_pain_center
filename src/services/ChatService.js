@@ -41,7 +41,7 @@ export const SetCurGroup = (dispatch, curGroupId) => {
   chatActions.fetchCurGroup(dispatch, curGroupId);
   var groupRef = db.collection("groups").doc(curGroupId);
   try {
-    groupRef.set({
+    groupRef.update({
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
   } catch (err) {
@@ -65,7 +65,7 @@ export const GetMessages = async (dispatch, groupId, limit) => {
           chatActions.fetchMessages(dispatch, messages);
         });
       });
-    groupRef.set({
+    groupRef.update({
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
   } catch (err) {
