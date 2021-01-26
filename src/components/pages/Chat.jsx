@@ -56,31 +56,60 @@ export default function Chat(props) {
     );
   };
 
+  function compareGroup(group1, group2) {
+    if (!group1 || !group2) {
+      return 0;
+    }
+    if (group1[1].data.timestamp.seconds > group2[1].data.seconds) {
+      return 1;
+    }
+    if (group1[1].data.timestamp.seconds < group2[1].data.seconds) {
+      return -1;
+    }
+    return 0;
+  }
+
+  function getContactName(group) {
+    if (!group || !group.users) {
+      return;
+    }
+    const groupMembers = Object.entries(group.users);
+
+    const contact = groupMembers.filter((member) => member[0] != curUid)[0];
+    return contact[1];
+  }
+
+  const renderContact = () => {
+    return (
+      <div>
+        {!groups.isLoading &&
+          groups.groups &&
+          Object.values(groups.groups)
+            .sort(compareGroup)
+            .map((group) => (
+              <div className="contact-drawer">
+                <div className="text">
+                  <h6> {getContactName(group)} </h6>
+
+                  <p className="text-muted">
+                    {messages[0] && messages[0].text}
+                  </p>
+                </div>
+              </div>
+            ))}
+      </div>
+    );
+  };
+
   return (
     <div className="chat">
       <div className="container">
         <div className="row no_gutters">
           <div className="col-md-3 border-right tight">
             <div className="settings-tray">
-              <img
-                src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                alt="Profile Image"
-                className="profile-image"
-              />
-              <span className="alignright">icon</span>
+              <span className="alignright">Contacts</span>
             </div>
-            <div className="contact-drawer">
-              <img
-                src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                alt="Profile Image"
-                className="profile-image"
-              />
-              <div className="text">
-                <h6>Doctor Name</h6>
-
-                <p className="text-muted">Last meassage sent</p>
-              </div>
-            </div>
+            {renderContact()}
             <hr />
           </div>
 

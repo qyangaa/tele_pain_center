@@ -20,6 +20,7 @@ export const GetGroups = async (dispatch, uid) => {
   try {
     const groupsSnapShot = await groupsRef
       .where("users", "array-contains-any", [uid])
+      .orderBy("timestamp", "desc")
       .get();
     groupsSnapShot.forEach(async (doc) => {
       const users = {};
@@ -38,13 +39,22 @@ export const GetGroups = async (dispatch, uid) => {
 
 export const SetCurGroup = (dispatch, curGroupId) => {
   chatActions.fetchCurGroup(dispatch, curGroupId);
+  var groupRef = db.collection("groups").doc(curGroupId);
+  try {
+    groupRef.set({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+  } catch (err) {
+    console.log("failed to set curGroup on server, ", err);
+  }
 };
 
 export const GetMessages = async (dispatch, groupId, limit) => {
-  var groupRef = db.collection("groups").doc(groupId).collection("messages");
+  const groupRef = db.collection("groups").doc(groupId);
+  const messageRef = groupRef.collection("messages");
   let messages = [];
   try {
-    groupRef
+    messageRef
       .orderBy("timestamp", "desc")
       .limit(limit)
       .onSnapshot((snapshot) => {
@@ -55,6 +65,9 @@ export const GetMessages = async (dispatch, groupId, limit) => {
           chatActions.fetchMessages(dispatch, messages);
         });
       });
+    groupRef.set({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
   } catch (err) {
     console.log("Message not retrieved, ", err);
   }
