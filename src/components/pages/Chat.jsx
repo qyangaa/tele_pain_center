@@ -27,7 +27,8 @@ export default function Chat(props) {
   useEffect(() => {
     GetGroups(dispatch, curUid);
     SetCurGroup(dispatch, curGroupId);
-    GetMessages(dispatch, curGroupId);
+    // TODO: increment limit when scroll up
+    GetMessages(dispatch, curGroupId, 30);
   }, [curUid]);
 
   const sendMessage = (event) => {

@@ -40,18 +40,21 @@ export const SetCurGroup = (dispatch, curGroupId) => {
   chatActions.fetchCurGroup(dispatch, curGroupId);
 };
 
-export const GetMessages = async (dispatch, groupId) => {
+export const GetMessages = async (dispatch, groupId, limit) => {
   var groupRef = db.collection("groups").doc(groupId).collection("messages");
   let messages = [];
   try {
-    groupRef.orderBy("timestamp", "asc").onSnapshot((snapshot) => {
-      snapshot.docs.map((doc) => {
-        const curObject = doc.data();
-        curObject._id = doc.id;
-        messages.push(curObject);
-        chatActions.fetchMessages(dispatch, messages);
+    groupRef
+      .orderBy("timestamp", "desc")
+      .limit(limit)
+      .onSnapshot((snapshot) => {
+        snapshot.docs.reverse().map((doc) => {
+          const curObject = doc.data();
+          curObject._id = doc.id;
+          messages.push(curObject);
+          chatActions.fetchMessages(dispatch, messages);
+        });
       });
-    });
   } catch (err) {
     console.log("Message not retrieved, ", err);
   }
