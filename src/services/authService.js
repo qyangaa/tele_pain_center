@@ -9,6 +9,14 @@ const user = {
 
 export const createNewUser = async ({ email, password, username }) => {
   await firebase.createUser({ email, password }, { username, email });
+  await login({ email, password });
+};
+
+export const login = async ({ email, password }) => {
+  await firebase.login({
+    email,
+    password,
+  });
 };
 
 export function GetCurrentUser() {
