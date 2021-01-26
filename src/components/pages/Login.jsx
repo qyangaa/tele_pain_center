@@ -1,12 +1,11 @@
 import React, { useRef, useState } from "react";
 import { Card, Button, Form, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { login } from "../../services/authService";
 
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -17,7 +16,10 @@ export default function Login() {
     try {
       setError("");
       setLoading(true); //disable sign up button when waiting
-      await login(emailRef.current.value, passwordRef.current.value);
+      await login({
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      });
       setLoading(false);
       history.push("/");
     } catch {

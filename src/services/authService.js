@@ -13,10 +13,16 @@ export const createNewUser = async ({ email, password, username }) => {
 };
 
 export const login = async ({ email, password }) => {
+  //  TODO: check whether logout without cur user is a problem
+  logout();
   await firebase.login({
     email,
     password,
   });
+};
+
+export const logout = async () => {
+  await firebase.logout();
 };
 
 export function GetCurrentUser() {
