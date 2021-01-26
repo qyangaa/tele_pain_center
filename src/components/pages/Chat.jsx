@@ -56,7 +56,7 @@ export default function Chat(props) {
   };
 
   return (
-    <div className="main">
+    <div className="chat">
       <div className="container">
         <div className="row no_gutters">
           <div className="col-md-3 border-right tight">

@@ -1,21 +1,21 @@
-.container {
+.chat .container {
   /* max-width: 728px; */
   margin: 0 auto;
   padding: 0px;
   border-radius: 7px;
 }
 
-.tight {
+.chat .tight {
   padding: 0 !important;
 }
 
-.profile-image {
+.chat .profile-image {
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
 
-.settings-tray {
+.chat .settings-tray {
   height: 3vh;
   min-height: 50px;
   /* position: fixed; */
@@ -34,15 +34,15 @@
   border-radius: 7px;
 }
 
-.settings-tray .no-gutters {
+.chat .settings-tray .no-gutters {
   padding: 0%;
 }
 
-.settings-tray .alignright {
+.chat .settings-tray .alignright {
   float: right;
 }
 
-.settings-tray i {
+.chat .settings-tray i {
   margin-top: 10px;
   font-size: 25px;
   color: grey;
@@ -50,7 +50,7 @@
   transition: 0.3s;
 }
 
-.contact-drawer {
+.chat .contact-drawer {
   padding: 5px 5px;
   display: flex;
   vertical-align: baseline;
@@ -58,32 +58,32 @@
   transition: 0.3s ease;
 }
 
-.contact-drawer .text {
+.chat .contact-drawer .text {
   margin-left: 4%;
   width: 90%;
   margin-bottom: 0%;
 }
 
-.contact-drawer .text h6 {
+.chat .contact-drawer .text h6 {
   margin: 0%;
 }
 
-.contact-drawer .text p {
+.chat .contact-drawer .text p {
   margin: 0%;
 }
 
-hr {
+.chat hr {
   margin: 0;
   height: 0;
 }
 
-.Chat {
+.chat .Chat {
   text-align: center;
   /* max-width: 720px; */
   margin: 0;
 }
 
-.Chat section {
+.chat .Chat section {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -91,7 +91,7 @@ hr {
   background-color: rgb(255, 255, 255);
 }
 
-.message-window {
+.chat .message-window {
   padding: 0;
   height: 70vh;
   margin: 0 0 2vh;
@@ -100,19 +100,19 @@ hr {
   flex-direction: column;
 }
 
-.message-window::-webkit-scrollbar {
+.chat .message-window::-webkit-scrollbar {
   width: 0.5rem;
 }
 
-.message-window::-webkit-scrollbar-track {
+.chat .message-window::-webkit-scrollbar-track {
   background: #fff;
 }
 
-.message-window::-webkit-scrollbar-thumb {
+.chat .message-window::-webkit-scrollbar-thumb {
   background: lightsteelblue;
 }
 
-form {
+.chat form {
   height: 10vh;
   bottom: 0;
   background-color: rgba(24, 23, 23, 0);
@@ -121,7 +121,7 @@ form {
   font-size: 1.5rem;
 }
 
-form button {
+.chat form button {
   width: 15%;
   height: 40px;
   background-color: lightskyblue !important;
@@ -129,15 +129,15 @@ form button {
   text-align: center;
   border: none !important;
 }
-a .input-bar {
+.chat a .input-bar {
   padding: 0%;
   height: 0;
 }
-.input-box {
+.chat .input-box {
   text-align: center;
 }
 
-.chat-box-tray {
+.chat .chat-box-tray {
   background: #eee;
   display: flex;
   align-items: baseline;
