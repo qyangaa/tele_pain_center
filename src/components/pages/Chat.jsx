@@ -89,9 +89,10 @@ export default function Chat(props) {
               <header className="settings-tray">Welcome {displayName}! </header>
               {/* Message */}
               <div className="message-window">
-                <section>
+                <div className="messages">
                   {messagesLoading ? "Retrieving Messages" : renderMessage()}
-                </section>
+                </div>
+                <div id="anchor"></div>
               </div>
 
               {/* Input */}

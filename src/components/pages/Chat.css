@@ -94,11 +94,12 @@
 .chat .message-window {
   padding: 0;
   height: 70vh;
-  margin: 0 0 2vh;
-  padding-bottom: 40px;
+  margin: 40px 0 2vh;
+  padding-bottom: 20px;
   overflow-y: scroll;
   display: flex;
   flex-direction: column-reverse;
+  position: relative;
 }
 
 .chat .message-window::-webkit-scrollbar {
@@ -130,10 +131,7 @@
   text-align: center;
   border: none !important;
 }
-.chat a .input-bar {
-  padding: 0%;
-  height: 0;
-}
+
 .chat .input-box {
   text-align: center;
 }
