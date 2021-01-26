@@ -95,9 +95,10 @@
   padding: 0;
   height: 70vh;
   margin: 0 0 2vh;
+  padding-bottom: 40px;
   overflow-y: scroll;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
 }
 
 .chat .message-window::-webkit-scrollbar {
