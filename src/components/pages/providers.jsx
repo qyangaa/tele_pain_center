@@ -16,6 +16,8 @@ import GetProviders from "../../services/providerService";
 
 import { PROVIDERS } from "../../services/data/providerData";
 
+import "./Providers.css";
+
 export default function Providers() {
   // const [providers, setProviders] = useState([]);
   const providersState = useSelector((state) => state.providersState);
@@ -154,18 +156,20 @@ export default function Providers() {
   const renderProviders = (pagedProviders) => {
     return (
       <div>
-        {!smallWindow && (
+        {
           <div className="row">
-            <div className={"col-3"}>
-              <CollapsibleList
-                groups={filters}
-                itemKey="options"
-                onSelect={handleSelect}
-                selectedItems={selectedFilters}
-              />
+            <div className="col-sm-5 col-md-3">
+              <div className="side_menu">
+                <CollapsibleList
+                  groups={filters}
+                  itemKey="options"
+                  onSelect={handleSelect}
+                  selectedItems={selectedFilters}
+                />
+                <SearchBox onChange={handleSearch} />
+              </div>
             </div>
-            <div className="col">
-              <SearchBox onChange={handleSearch} />
+            <div className="col-sm-7 col-md-9 card-list">
               {providersState.isLoading && Loading()}
               {CardDeck(pagedProviders, smallWindow, button2)}
               <Pagination
@@ -176,26 +180,7 @@ export default function Providers() {
               />
             </div>
           </div>
-        )}
-        {smallWindow && (
-          <div>
-            <CollapsibleList
-              groups={filters}
-              itemKey="options"
-              onSelect={handleSelect}
-              selectedItems={selectedFilters}
-            />
-            <SearchBox onChange={handleSearch} />
-            {providersState.isLoading && Loading()}
-            {CardDeck(pagedProviders, smallWindow, button2)}
-            <Pagination
-              itemsCount={itemsCount}
-              pageSize={pageSize}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-            />
-          </div>
-        )}
+        }
       </div>
     );
   };

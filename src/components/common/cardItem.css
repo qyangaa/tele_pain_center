@@ -1,0 +1,11 @@
+.card div.center_content {
+  text-align: center;
+}
+
+img.profile_img {
+  object-fit: cover;
+  height: 180px;
+  width: 180px;
+  border-radius: 20%;
+  margin: 20px;
+}

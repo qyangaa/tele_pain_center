@@ -1,0 +1,21 @@
+div.side_menu {
+  position: sticky;
+  margin-top: 20px;
+}
+
+div.side_menu .card {
+  border: none;
+}
+
+div.side_menu .card .card-header {
+  background: var(--dark-bg-color);
+  color: var(--light-text-color);
+  border-radius: 15px;
+  margin: 10px;
+}
+
+.card-list .card {
+  border-color: var(--light-bg-color);
+  margin: 10px;
+  border-radius: 10px;
+}

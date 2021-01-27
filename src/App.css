@@ -4,3 +4,21 @@
   margin-right: auto;
   margin-left: auto;
 }
+
+.btn.btn-primary {
+  background: var(--dark-bg-color);
+  color: var(--light-text-color);
+  border-color: var(--dark-bg-color);
+  border-radius: 10px;
+  transition: 0.3s ease-in-out;
+}
+
+.btn.btn-primary:hover {
+  border-color: var(--dark-bg-color);
+  background: transparent;
+  color: var(--dark-text-color);
+}
+
+a {
+  color: var(--dark-text-color-link);
+}

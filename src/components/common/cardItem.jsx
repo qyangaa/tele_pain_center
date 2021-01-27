@@ -4,30 +4,22 @@ import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import "./cardItem.css";
 
 const CardItem = (item, smallWindow, button2) => {
+  // TODO: Image not equal height
   return (
-    <Card key={item._id}>
+    <Card key={item._id} className="horizontal_card">
       <Row className="align-items-center">
-        {!smallWindow && (
-          <Col
-            xs={0}
-            md={3}
-            lg={3}
-            className="align-items-center"
-            style={{ margin: 20 }}
-          >
-            <div>
-              <Image
-                src={item.image}
-                roundedCircle
-                fluid="true"
-                className="m-auto profile"
-                style={{ alignSelf: "center" }}
-              />
-            </div>
-          </Col>
-        )}
+        <Col xs={0} md={4} lg={3} style={{ margin: 20 }}>
+          <div className={`${smallWindow ? "center_content" : ""}`}>
+            <Image
+              src={item.image}
+              className="profile_img"
+              style={{ alignSelf: "center" }}
+            />
+          </div>
+        </Col>
         <Col>
           <Card.Body>
             <Card.Title>{item.name}</Card.Title>
