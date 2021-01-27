@@ -4,11 +4,11 @@ export const FILTERS = [
     title: "Specialty",
     options: [
       {
-        name: "fibromyalgia",
+        name: "Fibromyalgia",
         _id: "fibromyalgia",
       },
       {
-        name: "arthritis",
+        name: "Arthritis",
         _id: "arthritis",
       },
       {

@@ -10,11 +10,11 @@ import NavBar from "./components/UI/navBar";
 import NotFound from "./components/pages/notFound";
 import Dashboard from "./components/pages/Dashboard";
 import ForgotPassword from "./components/pages/ForgotPassword";
+import NewProvider from "./components/pages/NewProvider";
 
 import "./App.css";
 import Records from "./components/pages/records";
 import { Container } from "react-bootstrap";
-import { AuthProvider } from "./contexts/AuthContext";
 import Login from "./components/pages/Login";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import UpdateProfile from "./components/pages/UpdateProfile";
@@ -43,6 +43,7 @@ class App extends Component {
               <Switch>
                 <Route path="/calendar" component={Calendar} />
                 <Route path="/chat" component={Chat} />
+                <Route path="/newprovider" component={NewProvider} />
                 <Route path="/registration" component={Registration} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
                 <ProtectedRoute
