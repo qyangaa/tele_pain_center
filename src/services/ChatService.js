@@ -76,7 +76,7 @@ export const GetMessages = async (dispatch, groupId, limit) => {
 };
 
 export const SendMessages = async (dispatch, groupId, uid, text) => {
-  var groupRef = db.collection("groups").doc(groupId).collection("messages");
+  const groupRef = db.collection("groups").doc(groupId).collection("messages");
   try {
     const message = {
       uid: uid,
