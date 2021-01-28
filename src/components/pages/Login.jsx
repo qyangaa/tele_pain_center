@@ -2,14 +2,23 @@ import React, { useRef, useState } from "react";
 import { Card, Button, Form, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { login } from "../../services/authService";
+import {
+  GetGroups,
+  GetMessages,
+  SetCurGroup,
+  SendMessages,
+} from "../../services/ChatService";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Login() {
+  const dispatch = useDispatch();
   const emailRef = useRef();
   const passwordRef = useRef();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-
+  const curUid = useSelector((state) => state.firebase.auth.uid);
+  const groups = useSelector((state) => state.chatGroupsState);
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -20,6 +29,12 @@ export default function Login() {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       });
+      await GetGroups(dispatch, curUid);
+      if (groups.groups) {
+        console.log({ groups: groups.groups });
+        const curGroupId = Object.keys(groups.groups)[0];
+        SetCurGroup(dispatch, curGroupId);
+      }
       setLoading(false);
       history.push("/");
     } catch {

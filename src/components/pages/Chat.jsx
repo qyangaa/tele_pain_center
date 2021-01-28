@@ -16,7 +16,7 @@ export default function Chat(props) {
   const messages = useSelector((state) => state.messagesState.messages);
   const messagesLoading = useSelector((state) => state.messagesState.isLoading);
   const groups = useSelector((state) => state.chatGroupsState);
-  const curGroup = useSelector((state) => state.curGroup);
+  const curGroup = useSelector((state) => state.curGroup.curGroup);
   const displayName = useSelector((state) => state.firebase.auth.displayname);
   const curUid = useSelector((state) => state.firebase.auth.uid);
 
@@ -26,10 +26,23 @@ export default function Chat(props) {
 
   useEffect(() => {
     GetGroups(dispatch, curUid);
-    SetCurGroup(dispatch, curGroupId);
-    // TODO: increment limit when scroll up
-    GetMessages(dispatch, curGroupId, 30);
   }, [curUid]);
+
+  useEffect(() => {
+    GetGroups(dispatch, curUid);
+    if (curGroup) {
+      GetMessages(dispatch, curGroup, 30);
+    }
+  }, [curGroup]);
+
+  useEffect(() => {
+    if (!curGroup.curGroup && groups.groups) {
+      const curGroupTemp = Object.values(groups.groups).sort(compareGroup)[0];
+      if (curGroupTemp) {
+        SetCurGroup(dispatch, curGroupTemp._id);
+      }
+    }
+  }, [groups]);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -57,7 +70,7 @@ export default function Chat(props) {
   };
 
   function compareGroup(group1, group2) {
-    if (!group1 || !group2) {
+    if (!group1 || !group2 || !group1[1] || !group2[1]) {
       return 0;
     }
     if (group1[1].data.timestamp.seconds > group2[1].data.seconds) {
@@ -81,7 +94,7 @@ export default function Chat(props) {
 
   const renderContact = () => {
     return (
-      <div>
+      <div className="contact-list">
         {!groups.isLoading &&
           groups.groups &&
           Object.values(groups.groups)
@@ -90,10 +103,10 @@ export default function Chat(props) {
               <div className="contact-drawer">
                 <div className="text">
                   <h6> {getContactName(group)} </h6>
-
+                  {/* 
                   <p className="text-muted">
                     {messages[0] && messages[0].text}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             ))}
@@ -116,7 +129,9 @@ export default function Chat(props) {
           <div className="col-md-9 tight">
             <div className="Chat">
               {/* Header */}
-              <header className="settings-tray">Welcome {displayName}! </header>
+              <header className="settings-tray">
+                Conversation with {getContactName(groups.groups[curGroup])}
+              </header>
               {/* Message */}
               <div className="message-window">
                 <div className="messages">
