@@ -26,6 +26,17 @@
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
 
+  --fullbg-primary: #01bbb3;
+  --fullbg-secondary: #04475c;
+  --light-bg-semitransparent: rgba(255, 255, 255, 0.05);
+  --light-bg-semitransparent1: rgba(255, 255, 255, 0.1);
+  --light-bg-semitransparent2: rgba(255, 255, 255, 0.2);
+  --light-bg-semitransparent3: rgba(255, 255, 255, 0.3);
+  --dark-bg-semitransparent: rgba(0, 0, 0, 0.1);
+  --dark-bg-semitransparent1: rgba(0, 0, 0, 0.1);
+  --dark-bg-semitransparent2: rgba(0, 0, 0, 0.2);
+  --dark-bg-semitransparent3: rgba(0, 0, 0, 0.3);
+
   --dark-bg-color: #526088;
   --light-bg-color: #ccc5bf;
   --light-bg-alternate-top: #f5f5f3;
@@ -48,6 +59,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(
+    120deg,
+    var(--fullbg-primary),
+    var(--fullbg-secondary)
+  );
 }
 
 code {

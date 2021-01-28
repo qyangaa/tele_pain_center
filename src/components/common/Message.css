@@ -1,8 +1,8 @@
 .message {
   width: fit-content;
   font-size: small;
-  margin: 0 1%;
-  color: dimgrey;
+  margin: 0px 15px;
+  color: var(--light-text-color);
   text-align: left;
 }
 
@@ -12,14 +12,23 @@
 }
 
 .message__card {
-  padding: 8px;
   width: fit-content;
-  background-color: lightslategrey !important;
+  max-width: 400px;
+  background: var(--light-bg-semitransparent1) !important;
+  border: none !important;
   color: white;
   font-size: medium;
+  padding: 10px 20px;
+  box-shadow: 1px 1px 20px var(--dark-bg-semitransparent1);
 }
 
 .message__card__user {
   margin-left: auto;
-  background-color: lightsteelblue !important;
+  background-color: var(--light-bg-semitransparent2) !important;
+}
+
+.message .name {
+  margin-top: 15px;
+  margin-bottom: 3px;
+  font-size: medium;
 }

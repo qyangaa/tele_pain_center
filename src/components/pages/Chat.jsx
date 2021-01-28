@@ -9,6 +9,8 @@ import {
 } from "../../services/ChatService";
 import { useSelector, useDispatch } from "react-redux";
 
+import { BsDot } from "react-icons/bs";
+
 import "./Chat.css";
 
 export default function Chat(props) {
@@ -95,21 +97,18 @@ export default function Chat(props) {
   const renderContact = () => {
     return (
       <div className="contact-list">
-        {!groups.isLoading &&
-          groups.groups &&
-          Object.values(groups.groups)
-            .sort(compareGroup)
-            .map((group) => (
-              <div className="contact-drawer">
-                <div className="text">
-                  <h6> {getContactName(group)} </h6>
-                  {/* 
-                  <p className="text-muted">
-                    {messages[0] && messages[0].text}
-                  </p> */}
+        <div className="contact-drawer">
+          {!groups.isLoading &&
+            groups.groups &&
+            Object.values(groups.groups)
+              .sort(compareGroup)
+              .map((group) => (
+                <div className="item">
+                  <BsDot className="icon" />
+                  {getContactName(group)}
                 </div>
-              </div>
-            ))}
+              ))}
+        </div>
       </div>
     );
   };
@@ -117,21 +116,17 @@ export default function Chat(props) {
   return (
     <div className="chat">
       <div className="container">
-        <div className="row no_gutters">
-          <div className="col-md-3 border-right tight">
-            <div className="settings-tray">
-              <span className="alignright">Contacts</span>
-            </div>
+        <div className="row">
+          <div className="col-md-3 contacts">
+            <div className="header">Contact List</div>
             {renderContact()}
-            <hr />
           </div>
 
           <div className="col-md-9 tight">
             <div className="Chat">
-              {/* Header */}
-              <header className="settings-tray">
+              <div className="header">
                 Conversation with {getContactName(groups.groups[curGroup])}
-              </header>
+              </div>
               {/* Message */}
               <div className="message-window">
                 <div className="messages">
@@ -139,7 +134,6 @@ export default function Chat(props) {
                 </div>
                 <div id="anchor"></div>
               </div>
-
               {/* Input */}
               <form className="input-bar">
                 <FormControl
