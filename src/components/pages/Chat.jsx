@@ -24,17 +24,13 @@ export default function Chat(props) {
 
   const [input, setInput] = useState("");
 
-  let curGroupId = "cndh7Tr86fjKTKL09Rkx";
-
   useEffect(() => {
     GetGroups(dispatch, curUid);
   }, [curUid]);
 
   useEffect(() => {
-    GetGroups(dispatch, curUid);
-    if (curGroup) {
-      GetMessages(dispatch, curGroup, 30);
-    }
+    console.log({ curGroup });
+    GetMessages(dispatch, curGroup, 30);
   }, [curGroup]);
 
   useEffect(() => {
@@ -48,8 +44,7 @@ export default function Chat(props) {
 
   const sendMessage = (event) => {
     event.preventDefault();
-    console.log(input);
-    SendMessages(dispatch, curGroupId, curUid, input);
+    SendMessages(dispatch, curGroup, curUid, input);
     setInput("");
   };
 
@@ -61,8 +56,8 @@ export default function Chat(props) {
             <Message
               message={message}
               name={
-                groups.groups[curGroupId] &&
-                groups.groups[curGroupId].users[message.uid]
+                groups.groups[curGroup] &&
+                groups.groups[curGroup].users[message.uid]
               }
               isUser={curUid == message.uid}
             />
@@ -103,7 +98,10 @@ export default function Chat(props) {
             Object.values(groups.groups)
               .sort(compareGroup)
               .map((group) => (
-                <div className="item">
+                <div
+                  className="item"
+                  onClick={() => SetCurGroup(dispatch, group._id)}
+                >
                   <BsDot className="icon" />
                   {getContactName(group)}
                 </div>

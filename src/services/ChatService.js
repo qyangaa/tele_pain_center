@@ -50,6 +50,10 @@ export const SetCurGroup = (dispatch, curGroupId) => {
 };
 
 export const GetMessages = async (dispatch, groupId, limit) => {
+  if (!groupId) {
+    chatActions.fetchMessages(dispatch, []);
+    return [];
+  }
   const groupRef = db.collection("groups").doc(groupId);
   const messageRef = groupRef.collection("messages");
   let messages = [];
@@ -70,6 +74,10 @@ export const GetMessages = async (dispatch, groupId, limit) => {
     });
   } catch (err) {
     console.log("Message not retrieved, ", err);
+  }
+
+  if (!messages.length) {
+    chatActions.fetchMessages(dispatch, messages);
   }
 
   return [...messages];
