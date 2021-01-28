@@ -28,10 +28,16 @@
 
   --fullbg-primary: #01bbb3;
   --fullbg-secondary: #04475c;
+  --fullbg-red: #f197a2;
+  --fullbg-yellow: #f5c832;
+  --fullbg-yellow-light: #f0ca75;
+
   --light-bg-semitransparent: rgba(255, 255, 255, 0.05);
   --light-bg-semitransparent1: rgba(255, 255, 255, 0.1);
   --light-bg-semitransparent2: rgba(255, 255, 255, 0.2);
   --light-bg-semitransparent3: rgba(255, 255, 255, 0.3);
+  --light-bg-semitransparent7: rgba(255, 255, 255, 0.7);
+  --light-bg-semitransparent9: rgba(255, 255, 255, 0.9);
   --dark-bg-semitransparent: rgba(0, 0, 0, 0.1);
   --dark-bg-semitransparent1: rgba(0, 0, 0, 0.1);
   --dark-bg-semitransparent2: rgba(0, 0, 0, 0.2);

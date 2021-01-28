@@ -10,6 +10,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 
 import { BsDot } from "react-icons/bs";
+import { IoSend } from "react-icons/io5";
 
 import "./Chat.css";
 
@@ -29,7 +30,7 @@ export default function Chat(props) {
   }, [curUid]);
 
   useEffect(() => {
-    console.log({ curGroup });
+    GetGroups(dispatch, curUid);
     GetMessages(dispatch, curGroup, 30);
   }, [curGroup]);
 
@@ -99,7 +100,7 @@ export default function Chat(props) {
               .sort(compareGroup)
               .map((group) => (
                 <div
-                  className="item"
+                  className={`item ${group._id == curGroup ? "curItem" : ""}`}
                   onClick={() => SetCurGroup(dispatch, group._id)}
                 >
                   <BsDot className="icon" />
@@ -123,7 +124,7 @@ export default function Chat(props) {
           <div className="col-md-9 tight">
             <div className="Chat">
               <div className="header">
-                Conversation with {getContactName(groups.groups[curGroup])}
+                {getContactName(groups.groups[curGroup])}
               </div>
               {/* Message */}
               <div className="message-window">
@@ -141,9 +142,12 @@ export default function Chat(props) {
                   onChange={(event) => setInput(event.target.value)}
                   className="input-box"
                 />
-                <Button disabled={!input} type="submit" onClick={sendMessage}>
-                  Submit
-                </Button>
+                <IoSend
+                  disabled={!input}
+                  type="submit"
+                  onClick={sendMessage}
+                  className="send-button"
+                />
               </form>
             </div>
           </div>

@@ -67,7 +67,6 @@ export const GetMessages = async (dispatch, groupId, limit) => {
           const curObject = doc.data();
           curObject._id = doc.id;
           messages.push(curObject);
-          console.log({ numMesages: messages.length });
           chatActions.fetchMessages(dispatch, messages);
         });
       });
