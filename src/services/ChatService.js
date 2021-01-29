@@ -49,22 +49,18 @@ export const SetCurGroup = (dispatch, curGroupId) => {
   }
 };
 
-export const FindGroup = async (dispatch, uid1, uid2) => {
+export const CreateGroup = async (dispatch, uid1, uid2) => {
   const groupsRef = db.collection("groups");
-  let groups = {};
-  console.log({ uid1, uid2 });
   try {
-    const groupsSnapShot = await groupsRef
-      .where("users", "array-contains-any", [uid1])
-      .where("users", "array-contains-any", [uid2])
-      .orderBy("timestamp", "desc")
-      .get();
-    console.log(groupsSnapShot);
+    const group = {
+      users: [uid1, uid2],
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    const groupRef = await groupsRef.add(group);
+    chatActions.fetchCurGroup(dispatch, groupRef.id);
   } catch (err) {
-    console.log("Group not retrieved:", err);
+    console.log("Group not created:", err);
   }
-
-  return groups;
 };
 
 export const GetMessages = async (dispatch, groupId, limit) => {

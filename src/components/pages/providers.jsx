@@ -1,4 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 
 import exampleImg from "../../services/data/pictures/exampleImg.jpeg";
 import CardDeck from "../common/cardDeck";
@@ -16,21 +17,26 @@ import GetProviders from "../../services/providerService";
 
 import { PROVIDERS } from "../../services/data/providerData";
 
-import { FindGroup, GetGroups } from "../../services/ChatService";
+import {
+  CreateGroup,
+  GetGroups,
+  SetCurGroup,
+} from "../../services/ChatService";
 
 import "./Providers.css";
 
 export default function Providers() {
   // const [providers, setProviders] = useState([]);
   const providersState = useSelector((state) => state.providersState);
-
+  const groups = useSelector((state) => state.chatGroupsState);
+  const curGroup = useSelector((state) => state.curGroup.curGroup);
   // const [filters, setFilters] = useState(getFilters());
   const filters = useSelector((state) => state.filters);
   const curUid = useSelector((state) => state.firebase.auth.uid);
   const [uid, setUid] = useState("");
 
   const dispatch = useDispatch();
-
+  const history = useHistory();
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   const [smallWindow, setSmallWindow] = useState(false);
@@ -39,8 +45,8 @@ export default function Providers() {
   const [pageSize, setPageSize] = useState(5);
   const [button2, setButton2] = useState({
     text: "Message",
-    onClick: (item) => () => {
-      console.log({ item, curUid });
+    onClick: (providerUid) => () => {
+      console.log({ providerUid, curUid });
     },
   });
 
@@ -52,13 +58,27 @@ export default function Providers() {
   }, []);
 
   useEffect(() => {
+    GetGroups(dispatch, curUid);
+  }, [curUid]);
+
+  useEffect(() => {
     setButton2({
       text: "Message",
-      onClick: (item) => () => {
-        FindGroup(dispatch, curUid, item);
+      onClick: (providerUid) => () => {
+        if (groups.groups) {
+          for (let group of Object.values(groups.groups)) {
+            if (providerUid in group.users) {
+              SetCurGroup(dispatch, group._id);
+              history.push("/chat");
+              return;
+            }
+          }
+          CreateGroup(dispatch, providerUid, curUid);
+          history.push("/chat");
+        }
       },
     });
-  }, [curUid]);
+  }, [groups]);
 
   useEffect(() => {
     // console.log({ providers: providersState.providers, curUid });

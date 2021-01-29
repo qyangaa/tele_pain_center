@@ -37,7 +37,7 @@ export default function Chat(props) {
   useEffect(() => {
     if (!curGroup.curGroup && groups.groups) {
       const curGroupTemp = Object.values(groups.groups).sort(compareGroup)[0];
-      if (curGroupTemp) {
+      if (curGroupTemp && !curGroup) {
         SetCurGroup(dispatch, curGroupTemp._id);
       }
     }
