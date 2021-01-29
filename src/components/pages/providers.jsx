@@ -16,6 +16,8 @@ import GetProviders from "../../services/providerService";
 
 import { PROVIDERS } from "../../services/data/providerData";
 
+import { FindGroup, GetGroups } from "../../services/ChatService";
+
 import "./Providers.css";
 
 export default function Providers() {
@@ -24,6 +26,9 @@ export default function Providers() {
 
   // const [filters, setFilters] = useState(getFilters());
   const filters = useSelector((state) => state.filters);
+  const curUid = useSelector((state) => state.firebase.auth.uid);
+  const [uid, setUid] = useState("");
+
   const dispatch = useDispatch();
 
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -34,7 +39,9 @@ export default function Providers() {
   const [pageSize, setPageSize] = useState(5);
   const [button2, setButton2] = useState({
     text: "Message",
-    onClick: (item) => () => handleMessage(item),
+    onClick: (item) => () => {
+      console.log({ item, curUid });
+    },
   });
 
   useEffect(() => {
@@ -45,7 +52,16 @@ export default function Providers() {
   }, []);
 
   useEffect(() => {
-    console.log("providers:", { providers: providersState.providers });
+    setButton2({
+      text: "Message",
+      onClick: (item) => () => {
+        FindGroup(dispatch, curUid, item);
+      },
+    });
+  }, [curUid]);
+
+  useEffect(() => {
+    // console.log({ providers: providersState.providers, curUid });
   }, [providersState]);
 
   useEffect(() => {
@@ -55,10 +71,6 @@ export default function Providers() {
       window.removeEventListener("resize", updateDimensions);
     };
   }, []);
-
-  const handleMessage = (item) => {
-    console.log("clicked:", item);
-  };
 
   const updateDimensions = () => {
     if (window.innerWidth < 800) {

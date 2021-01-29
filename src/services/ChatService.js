@@ -16,7 +16,7 @@ export const GetGroups = async (dispatch, uid) => {
   const groupsRef = db.collection("groups");
   let groups = {};
 
-  console.log(uid);
+  console.log({ uid });
   try {
     const groupsSnapShot = await groupsRef
       .where("users", "array-contains-any", [uid])
@@ -47,6 +47,24 @@ export const SetCurGroup = (dispatch, curGroupId) => {
   } catch (err) {
     console.log("failed to set curGroup on server, ", err);
   }
+};
+
+export const FindGroup = async (dispatch, uid1, uid2) => {
+  const groupsRef = db.collection("groups");
+  let groups = {};
+  console.log({ uid1, uid2 });
+  try {
+    const groupsSnapShot = await groupsRef
+      .where("users", "array-contains-any", [uid1])
+      .where("users", "array-contains-any", [uid2])
+      .orderBy("timestamp", "desc")
+      .get();
+    console.log(groupsSnapShot);
+  } catch (err) {
+    console.log("Group not retrieved:", err);
+  }
+
+  return groups;
 };
 
 export const GetMessages = async (dispatch, groupId, limit) => {
