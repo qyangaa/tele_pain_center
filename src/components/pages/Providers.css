@@ -6,6 +6,7 @@ div.side_menu {
 div.side_menu .card {
   border: none;
   background: transparent;
+  box-shadow: none;
 }
 
 div.side_menu .card .card-header {

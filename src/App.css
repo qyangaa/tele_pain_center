@@ -1,8 +1,31 @@
+.body {
+  color: var(--light-text-color);
+}
+
+div {
+  color: var(--light-text-color);
+}
+
 .container {
   max-width: 100%;
   padding: 0;
   margin-right: auto;
   margin-left: auto;
+}
+
+.card {
+  background: var(--light-bg-semitransparent1);
+  background: linear-gradient(
+    120deg,
+    var(--light-bg-semitransparent1),
+    var(--light-bg-semitransparent3)
+  );
+  margin: 30px auto;
+  max-width: 800px;
+  /* height: 80vh; */
+  position: relative;
+  color: var(--light-text-color);
+  box-shadow: 1px 1px 12px var(--dark-bg-semitransparent2);
 }
 
 .btn.btn-primary {
@@ -11,6 +34,7 @@
   border: none;
   border-radius: 10px;
   transition: 0.3s ease-in-out;
+  margin: 15px 0px 5px 0px;
 }
 
 .btn.btn-primary:hover {
@@ -23,7 +47,11 @@
 }
 
 a {
-  color: var(--dark-text-color-link);
+  color: var(--light-text-color-link);
+}
+
+a:hover {
+  color: var(--light-text-color-focus);
 }
 
 .form-control {
@@ -36,6 +64,7 @@ a {
 
 .form-control:focus {
   background: var(--dark-bg-semitransparent2);
+  color: var(--light-text-color);
 }
 
 .form-control::placeholder {
@@ -49,7 +78,7 @@ a {
 }
 
 ul.pagination {
-  margin: 0px 10px;
+  margin: 10px 10px 20px 10px;
 }
 
 .page-item .page-link {
