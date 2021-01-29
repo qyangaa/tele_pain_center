@@ -3,11 +3,15 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "bootstrap/dist/css/bootstrap.css";
 import Tracking from "../pages/tracking";
+import { RiLoginCircleLine, RiMedicineBottleFill } from "react-icons/ri";
 
 const NavBar = ({ user }) => {
   return (
-    <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="#home">Tele Pain Center</Navbar.Brand>
+    <Navbar expand="lg">
+      <Navbar.Brand href="#home">
+        <RiMedicineBottleFill />
+        Tele Pain Center
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
@@ -16,9 +20,10 @@ const NavBar = ({ user }) => {
           <Nav.Link href="/calendar">Calendar</Nav.Link>
           <Nav.Link href="/Records">Records</Nav.Link>
           <Nav.Link href="/Chat">Chat</Nav.Link>
-          <Nav.Link href="/registration">Registration</Nav.Link>
-          <Nav.Link href="/login">Login</Nav.Link>
         </Nav>
+        <Nav.Link href="/registration" className="icon">
+          <RiLoginCircleLine />
+        </Nav.Link>
       </Navbar.Collapse>
     </Navbar>
   );
