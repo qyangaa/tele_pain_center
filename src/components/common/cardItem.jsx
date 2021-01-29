@@ -23,13 +23,13 @@ const CardItem = (item, smallWindow, button2) => {
         <Col>
           <Card.Body>
             <Card.Title>{item.name}</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">
+            <Card.Subtitle className="mb-2 custom-subtitle">
               {item.specialty}
             </Card.Subtitle>
             <Card.Text>{item.description}</Card.Text>
-            <Card.Text>{`${item.address.address1}, ${item.address.address2},${item.address.city}, ${item.address.state}, ${item.address.zip}`}</Card.Text>
+            <Card.Text className="mb-1">{`${item.address.address1}, ${item.address.address2},${item.address.city}, ${item.address.state}, ${item.address.zip}`}</Card.Text>
             <Button variant="primary">Appointment</Button>{" "}
-            <Button variant="primary" onClick={button2.onClick(item._id)}>
+            <Button variant="primary" onClick={button2.onClick(item.uid)}>
               {button2.text}
             </Button>
           </Card.Body>

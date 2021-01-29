@@ -5,17 +5,41 @@ div.side_menu {
 
 div.side_menu .card {
   border: none;
+  background: transparent;
 }
 
 div.side_menu .card .card-header {
-  background: var(--dark-bg-color);
-  color: var(--light-text-color);
+  cursor: pointer;
+  background: linear-gradient(
+    120deg,
+    var(--fullbg-yellow-light),
+    var(--fullbg-red)
+  );
+  box-shadow: 1px 1px 12px var(--dark-bg-semitransparent);
+  color: var(--fullbg-secondary);
   border-radius: 15px;
   margin: 10px;
 }
 
+div.side_menu .card .card-body {
+  cursor: pointer;
+  text-shadow: 3px 3px 20px var(--dark-bg-semitransparent3);
+  color: var(--light-text-color);
+  border-radius: 15px;
+}
+
 .card-list .card {
-  border-color: var(--light-bg-color);
-  margin: 10px;
+  background: linear-gradient(
+    120deg,
+    var(--light-bg-semitransparent3),
+    var(--light-bg-semitransparent)
+  );
+  color: var(--light-text-color);
+  border: none;
+  margin: 20px 10px;
   border-radius: 10px;
+}
+
+.card-list .card .custom-subtitle {
+  color: var(--light-bg-semitransparent5) !important;
 }

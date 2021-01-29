@@ -6,19 +6,38 @@
 }
 
 .btn.btn-primary {
-  background: var(--dark-bg-color);
+  background: var(--light-bg-semitransparent2);
   color: var(--light-text-color);
-  border-color: var(--dark-bg-color);
+  border: none;
   border-radius: 10px;
   transition: 0.3s ease-in-out;
 }
 
 .btn.btn-primary:hover {
-  border-color: var(--dark-bg-color);
-  background: transparent;
-  color: var(--dark-text-color);
+  background: var(--dark-bg-semitransparent2);
+  color: var(--light-text-color);
+}
+
+.btn.btn-primary:focus {
+  outline: var(--fullbg-yellow);
 }
 
 a {
   color: var(--dark-text-color-link);
+}
+
+.form-control {
+  text-align: center;
+  height: 40px;
+  background: var(--light-bg-semitransparent2);
+  border: none;
+  color: var(--light-text-color);
+}
+
+.form-control:focus {
+  background: var(--dark-bg-semitransparent2);
+}
+
+.form-control::placeholder {
+  color: var(--light-bg-semitransparent7);
 }

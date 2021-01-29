@@ -8,4 +8,5 @@ img.profile_img {
   width: 180px;
   border-radius: 20%;
   margin: 20px;
+  box-shadow: 0px 0px 10px #ffffff;
 }
