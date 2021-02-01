@@ -8,8 +8,8 @@ export default function Tracking() {
   return (
     <div>
       <div className="image-container">
-        <HumanBack className="humanImage" />
-        <HumanFront className="humanImage" />
+        {/* <HumanBack className="humanImage" />
+        <HumanFront className="humanImage" /> */}
       </div>
     </div>
   );

@@ -50,6 +50,7 @@ export const SetCurGroup = (dispatch, curGroupId) => {
 };
 
 export const CreateGroup = async (dispatch, uid1, uid2) => {
+  console.log({ uid1, uid2 });
   const groupsRef = db.collection("groups");
   try {
     const group = {

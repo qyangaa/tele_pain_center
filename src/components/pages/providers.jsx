@@ -78,7 +78,7 @@ export default function Providers() {
         }
       },
     });
-  }, [groups]);
+  }, [groups, curUid]);
 
   useEffect(() => {
     // console.log({ providers: providersState.providers, curUid });

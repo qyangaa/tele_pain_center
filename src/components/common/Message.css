@@ -11,7 +11,7 @@
   text-align: right;
 }
 
-.message__card {
+.message__card.card {
   width: fit-content;
   max-width: 400px;
   background: var(--light-bg-semitransparent1) !important;
@@ -20,6 +20,7 @@
   font-size: medium;
   padding: 10px 20px;
   box-shadow: 1px 1px 20px var(--dark-bg-semitransparent1);
+  margin: 10px 0px;
 }
 
 .message__card__user {
