@@ -33,7 +33,6 @@ export default function Providers() {
   // const [filters, setFilters] = useState(getFilters());
   const filters = useSelector((state) => state.filters);
   const curUid = useSelector((state) => state.firebase.auth.uid);
-  const [uid, setUid] = useState("");
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -65,6 +64,10 @@ export default function Providers() {
     setButton2({
       text: "Message",
       onClick: (providerUid) => () => {
+        if (!curUid) {
+          history.push("/login");
+          return;
+        }
         if (groups.groups) {
           for (let group of Object.values(groups.groups)) {
             if (providerUid in group.users) {

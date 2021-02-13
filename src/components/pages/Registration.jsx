@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Card, Button, Form, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { createNewUser } from "../../services/authService";
+import { createNewUser, logout } from "../../services/authService";
 
 export default function Registration() {
   const emailRef = useRef();
@@ -12,6 +12,7 @@ export default function Registration() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const curUid = useSelector((state) => state.firebase.auth.uid);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -35,11 +36,8 @@ export default function Registration() {
     }
   }
 
-  return (
-    <Container
-      className="d-flex align-items-center justify-content-center"
-      stype={{ minHeight: "100vh" }}
-    >
+  const renderSignUpForm = () => {
+    return (
       <div className="w-100" style={{ maxWidth: "400px" }}>
         <Card>
           <Card.Body>
@@ -77,6 +75,24 @@ export default function Registration() {
           <Link to="/login"> Log In</Link>
         </div>
       </div>
+    );
+  };
+
+  const renderSignOut = () => {
+    return (
+      <div className="w-100" style={{ maxWidth: "400px" }}>
+        <h3>Already signed in</h3>
+        <Button onClick={() => logout()}>Sign out</Button>
+      </div>
+    );
+  };
+
+  return (
+    <Container
+      className="d-flex align-items-center justify-content-center"
+      stype={{ minHeight: "100vh" }}
+    >
+      {curUid ? renderSignOut() : renderSignUpForm()}
     </Container>
   );
 }
