@@ -4,18 +4,28 @@ import providerActions from "../redux/ProvidersActions";
 const GetProviders = async (
   dispatch,
   filterGroups,
-  currentPage,
+  currentChunk,
+  pageSize,
   searchQuery
 ) => {
-  var providersRef = db.collection("providers");
+  let providersRef = db.collection("providers");
 
   for (let filter in filterGroups) {
-    console.log({ filter });
     if (filterGroups[filter]) {
-      console.log({ filter, filterGroups });
       providersRef = providersRef.where(filter, "==", filterGroups[filter]);
     }
   }
+  const chunkSize = 5 * pageSize;
+  const startIndex = (currentChunk - 1) * chunkSize;
+  console.log({ startIndex });
+  providersRef = providersRef
+    .orderBy("uid")
+    .startAt(startIndex)
+    .limit(chunkSize);
+
+  // TODO: how to get total number of items for pagination [not possible in firebase unless fetch all]
+  // Or change to continuous scroll [not ideal for current layout (will lose menubar/ filters when scrolled down)]
+  // Current solution: Hard code number of total pages to fetch each time for now (*5)
   let data = [];
   try {
     const providersSnapShot = await providersRef.get();

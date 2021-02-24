@@ -39,7 +39,7 @@ export default function Providers() {
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   const [filterGroups, setFilterGroups] = useState({
-    specialty: "fibromyalgia",
+    specialty: "",
     city: "",
   });
 
@@ -47,6 +47,7 @@ export default function Providers() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
+  const [currentChunk, setCurrentChunk] = useState(1);
   const [button2, setButton2] = useState({
     text: "Message",
     onClick: (providerUid) => () => {
@@ -58,12 +59,12 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    GetProviders(dispatch);
+    GetProviders(dispatch, filterGroups, currentPage, pageSize, searchQuery);
   }, []);
 
   useEffect(() => {
-    GetProviders(dispatch, filterGroups, currentPage, searchQuery);
-  }, [filterGroups, currentPage, searchQuery]);
+    GetProviders(dispatch, filterGroups, currentPage, pageSize, searchQuery);
+  }, [filterGroups, currentChunk, pageSize, searchQuery]);
 
   useEffect(() => {
     GetGroups(dispatch, curUid);
@@ -93,10 +94,6 @@ export default function Providers() {
   }, [groups, curUid]);
 
   useEffect(() => {
-    // console.log({ providers: providersState.providers, curUid });
-  }, [providersState]);
-
-  useEffect(() => {
     //componnetWillUnmount
 
     return () => {
@@ -113,16 +110,6 @@ export default function Providers() {
   };
 
   const handleSelect = (groupName, itemName) => {
-    // item: "filter_Name:item_Name"
-
-    // let selected = [...selectedFilters];
-    // if (!selected.includes(item)) {
-    //   selected.push(item);
-    // } else {
-    //   selected = selectedFilters.filter((i) => i !== item);
-    // }
-    // console.log({ item });
-    // setSelectedFilters(selected);
     const newFilterGroups = { ...filterGroups };
     if (filterGroups[groupName] != itemName) {
       newFilterGroups[groupName] = itemName;
@@ -143,62 +130,8 @@ export default function Providers() {
     setCurrentPage(page);
   };
 
-  const obtainFilters = () => {
-    const groupedFilters = {};
-    for (const key of selectedFilters) {
-      const splitKey = key.split(":");
-      const group = filters.filter((group) => group._id === splitKey[0])[0];
-      const item = group.options.filter((item) => item._id === splitKey[1])[0];
-      if (group._id in groupedFilters) {
-        groupedFilters[group._id].push(item);
-      } else {
-        groupedFilters[group._id] = [item];
-      }
-    }
-    return groupedFilters;
-  };
-
-  const filterSearch = (searchQuery, provider) => {
-    if (!searchQuery) {
-      return true;
-    }
-    const searchFields = [
-      "address",
-      "city",
-      "description",
-      "name",
-      "specialty",
-    ];
-    for (const field of searchFields) {
-      if (provider[field].toLowerCase().includes(searchQuery.toLowerCase())) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const getPagedData = () => {
-    // provider: group_id: name
     let filteredProviders = providersState.providers;
-    if (filteredProviders == null) {
-      return { itemsCount: 0, data: [] };
-    }
-    if (searchQuery) {
-      filteredProviders = filteredProviders.filter((provider) =>
-        filterSearch(searchQuery, provider)
-      );
-    }
-
-    const groupedFilters = obtainFilters();
-    for (const group in groupedFilters) {
-      let curProviders = [];
-      for (const item of groupedFilters[group]) {
-        curProviders = curProviders.concat(
-          filteredProviders.filter((provider) => provider[group] === item.name)
-        );
-      }
-      filteredProviders = curProviders;
-    }
     const itemsCount = filteredProviders.length;
     filteredProviders = paginate(filteredProviders, currentPage, pageSize);
 
