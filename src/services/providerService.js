@@ -1,8 +1,21 @@
 import { db } from "./Firebase/firebase";
 import providerActions from "../redux/ProvidersActions";
 
-const GetProviders = async (dispatch) => {
+const GetProviders = async (
+  dispatch,
+  filterGroups,
+  currentPage,
+  searchQuery
+) => {
   var providersRef = db.collection("providers");
+
+  for (let filter in filterGroups) {
+    console.log({ filter });
+    if (filterGroups[filter]) {
+      console.log({ filter, filterGroups });
+      providersRef = providersRef.where(filter, "==", filterGroups[filter]);
+    }
+  }
   let data = [];
   try {
     const providersSnapShot = await providersRef.get();

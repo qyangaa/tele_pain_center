@@ -4,11 +4,14 @@ import Accordion from "react-bootstrap/Accordion";
 import { TiTick } from "react-icons/ti";
 
 class CollapsibleList extends Component {
-  getKey = (group, item) => {
-    return `${group._id}:${item._id}`;
-  };
   render() {
-    const { groups, itemKey, onSelect, selectedItems } = this.props;
+    const {
+      groups,
+      itemKey,
+      onSelect,
+      selectedItems,
+      filterGroups,
+    } = this.props;
     return (
       <Accordion defaultActiveKey="0">
         {groups.map((group) => (
@@ -18,16 +21,19 @@ class CollapsibleList extends Component {
               eventKey={group._id}
               key={group._id}
             >
-              {group.title}
+              {group.name}
             </Accordion.Toggle>
             {group[itemKey].map((item) => (
               <Accordion.Collapse eventKey={group._id} key={item._id}>
                 <Card.Body
                   key={item._id}
-                  onClick={() => onSelect(this.getKey(group, item))}
+                  onClick={() => onSelect(group._id, item.name)}
                 >
                   {item.name}
-                  {selectedItems.includes(this.getKey(group, item)) && (
+                  {/* {selectedItems.includes(console.log({ group, item })) && (
+                    <TiTick style={{ float: "right" }} />
+                  )} */}
+                  {filterGroups[group._id] == item.name && (
                     <TiTick style={{ float: "right" }} />
                   )}
                 </Card.Body>

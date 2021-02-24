@@ -38,6 +38,11 @@ export default function Providers() {
   const history = useHistory();
   const [selectedFilters, setSelectedFilters] = useState([]);
 
+  const [filterGroups, setFilterGroups] = useState({
+    specialty: "fibromyalgia",
+    city: "",
+  });
+
   const [smallWindow, setSmallWindow] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,6 +60,10 @@ export default function Providers() {
     window.addEventListener("resize", updateDimensions);
     GetProviders(dispatch);
   }, []);
+
+  useEffect(() => {
+    GetProviders(dispatch, filterGroups, currentPage, searchQuery);
+  }, [filterGroups, currentPage, searchQuery]);
 
   useEffect(() => {
     GetGroups(dispatch, curUid);
@@ -103,15 +112,25 @@ export default function Providers() {
     }
   };
 
-  const handleSelect = (item) => {
-    // item: "filter_id:item_id"
-    let selected = [...selectedFilters];
-    if (!selected.includes(item)) {
-      selected.push(item);
+  const handleSelect = (groupName, itemName) => {
+    // item: "filter_Name:item_Name"
+
+    // let selected = [...selectedFilters];
+    // if (!selected.includes(item)) {
+    //   selected.push(item);
+    // } else {
+    //   selected = selectedFilters.filter((i) => i !== item);
+    // }
+    // console.log({ item });
+    // setSelectedFilters(selected);
+    const newFilterGroups = { ...filterGroups };
+    if (filterGroups[groupName] != itemName) {
+      newFilterGroups[groupName] = itemName;
     } else {
-      selected = selectedFilters.filter((i) => i !== item);
+      newFilterGroups[groupName] = "";
     }
-    setSelectedFilters(selected);
+    setFilterGroups(newFilterGroups);
+    console.log({ groupName, itemName, filterGroups });
   };
 
   const handleSearch = (query) => {
@@ -169,6 +188,7 @@ export default function Providers() {
         filterSearch(searchQuery, provider)
       );
     }
+
     const groupedFilters = obtainFilters();
     for (const group in groupedFilters) {
       let curProviders = [];
@@ -200,6 +220,7 @@ export default function Providers() {
                   itemKey="options"
                   onSelect={handleSelect}
                   selectedItems={selectedFilters}
+                  filterGroups={filterGroups}
                 />
                 <SearchBox onChange={handleSearch} />
               </div>

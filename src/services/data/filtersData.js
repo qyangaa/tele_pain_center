@@ -1,7 +1,7 @@
 export const FILTERS = [
   {
     _id: "specialty",
-    title: "Specialty",
+    name: "Specialty",
     options: [
       {
         name: "Fibromyalgia",
@@ -27,7 +27,7 @@ export const FILTERS = [
   },
   {
     _id: "city",
-    title: "City",
+    name: "City",
     options: [
       {
         name: "Mountain View",
