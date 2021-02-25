@@ -5,6 +5,7 @@ const PROVIDERSSTATE = {
   isLoading: false,
   err: null,
   providers: [],
+  terminals: {},
 };
 
 export const providersReducer = (state = PROVIDERSSTATE, action) => {
@@ -14,7 +15,8 @@ export const providersReducer = (state = PROVIDERSSTATE, action) => {
         ...state,
         isLoading: false,
         err: null,
-        providers: action.payload,
+        providers: action.payload.providers,
+        terminals: action.payload.terminals,
       };
     case ActionTypes.PROVIDERS_LOADING:
       return { ...state, isLoading: true, err: null, providers: [] };

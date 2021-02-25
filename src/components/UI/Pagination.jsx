@@ -2,7 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
-const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
+const Pagination = ({
+  itemsCount,
+  pageSize,
+  currentPage,
+  onPageChange,
+  startPage,
+}) => {
   const pagesCount = Math.ceil(itemsCount / pageSize);
   if (pagesCount === 1) return null;
   const pages = _.range(1, pagesCount + 1);
@@ -10,40 +16,37 @@ const Pagination = ({ itemsCount, pageSize, currentPage, onPageChange }) => {
   return (
     <nav>
       <ul className="pagination">
-        {currentPage > 1 && (
-          <li className="page-item">
-            <a
-              className="page-link"
-              aria-label="Previous"
-              onClick={() => onPageChange(currentPage - 1)}
-            >
-              <span aria-hidden="true">&laquo;</span>
-              <span className="sr-only">Previous</span>
-            </a>
-          </li>
-        )}
+        <li className="page-item">
+          <a
+            className="page-link"
+            aria-label="Previous"
+            onClick={() => onPageChange(currentPage - 1)}
+          >
+            <span aria-hidden="true">&laquo;</span>
+            <span className="sr-only">Previous</span>
+          </a>
+        </li>
         {pages.map((page) => (
           <li
             key={page}
             className={page === currentPage ? "page-item active" : "page-item"}
           >
             <a className="page-link" onClick={() => onPageChange(page)}>
-              {page}
+              {startPage + page - 1}
             </a>
           </li>
         ))}
-        {currentPage < pagesCount && (
-          <li className="page-item">
-            <a
-              className="page-link"
-              aria-label="Previous"
-              onClick={() => onPageChange(currentPage + 1)}
-            >
-              <span aria-hidden="true">&raquo;</span>
-              <span className="sr-only">Next</span>
-            </a>
-          </li>
-        )}
+
+        <li className="page-item">
+          <a
+            className="page-link"
+            aria-label="Previous"
+            onClick={() => onPageChange(currentPage + 1)}
+          >
+            <span aria-hidden="true">&raquo;</span>
+            <span className="sr-only">Next</span>
+          </a>
+        </li>
       </ul>
     </nav>
   );

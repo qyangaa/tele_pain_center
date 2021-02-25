@@ -43,6 +43,8 @@ export default function Providers() {
     city: "",
   });
 
+  const chunkSize = 5; // TODO: Watchout! Hard coded for now, matches providerService
+
   const [smallWindow, setSmallWindow] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,12 +61,25 @@ export default function Providers() {
     //componentDidMount
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
-    GetProviders(dispatch, filterGroups, currentPage, pageSize, searchQuery);
+    GetProviders(
+      dispatch,
+      filterGroups,
+      pageSize * chunkSize,
+      "none",
+      providersState.terminals,
+      searchQuery
+    );
   }, []);
 
   useEffect(() => {
-    GetProviders(dispatch, filterGroups, currentPage, pageSize, searchQuery);
-  }, [filterGroups, currentChunk, pageSize, searchQuery]);
+    GetProviders(
+      dispatch,
+      filterGroups,
+      pageSize * chunkSize,
+      providersState.terminals,
+      searchQuery
+    );
+  }, [filterGroups, pageSize, searchQuery]);
 
   useEffect(() => {
     GetGroups(dispatch, curUid);
@@ -127,6 +142,35 @@ export default function Providers() {
   };
 
   const handlePageChange = (page) => {
+    if (page < 1 && currentChunk <= 1) {
+      return;
+    }
+    if (page < 1) {
+      setCurrentChunk((currentChunk) => currentChunk - 1);
+      setCurrentPage(chunkSize);
+      GetProviders(
+        dispatch,
+        filterGroups,
+        pageSize * chunkSize,
+        "prev",
+        providersState.terminals,
+        searchQuery
+      );
+      return;
+    }
+    if (page > chunkSize) {
+      setCurrentChunk((currentChunk) => currentChunk + 1);
+      setCurrentPage(1);
+      GetProviders(
+        dispatch,
+        filterGroups,
+        pageSize * chunkSize,
+        "next",
+        providersState.terminals,
+        searchQuery
+      );
+      return;
+    }
     setCurrentPage(page);
   };
 
@@ -166,6 +210,7 @@ export default function Providers() {
                 pageSize={pageSize}
                 currentPage={currentPage}
                 onPageChange={handlePageChange}
+                startPage={(currentChunk - 1) * chunkSize + 1}
               />
             </div>
           </div>
