@@ -48,6 +48,7 @@ export const createProvider = async ({
   phone,
   specialty,
   image,
+  _geoloc,
 }) => {
   const providersRef = db.collection("providers");
 
@@ -71,10 +72,12 @@ export const createProvider = async ({
     phone,
     specialty,
     image,
+    _geoloc,
   };
 
   try {
     providersRef.doc(uid).set(providerData);
+    console.log(`provider ${providerData.name} added`);
   } catch (err) {
     console.log("Failed to create provider, ", err);
     toast.log("Failed to create provider, ", err);

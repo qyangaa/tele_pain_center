@@ -4,6 +4,9 @@ import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { createProvider } from "../../services/authService";
 import { ToastContainer, toast } from "react-toastify";
+
+import { generateProviders } from "../../services/data/dummyDataGenerator";
+
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Registration() {
@@ -24,6 +27,13 @@ export default function Registration() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+
+  const generate = async () => {
+    const providers = generateProviders(false);
+    for (let provider of providers) {
+      await createProvider(provider);
+    }
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -196,6 +206,9 @@ export default function Registration() {
           <Link to="/login"> Log In</Link>
         </div>
       </div>
+      <Button variant="primary" onClick={() => generate()}>
+        Generate
+      </Button>
     </Container>
   );
 }
