@@ -9,6 +9,7 @@ import getFilters from "../../services/FilterService";
 import CollapsibleList from "../UI/CollapsibleList";
 import Pagination from "../UI/Pagination";
 import Loading from "../common/Loading";
+import ProvidersMap from "./ProvidersMap";
 
 import { paginate } from "../../utils/paginate";
 import { db } from "../../services/Firebase/firebase";
@@ -219,10 +220,12 @@ export default function Providers() {
                   onChange={(e) => handleSearch(e)}
                   onSubmit={() => handleSubmitSearch()}
                 />
+                <ProvidersMap />
               </div>
             </div>
             <div className="col-sm-7 col-md-9 card-list">
               {providersState.isLoading && Loading()}
+
               {CardDeck(pagedProviders, smallWindow, button2)}
               <Pagination
                 itemsCount={itemsCount}
