@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 function Map() {
   const providersState = useSelector((state) => state.providersState);
   const [selected, setSelected] = useState(null);
+  //TODO: deal with overlapping markers (marker cluster?) https://developers.google.com/maps/documentation/javascript/marker-clustering
   return (
     <GoogleMap
       defaultZoom={10}
@@ -22,6 +23,7 @@ function Map() {
             key={provider._id}
             position={{ lat: provider._geoloc.lat, lng: provider._geoloc.lng }}
             onClick={() => setSelected(provider)}
+            label={provider.index.toString()}
           />
         ))}
       {selected && (
@@ -34,6 +36,7 @@ function Map() {
           <div style={{ color: "black" }}>
             <h4>{selected.name}</h4>
             <p>{selected.specialty}</p>
+            <p>{selected.description}</p>
           </div>
         </InfoWindow>
       )}

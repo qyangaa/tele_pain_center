@@ -21,7 +21,7 @@ const CardItem = (item, smallWindow, button2) => {
         </Col>
         <Col>
           <Card.Body>
-            <Card.Title>{item.name}</Card.Title>
+            <Card.Title>{item.index.toString() + ". " + item.name}</Card.Title>
             <Card.Subtitle className="mb-2 custom-subtitle">
               {item.specialty}
             </Card.Subtitle>

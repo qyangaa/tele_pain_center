@@ -66,12 +66,15 @@ export const GetProviders = async (
   }
 
   try {
+    let index = 1;
     providersSnapShot = await providersRef.get();
     providersSnapShot.forEach((doc) => {
       if (first === null) first = doc;
       last = doc;
       const curObject = doc.data();
       curObject._id = doc.id;
+      curObject.index = index;
+      index += 1;
       data.push(curObject);
     });
     first = providersSnapShot.docs[providersSnapShot.docs.length - 1];
