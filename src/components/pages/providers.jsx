@@ -1,4 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 
 import exampleImg from "../../services/data/pictures/exampleImg.jpeg";
@@ -13,7 +14,7 @@ import { paginate } from "../../utils/paginate";
 import { db } from "../../services/Firebase/firebase";
 import providerActions from "../../redux/ProvidersActions";
 import { useSelector, useDispatch } from "react-redux";
-import GetProviders from "../../services/providerService";
+import { GetProviders, searchAlgolia } from "../../services/providerService";
 
 import { PROVIDERS } from "../../services/data/providerData";
 
@@ -76,10 +77,11 @@ export default function Providers() {
       dispatch,
       filterGroups,
       pageSize * chunkSize,
+      "none",
       providersState.terminals,
       searchQuery
     );
-  }, [filterGroups, pageSize, searchQuery]);
+  }, [filterGroups, pageSize]);
 
   useEffect(() => {
     GetGroups(dispatch, curUid);
@@ -140,6 +142,9 @@ export default function Providers() {
       setSearchQuery(query);
     }
   };
+  const handleSubmitSearch = () => {
+    searchAlgolia(searchQuery, dispatch);
+  };
 
   const handlePageChange = (page) => {
     if (page < 1 && currentChunk <= 1) {
@@ -199,7 +204,8 @@ export default function Providers() {
                   selectedItems={selectedFilters}
                   filterGroups={filterGroups}
                 />
-                <SearchBox onChange={handleSearch} />
+                <SearchBox onChange={(e) => handleSearch(e)} />
+                <Button onClick={() => handleSubmitSearch()}>Search</Button>
               </div>
             </div>
             <div className="col-sm-7 col-md-9 card-list">

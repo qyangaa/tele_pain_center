@@ -1,7 +1,32 @@
 import { db } from "./Firebase/firebase";
 import providerActions from "../redux/ProvidersActions";
+import algoliasearch from "algoliasearch";
 
-const GetProviders = async (
+const client = algoliasearch(
+  process.env.REACT_APP_ALGOLIA_APPID,
+  process.env.REACT_APP_ALGOLIA_SEARCH_API_KEY
+);
+
+const index = client.initIndex(process.env.REACT_APP_ALGOLIA_INDEX_NAME);
+
+export const searchAlgolia = async (query, dispatch) => {
+  try {
+    const searchResults = await index.search(query);
+
+    searchResults.hits.forEach((hit) => {
+      hit._id = hit.uid;
+    });
+    providerActions.fetchProviders(dispatch, {
+      providers: searchResults.hits,
+    });
+  } catch (err) {
+    console.log("provider not retrieved:", err);
+  }
+
+  return;
+};
+
+export const GetProviders = async (
   dispatch,
   filterGroups,
   chunkSize,
@@ -62,4 +87,4 @@ const GetProviders = async (
   return;
 };
 
-export default GetProviders;
+// export default GetProviders;

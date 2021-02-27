@@ -34,7 +34,6 @@ class App extends Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          {console.log(".env test:", process.env.REACT_APP_TEST)}
           {console.log({ ...getRrfProps(store) })}
           <ToastContainer />
           <NavBar user={user} />
