@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+
 import { Link, useHistory } from "react-router-dom";
 
 import exampleImg from "../../services/data/pictures/exampleImg.jpeg";
@@ -143,6 +143,17 @@ export default function Providers() {
     }
   };
   const handleSubmitSearch = () => {
+    if (!searchQuery) {
+      GetProviders(
+        dispatch,
+        filterGroups,
+        pageSize * chunkSize,
+        "none",
+        providersState.terminals,
+        searchQuery
+      );
+      return;
+    }
     searchAlgolia(searchQuery, dispatch);
   };
 
@@ -204,8 +215,10 @@ export default function Providers() {
                   selectedItems={selectedFilters}
                   filterGroups={filterGroups}
                 />
-                <SearchBox onChange={(e) => handleSearch(e)} />
-                <Button onClick={() => handleSubmitSearch()}>Search</Button>
+                <SearchBox
+                  onChange={(e) => handleSearch(e)}
+                  onSubmit={() => handleSubmitSearch()}
+                />
               </div>
             </div>
             <div className="col-sm-7 col-md-9 card-list">
