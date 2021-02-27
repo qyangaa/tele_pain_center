@@ -7,7 +7,6 @@ import Row from "react-bootstrap/Row";
 import "./cardItem.css";
 
 const CardItem = (item, smallWindow, button2) => {
-  // TODO: Image not equal height
   return (
     <Card key={item._id} className="horizontal_card">
       <Row className="align-items-center">
