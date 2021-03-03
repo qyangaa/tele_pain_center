@@ -11,12 +11,21 @@ import { useSelector, useDispatch } from "react-redux";
 function Map() {
   const providersState = useSelector((state) => state.providersState);
   const [selected, setSelected] = useState(null);
+  const [center, setCenter] = useState({
+    lat: 0,
+    lng: 0,
+  });
+
+  useEffect(() => {
+    try {
+      const newCenter = providersState.providers[0]._geoloc;
+      setCenter(newCenter);
+    } catch (e) {}
+  }, [providersState]);
+
   //TODO: deal with overlapping markers (marker cluster?) https://developers.google.com/maps/documentation/javascript/marker-clustering
   return (
-    <GoogleMap
-      defaultZoom={10}
-      defaultCenter={{ lat: 37.430228143135366, lng: -122.08385467716393 }}
-    >
+    <GoogleMap defaultZoom={10} center={center}>
       {providersState &&
         providersState.providers.map((provider) => (
           <Marker
