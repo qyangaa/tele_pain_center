@@ -6,6 +6,8 @@ import {
   Marker,
   InfoWindow,
 } from "react-google-maps";
+import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer";
+
 import { useSelector, useDispatch } from "react-redux";
 
 function Map() {
@@ -15,6 +17,7 @@ function Map() {
     lat: 0,
     lng: 0,
   });
+  const [markers, setmMarkers] = useState();
 
   useEffect(() => {
     try {
@@ -23,18 +26,34 @@ function Map() {
     } catch (e) {}
   }, [providersState]);
 
+  const onMarkerClustererClick = (markerClusterer) => {
+    const clickedMarkers = markerClusterer.getMarkers();
+    console.log(`Current clicked markers length: ${clickedMarkers.length}`);
+    console.log(clickedMarkers);
+  };
+
   //TODO: deal with overlapping markers (marker cluster?) https://developers.google.com/maps/documentation/javascript/marker-clustering
   return (
     <GoogleMap defaultZoom={10} center={center}>
-      {providersState &&
-        providersState.providers.map((provider) => (
-          <Marker
-            key={provider._id}
-            position={{ lat: provider._geoloc.lat, lng: provider._geoloc.lng }}
-            onClick={() => setSelected(provider)}
-            label={provider.index.toString()}
-          />
-        ))}
+      <MarkerClusterer
+        onClick={() => onMarkerClustererClick}
+        averageCenter
+        enableRetinaIcons
+        gridSize={5}
+      >
+        {providersState &&
+          providersState.providers.map((provider) => (
+            <Marker
+              key={provider._id}
+              position={{
+                lat: provider._geoloc.lat,
+                lng: provider._geoloc.lng,
+              }}
+              onClick={() => setSelected(provider)}
+              label={provider.index.toString()}
+            />
+          ))}
+      </MarkerClusterer>
       {selected && (
         <InfoWindow
           position={{ lat: selected._geoloc.lat, lng: selected._geoloc.lng }}
