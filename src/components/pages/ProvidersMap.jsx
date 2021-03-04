@@ -17,7 +17,6 @@ function Map() {
     lat: 0,
     lng: 0,
   });
-  const [markers, setmMarkers] = useState();
 
   useEffect(() => {
     try {
