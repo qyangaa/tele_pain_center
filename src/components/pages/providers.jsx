@@ -10,6 +10,7 @@ import CollapsibleList from "../UI/CollapsibleList";
 import Pagination from "../UI/Pagination";
 import Loading from "../common/Loading";
 import ProvidersMap from "./ProvidersMap";
+import AppointmentModal from "./AppointmentModal";
 
 import { paginate } from "../../utils/paginate";
 import { db } from "../../services/Firebase/firebase";
@@ -35,6 +36,7 @@ export default function Providers() {
   // const [filters, setFilters] = useState(getFilters());
   const filters = useSelector((state) => state.filters);
   const curUid = useSelector((state) => state.firebase.auth.uid);
+  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -55,6 +57,14 @@ export default function Providers() {
   const [button2, setButton2] = useState({
     text: "Message",
     onClick: (providerUid) => () => {
+      console.log({ providerUid, curUid });
+    },
+  });
+
+  const [button1, setButton1] = useState({
+    text: "Appointment",
+    onClick: (providerUid) => () => {
+      setIsAppointmentModalOpen(true);
       console.log({ providerUid, curUid });
     },
   });
@@ -226,7 +236,7 @@ export default function Providers() {
             <div className="col-sm-7 col-md-9 card-list">
               {providersState.isLoading && Loading()}
 
-              {CardDeck(pagedProviders, smallWindow, button2)}
+              {CardDeck(pagedProviders, smallWindow, button1, button2)}
               <Pagination
                 itemsCount={itemsCount}
                 pageSize={pageSize}
@@ -244,6 +254,10 @@ export default function Providers() {
   return (
     <div className="container-fluid">
       {pagedProviders && renderProviders(pagedProviders)}
+      <AppointmentModal
+        open={isAppointmentModalOpen}
+        onClose={() => setIsAppointmentModalOpen(false)}
+      ></AppointmentModal>
     </div>
   );
 }

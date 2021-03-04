@@ -3,6 +3,13 @@ import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
 import "./Calendar.css";
 
+//  business logic:
+// provider side: set available time slot, see self events
+// patient side: get available time slot of provider, see events of self
+// make appointment:
+//      provider: remove time slot, add event with patient name
+//      patient: add event with provider name
+
 const localizer = BigCalendar.momentLocalizer(moment);
 
 export default function Calendar() {

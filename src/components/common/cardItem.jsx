@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import "./cardItem.css";
 
-const CardItem = (item, smallWindow, button2) => {
+const CardItem = (item, smallWindow, button1, button2) => {
   return (
     <Card key={item._id} className="horizontal_card">
       <Row className="align-items-center">
@@ -27,7 +27,9 @@ const CardItem = (item, smallWindow, button2) => {
             </Card.Subtitle>
             <Card.Text>{item.description}</Card.Text>
             <Card.Text className="mb-1">{`${item.address1}, ${item.address2},${item.city}, ${item.state}, ${item.zip}`}</Card.Text>
-            <Button variant="primary">Appointment</Button>{" "}
+            <Button variant="primary" onClick={button1.onClick(item.uid)}>
+              {button1.text}
+            </Button>{" "}
             <Button variant="primary" onClick={button2.onClick(item.uid)}>
               {button2.text}
             </Button>
