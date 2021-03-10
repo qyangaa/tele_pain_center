@@ -1,14 +1,27 @@
 import { db } from "./Firebase/firebase";
 import firebase from "firebase/app";
 import { ToastContainer, toast } from "react-toastify";
+import _ from "lodash";
 
-export const createAppointment = async ({ providerId, curUid, time }) => {
+Date.prototype.addHours = function (h) {
+  this.setHours(this.getHours() + h);
+  return this;
+};
+
+export const createAppointment = async ({
+  provider,
+  curUid,
+  curName,
+  time,
+}) => {
   const appointmentsRef = db.collection("appointments");
-  const providerRef = db.collection("providers").doc(providerId);
+  const providerRef = db.collection("providers").doc(provider._id);
   const timeStamp = time.getTime();
   const data = {
-    providerId,
+    providerId: provider._id,
+    providerName: provider.name,
     curUid,
+    curName,
     timeStamp,
   };
 
@@ -45,11 +58,66 @@ export const getUserAppointment = async (props) => {
     const querySnapshot = await userApptRef.get();
     const apptList = querySnapshot.docs;
     const events = apptList.map((appt) => {
-      return { ...appt.data(), _id: appt.id };
+      return {
+        _id: appt.id,
+        providerName: appt.data().providerName,
+        eventName: appt.data().providerName,
+        start: new Date(appt.data().timeStamp),
+        end: new Date(appt.data().timeStamp).addHours(1),
+      };
     });
     return events;
   } catch (err) {
     console.log("Failed to retrieve appointment, ", err);
     toast("Failed to retrieve appointment, ", err);
+  }
+};
+
+export const addTimeSlot = async (props) => {
+  const curUid = props.curUid;
+  const providerRef = db.collection("providers").doc(curUid);
+  const timeStamp = props.time.getTime();
+  try {
+    const result = await providerRef.update(
+      {
+        availableTimeSlots: firebase.firestore.FieldValue.arrayUnion(timeStamp),
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    console.log({ timeStamp, result });
+    console.log(`timeslot added`);
+  } catch (err) {
+    console.log("Failed to add timeslot, ", err);
+    toast("Failed to add timeslot, ", err);
+  }
+};
+
+// Helper
+
+export const addRandomTimeSlot = async (props) => {
+  const curUid = "1FWDmDooZjdQh1RKojp1e8MOCq82";
+  const providerRef = db.collection("providers").doc(curUid);
+  const timeStamp = new Date(
+    "2021",
+    "02",
+    _.random(1, 30).toString(),
+    _.random(0, 24).toString()
+  ).getTime();
+  try {
+    const result = await providerRef.update(
+      {
+        availableTimeSlots: firebase.firestore.FieldValue.arrayUnion(timeStamp),
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    console.log({ timeStamp, result });
+    console.log(`timeslot added`);
+  } catch (err) {
+    console.log("Failed to add timeslot, ", err);
+    toast("Failed to add timeslot, ", err);
   }
 };

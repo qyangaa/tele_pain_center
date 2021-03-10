@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
 import { fetchEvents } from "../../redux/EventsActions";
+import { addRandomTimeSlot } from "../../services/AppointmentService";
 import "./Calendar.css";
 
 //  business logic:
@@ -21,16 +22,16 @@ export default function Calendar() {
   useEffect(() => {
     fetchEvents(dispatch, curUid);
   }, [curUid]);
-  const events = [
-    {
-      allDay: false,
-      title: "Event",
-      start: new Date(2021, 2, 3, 17, 0, 0, 0),
-      end: new Date(2021, 2, 3, 18, 0, 0, 0),
-    },
-  ];
+  const events = eventsState.events.map((event) => {
+    return {
+      title: event.eventName,
+      start: event.start,
+      end: event.end,
+    };
+  });
   return (
     <div>
+      <button onClick={() => addRandomTimeSlot()}>Add random timeslot</button>
       <BigCalendar.Calendar
         localizer={localizer}
         events={events}

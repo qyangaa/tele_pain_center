@@ -30,6 +30,7 @@ const OVERLAY_STYLES = {
 
 export default function AppointmentModal({ onClose }) {
   const curUid = useSelector((state) => state.firebase.auth.uid);
+  const curName = useSelector((state) => state.firebase.auth.displayName);
   const provider = useSelector((state) => state.providersState.selected);
   const timeSlots = provider.availableTimeSlots.map((slot) => new Date(slot));
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -57,8 +58,9 @@ export default function AppointmentModal({ onClose }) {
     console.log({ selectedSlot });
     try {
       await createAppointment({
-        providerId: provider._id,
-        curUid: curUid,
+        provider,
+        curUid,
+        curName,
         time: selectedSlot,
       });
       onClose();
