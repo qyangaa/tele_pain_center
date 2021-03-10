@@ -31,6 +31,22 @@ export const createAppointment = async ({ providerId, curUid, time }) => {
     console.log(`appoinment added`);
   } catch (err) {
     console.log("Failed to create appointment, ", err);
-    toast.log("Failed to create appointment, ", err);
+    toast("Failed to create appointment, ", err);
+  }
+};
+
+export const getUserAppointment = async (props) => {
+  if (!props.curUid) return;
+  const curUid = props.curUid;
+  const userApptRef = db
+    .collection("appointments")
+    .where("curUid", "==", curUid);
+  try {
+    const querySnapshot = await userApptRef.get();
+    const apptList = querySnapshot.docs;
+    console.log(`appoinment retrieved`);
+  } catch (err) {
+    console.log("Failed to retrieve appointment, ", err);
+    toast("Failed to retrieve appointment, ", err);
   }
 };

@@ -14,7 +14,7 @@ import AppointmentModal from "./AppointmentModal";
 
 import { paginate } from "../../utils/paginate";
 import { db } from "../../services/Firebase/firebase";
-import providerActions from "../../redux/ProvidersActions";
+import * as providerActions from "../../redux/ProvidersActions";
 import { useSelector, useDispatch } from "react-redux";
 import { GetProviders, searchAlgolia } from "../../services/providerService";
 

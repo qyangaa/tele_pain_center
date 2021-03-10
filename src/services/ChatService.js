@@ -1,5 +1,5 @@
 import { db } from "./Firebase/firebase";
-import chatActions from "../redux/ChatActions";
+import * as chatActions from "../redux/ChatActions";
 import firebase from "firebase/app";
 
 export const GetUser = async (uid) => {

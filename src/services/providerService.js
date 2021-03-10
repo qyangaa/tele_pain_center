@@ -1,5 +1,5 @@
 import { db } from "./Firebase/firebase";
-import providerActions from "../redux/ProvidersActions";
+import * as providerActions from "../redux/ProvidersActions";
 import algoliasearch from "algoliasearch";
 
 const client = algoliasearch(

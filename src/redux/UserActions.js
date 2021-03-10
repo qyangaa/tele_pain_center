@@ -1,17 +1,26 @@
-import {
-  fetchCurUser,
-  addCurUser,
-  curUserLoading,
-  curUserFailed,
-  removeCurUser,
-} from "./UserActionCreator";
+import * as ActionTypes from "./ActionTypes";
 
-const chatActions = {
-  fetchCurUser,
-  addCurUser,
-  curUserLoading,
-  curUserFailed,
-  removeCurUser,
+export const fetchCurUser = async (dispatch, data) => {
+  dispatch(curUserLoading(true));
+  dispatch(addCurUser(data));
 };
 
-export default chatActions;
+export const addCurUser = (curUser) => ({
+  type: ActionTypes.ADD_CURUSER,
+  payload: curUser,
+});
+
+export const curUserLoading = (isLoading) => ({
+  type: ActionTypes.CURUSER_LOADING,
+  payload: isLoading,
+});
+
+export const curUserFailed = (err) => ({
+  type: ActionTypes.CURUSER_FAILED,
+  payload: err,
+});
+
+export const removeCurUser = (err) => ({
+  type: ActionTypes.REMOVE_CURUSER,
+  payload: err,
+});

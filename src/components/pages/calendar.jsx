@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
+import { getUserAppointment } from "../../services/AppointmentService";
 import "./Calendar.css";
 
 //  business logic:
@@ -13,6 +15,10 @@ import "./Calendar.css";
 const localizer = BigCalendar.momentLocalizer(moment);
 
 export default function Calendar() {
+  const curUid = useSelector((state) => state.firebase.auth.uid);
+  useEffect(() => {
+    getUserAppointment({ curUid });
+  }, [curUid]);
   const events = [
     {
       allDay: false,
