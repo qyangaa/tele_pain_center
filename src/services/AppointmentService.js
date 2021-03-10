@@ -44,7 +44,10 @@ export const getUserAppointment = async (props) => {
   try {
     const querySnapshot = await userApptRef.get();
     const apptList = querySnapshot.docs;
-    console.log(`appoinment retrieved`);
+    const events = apptList.map((appt) => {
+      return { ...appt.data(), _id: appt.id };
+    });
+    return events;
   } catch (err) {
     console.log("Failed to retrieve appointment, ", err);
     toast("Failed to retrieve appointment, ", err);

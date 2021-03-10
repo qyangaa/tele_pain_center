@@ -4,6 +4,7 @@ import { providersReducer } from "./providersReducer";
 import { messagesReducer } from "./messagesReducer";
 import { chatGroupsReducer } from "./chatGroupsReducer";
 import { curGroupReducer } from "./curGroupReducer";
+import { eventsReducer } from "./EventsReducer";
 import { firebaseReducer } from "react-redux-firebase";
 import { dashboardReducer } from "./reducers/dashboardReducer"; //test
 
@@ -19,6 +20,7 @@ export const ConfigureStore = () => {
       chatGroupsState: chatGroupsReducer,
       curGroup: curGroupReducer,
       firebase: firebaseReducer,
+      eventsState: eventsReducer,
       dashboardReducer: dashboardReducer, //test
     }),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

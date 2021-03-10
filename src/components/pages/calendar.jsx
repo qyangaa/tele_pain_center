@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
-import { getUserAppointment } from "../../services/AppointmentService";
+import { fetchEvents } from "../../redux/EventsActions";
 import "./Calendar.css";
 
 //  business logic:
@@ -15,9 +15,11 @@ import "./Calendar.css";
 const localizer = BigCalendar.momentLocalizer(moment);
 
 export default function Calendar() {
+  const eventsState = useSelector((state) => state.eventsState);
   const curUid = useSelector((state) => state.firebase.auth.uid);
+  const dispatch = useDispatch();
   useEffect(() => {
-    getUserAppointment({ curUid });
+    fetchEvents(dispatch, curUid);
   }, [curUid]);
   const events = [
     {

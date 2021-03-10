@@ -22,3 +22,8 @@ export const ADD_CURUSER = "ADD_CURUSER";
 export const CURUSER_LOADING = "CURUSER_LOADING";
 export const CURUSER_FAILED = "CURUSER_FAILED";
 export const REMOVE_CURUSER = "REMOVE_CURUSER";
+
+export const ADD_EVENTS = "ADD_EVENTS";
+export const EVENTS_LOADING = "EVENTS_LOADING";
+export const EVENTS_FAILED = "EVENTS_FAILED";
+export const SELECT_EVENT = "SELECT_EVENT";
