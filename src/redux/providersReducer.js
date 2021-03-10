@@ -6,10 +6,19 @@ const PROVIDERSSTATE = {
   err: null,
   providers: [],
   terminals: {},
+  selected: null,
 };
 
 export const providersReducer = (state = PROVIDERSSTATE, action) => {
   switch (action.type) {
+    case ActionTypes.SELECT_PROVIDER:
+      const selected = state.providers.filter(
+        (provider) => provider._id === action.payload.providerId
+      )[0];
+      return {
+        ...state,
+        selected: selected,
+      };
     case ActionTypes.FETCH_PROVIDERS:
       return {
         ...state,

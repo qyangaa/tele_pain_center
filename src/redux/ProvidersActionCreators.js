@@ -23,3 +23,8 @@ export const providersFailed = (err) => ({
   type: ActionTypes.PROVIDERS_FAILED,
   payload: err,
 });
+
+export const selectProvider = (providerId) => ({
+  type: ActionTypes.SELECT_PROVIDER,
+  payload: providerId,
+});

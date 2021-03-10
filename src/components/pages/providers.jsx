@@ -65,7 +65,11 @@ export default function Providers() {
     text: "Appointment",
     onClick: (providerUid) => () => {
       setIsAppointmentModalOpen(true);
-      console.log({ providerUid, curUid });
+      dispatch(
+        providerActions.selectProvider({
+          providerId: providerUid,
+        })
+      );
     },
   });
 
@@ -92,7 +96,7 @@ export default function Providers() {
       providersState.terminals,
       searchQuery
     );
-  }, [filterGroups, pageSize]);
+  }, [filterGroups, pageSize, isAppointmentModalOpen]);
 
   useEffect(() => {
     GetGroups(dispatch, curUid);
@@ -254,10 +258,12 @@ export default function Providers() {
   return (
     <div className="container-fluid">
       {pagedProviders && renderProviders(pagedProviders)}
-      <AppointmentModal
-        open={isAppointmentModalOpen}
-        onClose={() => setIsAppointmentModalOpen(false)}
-      ></AppointmentModal>
+      {isAppointmentModalOpen && (
+        <AppointmentModal
+          open={isAppointmentModalOpen}
+          onClose={() => setIsAppointmentModalOpen(false)}
+        ></AppointmentModal>
+      )}
     </div>
   );
 }

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ReactDom from "react-dom";
 import { Card, Button, Form } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import DatePicker from "react-datepicker";
+import { createAppointment } from "../../services/AppointmentService";
 import "react-datepicker/dist/react-datepicker.css";
 
 const MODAL_STYLES = {
@@ -26,17 +28,12 @@ const OVERLAY_STYLES = {
   zIndex: 1000,
 };
 
-export default function AppointmentModal({ open, children, onClose }) {
+export default function AppointmentModal({ onClose }) {
+  const curUid = useSelector((state) => state.firebase.auth.uid);
+  const provider = useSelector((state) => state.providersState.selected);
+  const timeSlots = provider.availableTimeSlots.map((slot) => new Date(slot));
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState();
-  if (!open) return null;
-
-  const timeSlots = [
-    new Date(2021, 3, 4, 17, 0, 0, 0),
-    new Date(2021, 3, 4, 18, 0, 0, 0),
-    new Date(2021, 3, 5, 15, 0, 0, 0),
-    new Date(2021, 3, 5, 16, 0, 0, 0),
-  ];
 
   const isDateAvailable = (date) => {
     return timeSlots.some((element) => date.getDate() === element.getDate());
@@ -51,11 +48,23 @@ export default function AppointmentModal({ open, children, onClose }) {
     selectedDate.setHours(moment(selectedTime, "HH:mm").hour());
     selectedDate.setMinutes(moment(selectedTime, "HH:mm").minute());
     selectedDate.setSeconds(0);
+    selectedDate.setMilliseconds(0);
     return selectedDate;
   };
 
-  const handleSubmit = () => {
-    console.log(getTimeSlot());
+  const handleSubmit = async () => {
+    const selectedSlot = getTimeSlot();
+    console.log({ selectedSlot });
+    try {
+      await createAppointment({
+        providerId: provider._id,
+        curUid: curUid,
+        time: selectedSlot,
+      });
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return ReactDom.createPortal(
@@ -94,7 +103,6 @@ export default function AppointmentModal({ open, children, onClose }) {
             </Button>{" "}
             <Button onClick={onClose}>Close</Button>
           </Form.Group>
-          {children}
         </Card.Body>
       </Card>
     </>,

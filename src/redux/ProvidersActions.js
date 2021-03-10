@@ -3,6 +3,7 @@ import {
   addProviders,
   providersLoading,
   providersFailed,
+  selectProvider,
 } from "./ProvidersActionCreators";
 
 const providerActions = {
@@ -10,6 +11,7 @@ const providerActions = {
   addProviders,
   providersLoading,
   providersFailed,
+  selectProvider,
 };
 
 export default providerActions;
