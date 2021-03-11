@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
 import { fetchEvents, selectEvent } from "../../redux/EventsActions";
-import { addRandomTimeSlot } from "../../services/AppointmentService";
+import {
+  addRandomTimeSlot,
+  cancelAppointment,
+} from "../../services/AppointmentService";
 import EventModal from "./EventModal";
 import "./Calendar.css";
 
@@ -25,18 +28,17 @@ export default function Calendar() {
   useEffect(() => {
     fetchEvents(dispatch, curUid);
   }, [curUid]);
-  const events = eventsState.events.map((event) => {
-    return {
-      title: event.eventName,
-      start: event.start,
-      end: event.end,
-      _id: event._id,
-    };
-  });
 
   const openEventHandler = (event) => {
     dispatch(selectEvent(event._id));
     setIsEventModalOpen(true);
+  };
+
+  const cancelEventHandler = async (eventId) => {
+    // using await to refresh page here, can delete from redux store directly to speed up
+    await cancelAppointment(eventId);
+    await fetchEvents(dispatch, curUid);
+    setIsEventModalOpen(false);
   };
 
   return (
@@ -44,7 +46,7 @@ export default function Calendar() {
       <button onClick={() => addRandomTimeSlot()}>Add random timeslot</button>
       <BigCalendar.Calendar
         localizer={localizer}
-        events={events}
+        events={eventsState.events}
         startAccessor="start"
         endAccessor="end"
         selectable
@@ -55,6 +57,7 @@ export default function Calendar() {
         <EventModal
           open={isEventModalOpen}
           onClose={() => setIsEventModalOpen(false)}
+          onCancelEvent={(eventId) => cancelEventHandler(eventId)}
         ></EventModal>
       )}
     </div>

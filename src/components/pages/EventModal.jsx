@@ -25,7 +25,7 @@ const OVERLAY_STYLES = {
   zIndex: 1000,
 };
 
-export default function AppointmentModal({ onClose }) {
+export default function AppointmentModal({ onClose, onCancelEvent }) {
   const curEvent = useSelector((state) => state.eventsState.selected);
   return ReactDom.createPortal(
     <>
@@ -37,6 +37,9 @@ export default function AppointmentModal({ onClose }) {
           <Card.Text>
             {`${curEvent.start.toLocaleTimeString()} - ${curEvent.end.toLocaleTimeString()}`}
           </Card.Text>
+          <Button onClick={() => onCancelEvent(curEvent._id)}>
+            Cancel Appointment
+          </Button>
           <Button onClick={onClose}>Close</Button>
         </Card.Body>
       </Card>

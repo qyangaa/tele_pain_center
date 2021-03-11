@@ -48,6 +48,25 @@ export const createAppointment = async ({
   }
 };
 
+export const cancelAppointment = async (apptId) => {
+  const appointmentRef = db.collection("appointments").doc(apptId);
+
+  try {
+    const appt = await appointmentRef.get();
+    if (appt.exists) {
+      const providerId = appt.data().providerId;
+      const timeStamp = new Date(appt.data().timeStamp);
+      await addTimeSlot({ curUid: providerId, time: timeStamp });
+      await appointmentRef.delete();
+    } else {
+      throw new Error("Appointment doesn't exist");
+    }
+  } catch (err) {
+    console.log("Failed to cancel appointment, ", err);
+    toast("Failed to cancel appointment, ", err);
+  }
+};
+
 export const getUserAppointment = async (props) => {
   if (!props.curUid) return;
   const curUid = props.curUid;
@@ -60,8 +79,7 @@ export const getUserAppointment = async (props) => {
     const events = apptList.map((appt) => {
       return {
         _id: appt.id,
-        providerName: appt.data().providerName,
-        eventName: appt.data().providerName,
+        title: appt.data().providerName,
         start: new Date(appt.data().timeStamp),
         end: new Date(appt.data().timeStamp).addHours(1),
       };
