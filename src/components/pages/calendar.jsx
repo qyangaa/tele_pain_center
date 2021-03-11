@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
-import { fetchEvents } from "../../redux/EventsActions";
+import { fetchEvents, selectEvent } from "../../redux/EventsActions";
 import { addRandomTimeSlot } from "../../services/AppointmentService";
+import EventModal from "./EventModal";
 import "./Calendar.css";
 
 //  business logic:
@@ -18,6 +19,8 @@ const localizer = BigCalendar.momentLocalizer(moment);
 export default function Calendar() {
   const eventsState = useSelector((state) => state.eventsState);
   const curUid = useSelector((state) => state.firebase.auth.uid);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+
   const dispatch = useDispatch();
   useEffect(() => {
     fetchEvents(dispatch, curUid);
@@ -27,8 +30,15 @@ export default function Calendar() {
       title: event.eventName,
       start: event.start,
       end: event.end,
+      _id: event._id,
     };
   });
+
+  const openEventHandler = (event) => {
+    dispatch(selectEvent(event._id));
+    setIsEventModalOpen(true);
+  };
+
   return (
     <div>
       <button onClick={() => addRandomTimeSlot()}>Add random timeslot</button>
@@ -37,7 +47,16 @@ export default function Calendar() {
         events={events}
         startAccessor="start"
         endAccessor="end"
+        selectable
+        popup
+        onSelectEvent={(event) => openEventHandler(event)}
       />
+      {isEventModalOpen && (
+        <EventModal
+          open={isEventModalOpen}
+          onClose={() => setIsEventModalOpen(false)}
+        ></EventModal>
+      )}
     </div>
   );
 }

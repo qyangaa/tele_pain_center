@@ -16,3 +16,8 @@ export const addEvents = (events) => ({
   type: ActionTypes.ADD_EVENTS,
   payload: { events },
 });
+
+export const selectEvent = (eventId) => ({
+  type: ActionTypes.SELECT_EVENT,
+  payload: { eventId },
+});
