@@ -1,11 +1,66 @@
 import { db } from "./Firebase/firebase";
 import firebase from "firebase/app";
+
 import { ToastContainer, toast } from "react-toastify";
 import _ from "lodash";
 
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
   return this;
+};
+
+export const getMyOpenSlots = async (curUid) => {
+  const providerRef = db.collection("providers").doc(curUid);
+  try {
+    const provider = await providerRef.get();
+    if (provider.exists) {
+      const timeSlots = provider.data().availableTimeSlots;
+      return timeSlots.map((time) => new Date(time));
+    } else {
+      throw new Error("Appointment doesn't exist");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const removeSlot = async (providerId, time) => {
+  const providerRef = db.collection("providers").doc(providerId);
+  const timeStamp = time.getTime();
+  try {
+    const result = await providerRef.update(
+      {
+        availableTimeSlots: firebase.firestore.FieldValue.arrayRemove(
+          timeStamp
+        ),
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const removeSlots = async (providerId, timeSlots) => {
+  const providerRef = db.collection("providers").doc(providerId);
+  try {
+    const result = await providerRef.update(
+      {
+        availableTimeSlots: firebase.firestore.FieldValue.arrayRemove(
+          ...timeSlots
+        ),
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const createAppointment = async ({
@@ -15,7 +70,6 @@ export const createAppointment = async ({
   time,
 }) => {
   const appointmentsRef = db.collection("appointments");
-  const providerRef = db.collection("providers").doc(provider._id);
   const timeStamp = time.getTime();
   const data = {
     providerId: provider._id,
@@ -30,16 +84,7 @@ export const createAppointment = async ({
 
   try {
     await appointmentsRef.add(data);
-    const result = await providerRef.update(
-      {
-        availableTimeSlots: firebase.firestore.FieldValue.arrayRemove(
-          timeStamp
-        ),
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    const result = await removeSlot(provider._id, time);
     console.log({ result });
     console.log(`appoinment added`);
   } catch (err) {
@@ -109,6 +154,30 @@ export const addTimeSlot = async (props) => {
   } catch (err) {
     console.log("Failed to add timeslot, ", err);
     toast("Failed to add timeslot, ", err);
+  }
+};
+
+export const addTimeSlots = async (props) => {
+  const curUid = props.curUid;
+  const providerRef = db.collection("providers").doc(curUid);
+  const timeSlots = props.timeSlots.map((slot) => slot.getTime());
+  console.log(timeSlots);
+  try {
+    const result = await providerRef.update(
+      {
+        availableTimeSlots: firebase.firestore.FieldValue.arrayUnion(
+          ...timeSlots
+        ),
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    console.log({ timeSlots, result });
+    console.log(`timeslots added`);
+  } catch (err) {
+    console.log("Failed to add timeslots, ", err);
+    toast("Failed to add timeslots, ", err);
   }
 };
 

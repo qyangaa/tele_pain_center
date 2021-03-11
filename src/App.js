@@ -11,6 +11,7 @@ import NotFound from "./components/pages/notFound";
 import Dashboard from "./components/pages/Dashboard";
 import ForgotPassword from "./components/pages/ForgotPassword";
 import NewProvider from "./components/pages/NewProvider";
+import MyOpenSlots from "./components/pages/MyOpenSlots";
 
 import "./App.css";
 import Records from "./components/pages/records";
@@ -35,7 +36,7 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           {console.log({ ...getRrfProps(store) })}
-          <ToastContainer />
+          <ToastContainer toastClassName="dark-toast" />
           <NavBar user={user} />
           <Container fluid>
             <ReactReduxFirebaseProvider {...getRrfProps(store)}>
@@ -54,6 +55,7 @@ class App extends Component {
                 <Route path="/search" component={Providers} />
                 <Route path="/tracking" component={Tracking} />
                 <Route path="/records" component={Records} />
+                <Route path="/myopenslots" component={MyOpenSlots} />
                 <Route path="/not-found" component={NotFound} />
                 <Redirect from="/" exact to="/tracking" />
                 <Redirect to="/not-found" />

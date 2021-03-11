@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { Button } from "react-bootstrap";
 import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
 import { fetchEvents, selectEvent } from "../../redux/EventsActions";
 import {
-  addRandomTimeSlot,
   cancelAppointment,
+  addTimeSlots,
 } from "../../services/AppointmentService";
 import EventModal from "./EventModal";
+import MyOpenSlots from "./MyOpenSlots";
 import "./Calendar.css";
 
 //  business logic:
@@ -20,9 +23,11 @@ import "./Calendar.css";
 const localizer = BigCalendar.momentLocalizer(moment);
 
 export default function Calendar() {
+  const history = useHistory();
   const eventsState = useSelector((state) => state.eventsState);
   const curUid = useSelector((state) => state.firebase.auth.uid);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [curView, setCurView] = useState("month");
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -41,9 +46,14 @@ export default function Calendar() {
     setIsEventModalOpen(false);
   };
 
+  const setAvailableSlots = async (slotInfo) => {
+    if (curView !== "month") {
+      await addTimeSlots({ curUid, timeSlots: slotInfo.slots });
+    }
+  };
+
   return (
     <div>
-      <button onClick={() => addRandomTimeSlot()}>Add random timeslot</button>
       <BigCalendar.Calendar
         localizer={localizer}
         events={eventsState.events}
@@ -52,6 +62,10 @@ export default function Calendar() {
         selectable
         popup
         onSelectEvent={(event) => openEventHandler(event)}
+        onSelectSlot={(slotInfo) => setAvailableSlots(slotInfo)}
+        step={60}
+        timeslots={1}
+        onView={(view) => setCurView(view)}
       />
       {isEventModalOpen && (
         <EventModal
@@ -60,6 +74,9 @@ export default function Calendar() {
           onCancelEvent={(eventId) => cancelEventHandler(eventId)}
         ></EventModal>
       )}
+      <Button onClick={() => history.push("/myopenslots")}>
+        My Open Time Slots
+      </Button>
     </div>
   );
 }
