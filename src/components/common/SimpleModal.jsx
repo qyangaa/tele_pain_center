@@ -24,7 +24,6 @@ const OVERLAY_STYLES = {
 };
 
 export default function SimpleModal({ children, onClose }) {
-  console.log({ children });
   return ReactDom.createPortal(
     <>
       <div style={OVERLAY_STYLES} />
