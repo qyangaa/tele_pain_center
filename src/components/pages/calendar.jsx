@@ -66,6 +66,10 @@ export default function Calendar() {
 
   const selectSlotsHandler = (slotInfo) => {
     if (curView !== "month") {
+      if (slotInfo.slots[0] < new Date()) {
+        toast.dark("Please select a future time slot");
+        return;
+      }
       setSelectedSlots(slotInfo.slots);
     } else {
       // Hard coding for now
@@ -82,6 +86,10 @@ export default function Calendar() {
       const timeSlots = [];
       for (const slot of slotInfo.slots) {
         for (const hour in _.range(workingHours.start, workingHours.end)) {
+          if (slot < new Date()) {
+            toast.dark("Please select a future time slot");
+            return;
+          }
           const curTimeSlot = new Date(slot.setHours(hour));
           timeSlots.push(curTimeSlot);
         }

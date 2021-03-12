@@ -74,6 +74,11 @@ export const GetProviders = async (
       const curObject = doc.data();
       curObject._id = doc.id;
       curObject.index = index;
+      if (curObject.availableTimeSlots) {
+        curObject.availableTimeSlots = curObject.availableTimeSlots.filter(
+          (t) => t >= new Date().getTime()
+        );
+      }
       index += 1;
       data.push(curObject);
     });

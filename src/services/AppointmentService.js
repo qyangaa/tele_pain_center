@@ -15,7 +15,9 @@ export const getMyOpenSlots = async (curUid) => {
     const provider = await providerRef.get();
     if (provider.exists) {
       const timeSlots = provider.data().availableTimeSlots;
-      return timeSlots.map((time) => new Date(time));
+      return timeSlots
+        .map((time) => new Date(time))
+        .filter((t) => t >= new Date());
     } else {
       throw new Error("Appointment doesn't exist");
     }
