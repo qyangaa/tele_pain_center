@@ -1,4 +1,6 @@
 import React from "react";
+import { Card, Button } from "react-bootstrap";
+import ReactDom from "react-dom";
 
 const MODAL_STYLES = {
   position: "fixed",
@@ -21,6 +23,16 @@ const OVERLAY_STYLES = {
   zIndex: 1000,
 };
 
-export default function SimpleModal({ onClose }) {
-  return <div></div>;
+export default function SimpleModal({ children, onClose }) {
+  console.log({ children });
+  return ReactDom.createPortal(
+    <>
+      <div style={OVERLAY_STYLES} />
+      <div style={MODAL_STYLES}>
+        <div>{children} </div>
+        <Button onClick={onClose}>Close</Button>
+      </div>
+    </>,
+    document.getElementById("portal")
+  );
 }

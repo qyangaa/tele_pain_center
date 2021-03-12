@@ -5,28 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import { createAppointment } from "../../services/AppointmentService";
+import SimpleModal from "../common/SimpleModal";
 import "react-datepicker/dist/react-datepicker.css";
-
-const MODAL_STYLES = {
-  position: "fixed",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  background: "#122",
-  padding: "50px",
-  zIndex: 1000,
-  color: "#000",
-};
-
-const OVERLAY_STYLES = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: "rgba(0, 0, 0, .7)",
-  zIndex: 1000,
-};
 
 export default function AppointmentModal({ onClose }) {
   const curUid = useSelector((state) => state.firebase.auth.uid);
@@ -69,45 +49,32 @@ export default function AppointmentModal({ onClose }) {
     }
   };
 
-  return ReactDom.createPortal(
-    <>
-      <div style={OVERLAY_STYLES} />
-      <Card style={MODAL_STYLES}>
-        <Card.Body>
-          <Form.Group>
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              filterDate={isDateAvailable}
-              inline
-            />
-            <br />
-            <Form.Control
-              as="select"
-              onChange={(e) => setSelectedTime(e.target.value)}
-            >
-              <option>Select Time</option>
-              {timeSlots
-                .filter(
-                  (element) => element.getDate() === selectedDate.getDate()
-                )
-                .map((time) => (
-                  <option>{`${moment(time).format("HH:mm")}`}</option>
-                ))}
-            </Form.Control>
-            <br />
-            <Button
-              variant="primary"
-              type="submit"
-              onClick={() => handleSubmit()}
-            >
-              Submit
-            </Button>{" "}
-            <Button onClick={onClose}>Close</Button>
-          </Form.Group>
-        </Card.Body>
-      </Card>
-    </>,
-    document.getElementById("portal")
+  return (
+    <SimpleModal onClose={onClose}>
+      <Form.Group>
+        <DatePicker
+          selected={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          filterDate={isDateAvailable}
+          inline
+        />
+        <br />
+        <Form.Control
+          as="select"
+          onChange={(e) => setSelectedTime(e.target.value)}
+        >
+          <option>Select Time</option>
+          {timeSlots
+            .filter((element) => element.getDate() === selectedDate.getDate())
+            .map((time) => (
+              <option>{`${moment(time).format("HH:mm")}`}</option>
+            ))}
+        </Form.Control>
+        <br />
+        <Button variant="primary" type="submit" onClick={() => handleSubmit()}>
+          Submit
+        </Button>{" "}
+      </Form.Group>
+    </SimpleModal>
   );
 }
