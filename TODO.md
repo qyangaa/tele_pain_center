@@ -6,9 +6,7 @@
 
 ## Calendar
 
-- SimpleModal.jsx
-- Add modal for confirming adding timeslots in calendar select slots
-- Add open time slots by chunk if select dates
+-
 
 ## Records: File update
 

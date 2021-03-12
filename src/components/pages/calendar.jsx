@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import _ from "lodash";
 import { Button } from "react-bootstrap";
 import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
@@ -29,9 +30,11 @@ export default function Calendar() {
   const eventsState = useSelector((state) => state.eventsState);
   const curUid = useSelector((state) => state.firebase.auth.uid);
   const [selectedSlots, setSelectedSlots] = useState(null);
+  const [selectedDates, setSelectedDates] = useState(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isTimeSlotsModalOpen, setIsTimeSlotsModalOpen] = useState(false);
   const [curView, setCurView] = useState("month");
+  const [workingHours, setWorkingHours] = useState({ start: 9, end: 18 });
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -51,20 +54,41 @@ export default function Calendar() {
   };
 
   const setAvailableSlots = async () => {
-    if (curView !== "month") {
-      try {
-        await addTimeSlots({ curUid, timeSlots: selectedSlots.slots });
-        setIsTimeSlotsModalOpen(false);
-        toast.dark("Open Time slots updated");
-        return;
-      } catch (error) {
-        toast.dark("Failed to update time slots, please try again");
-      }
+    try {
+      await addTimeSlots({ curUid, timeSlots: selectedSlots });
+      setIsTimeSlotsModalOpen(false);
+      toast.dark("Open Time slots updated");
+      return;
+    } catch (error) {
+      toast.dark("Failed to update time slots, please try again");
     }
   };
 
   const selectSlotsHandler = (slotInfo) => {
-    setSelectedSlots(slotInfo);
+    if (curView !== "month") {
+      setSelectedSlots(slotInfo.slots);
+    } else {
+      // Hard coding for now
+      setSelectedDates(
+        slotInfo.slots.map((time) =>
+          time.toLocaleString("en-us", {
+            weekday: "short",
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          })
+        )
+      );
+      const timeSlots = [];
+      for (const slot of slotInfo.slots) {
+        for (const hour in _.range(workingHours.start, workingHours.end)) {
+          const curTimeSlot = new Date(slot.setHours(hour));
+          timeSlots.push(curTimeSlot);
+        }
+      }
+      setSelectedSlots(timeSlots);
+    }
+
     setIsTimeSlotsModalOpen(true);
   };
 
@@ -93,9 +117,28 @@ export default function Calendar() {
       {isTimeSlotsModalOpen && (
         <SimpleModal onClose={() => setIsTimeSlotsModalOpen(false)}>
           <h3>Set following time slots open for appointment?</h3>
-          {selectedSlots.slots.map((slot) => (
-            <div>{slot.toLocaleString()}</div>
-          ))}
+          {curView !== "month" ? (
+            selectedSlots.map((slot) => (
+              <div>
+                {slot.toLocaleString("en-us", {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: false,
+                })}
+              </div>
+            ))
+          ) : (
+            <div>
+              {selectedDates.map((date) => (
+                <div>{date}</div>
+              ))}{" "}
+              Everyday from {workingHours.start}:00 to {workingHours.end}:00
+            </div>
+          )}
           <Button onClick={setAvailableSlots}>Confirm</Button>
           <Button onClick={() => setIsTimeSlotsModalOpen(false)}>Cancel</Button>
         </SimpleModal>
