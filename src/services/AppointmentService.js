@@ -97,30 +97,6 @@ export const cancelAppointment = async (apptId) => {
   }
 };
 
-export const getUserAppointment = async (props) => {
-  if (!props.curUid) return;
-  const curUid = props.curUid;
-  const userApptRef = db
-    .collection("appointments")
-    .where("curUid", "==", curUid);
-  try {
-    const querySnapshot = await userApptRef.get();
-    const apptList = querySnapshot.docs;
-    const events = apptList.map((appt) => {
-      return {
-        _id: appt.id,
-        title: appt.data().providerName,
-        start: new Date(appt.data().timeStamp),
-        end: new Date(appt.data().timeStamp).addHours(1),
-      };
-    });
-    return events;
-  } catch (err) {
-    console.log("Failed to retrieve appointment, ", err);
-    toast("Failed to retrieve appointment, ", err);
-  }
-};
-
 export const addTimeSlots = async (props) => {
   try {
     const token = await firebase.auth().currentUser.getIdToken();
