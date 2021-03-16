@@ -9,7 +9,7 @@ export default function AppointmentModal({ onClose, onCancelEvent }) {
   const curEvent = useSelector((state) => state.eventsState.selected);
   return (
     <SimpleModal onClose={onClose}>
-      <Card.Title>{`Appointment with ${curEvent.providerName}`}</Card.Title>
+      <Card.Title>{`Appointment with ${curEvent.title}`}</Card.Title>
       <Card.Text>{`${curEvent.start.toDateString()}`}</Card.Text>
       <Card.Text>
         {`${curEvent.start.toLocaleTimeString()} - ${curEvent.end.toLocaleTimeString()}`}

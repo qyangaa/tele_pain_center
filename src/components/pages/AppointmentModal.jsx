@@ -9,7 +9,6 @@ import SimpleModal from "../common/SimpleModal";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function AppointmentModal({ onClose }) {
-  const curUid = useSelector((state) => state.firebase.auth.uid);
   const curName = useSelector((state) => state.firebase.auth.displayName);
   const provider = useSelector((state) => state.providersState.selected);
   const timeSlots = provider.availableTimeSlots.map((slot) => new Date(slot));
@@ -17,8 +16,19 @@ export default function AppointmentModal({ onClose }) {
   const [selectedTime, setSelectedTime] = useState();
 
   const isDateAvailable = (date) => {
-    return timeSlots.some((element) => date.getDate() === element.getDate());
+    return timeSlots.some((element) => dateEqual(date, element));
   };
+
+  const dateEqual = (date, element) => {
+    return (
+      date.getDate() === element.getDate() &&
+      date.getMonth() === element.getMonth() &&
+      date.getYear() === element.getYear()
+    );
+  };
+
+  console.log({ timeSlots });
+  console.log({ selectedTime });
 
   const getTimeSlot = () => {
     if (
@@ -30,16 +40,17 @@ export default function AppointmentModal({ onClose }) {
     selectedDate.setMinutes(moment(selectedTime, "HH:mm").minute());
     selectedDate.setSeconds(0);
     selectedDate.setMilliseconds(0);
+    console.log({ selectedDate });
     return selectedDate;
   };
 
   const handleSubmit = async () => {
     const selectedSlot = getTimeSlot();
-    console.log({ selectedSlot });
+    console.log(selectedSlot.getTime());
     try {
       await createAppointment({
-        provider,
-        curUid,
+        providerId: provider._id,
+        providerName: provider.name,
         curName,
         time: selectedSlot,
       });
@@ -65,7 +76,7 @@ export default function AppointmentModal({ onClose }) {
         >
           <option>Select Time</option>
           {timeSlots
-            .filter((element) => element.getDate() === selectedDate.getDate())
+            .filter((element) => dateEqual(selectedDate, element))
             .map((time) => (
               <option>{`${moment(time).format("HH:mm")}`}</option>
             ))}

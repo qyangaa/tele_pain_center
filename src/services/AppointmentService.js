@@ -45,28 +45,34 @@ export const removeSlots = async (timeSlots) => {
 };
 
 export const createAppointment = async ({
-  provider,
-  curUid,
+  providerId,
+  providerName,
   curName,
   time,
 }) => {
-  const appointmentsRef = db.collection("appointments");
-  const timeStamp = time.getTime();
-  const data = {
-    providerId: provider._id,
-    providerName: provider.name,
-    curUid,
-    curName,
-    timeStamp,
-  };
-
-  //   Not optimized: may have issue with concurrent operations
-  console.log({ timeStamp });
-
   try {
+    const token = await firebase.auth().currentUser.getIdToken();
+    console.log(time.getTime());
+    const res = await fetch("patient/appointments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        providerId,
+        providerName,
+        patientName: curName,
+        time: time.getTime(),
+      }),
+    });
+    console.log(res);
+    const data = await res.json();
+    if (res.status == 500) throw new Error(data.error);
+    toast.dark("Appointment created successfully ");
   } catch (err) {
     console.log("Failed to create appointment, ", err);
-    toast("Failed to create appointment, ", err);
+    toast.dark("Failed to create appointment, ", err);
   }
 };
 
