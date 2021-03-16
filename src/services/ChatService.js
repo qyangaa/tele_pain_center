@@ -2,47 +2,28 @@ import { db } from "./Firebase/firebase";
 import * as chatActions from "../redux/ChatActions";
 import firebase from "firebase/app";
 
-export const GetUser = async (uid) => {
-  const usersRef = db.collection("users");
-  let data = {};
-  try {
-    const snapshot = await usersRef.doc(uid).get();
-    data = snapshot.data();
-    return data.username;
-  } catch (err) {}
-};
+import { requestWithToken } from "./apiService";
 
-export const GetGroups = async (dispatch, uid) => {
-  const groupsRef = db.collection("groups");
-  let groups = {};
-
-  console.log({ uid });
+export const GetGroups = async (dispatch) => {
   try {
-    const groupsSnapShot = await groupsRef
-      .where("users", "array-contains-any", [uid])
-      .orderBy("timestamp", "desc")
-      .get();
-    groupsSnapShot.forEach(async (doc) => {
-      const users = {};
-      for (const uid of doc.data().users) {
-        users[uid] = await GetUser(uid);
-      }
-      groups[doc.id] = { users, _id: doc.id, data: doc.data() };
-      chatActions.fetchGroups(dispatch, groups);
+    const data = await requestWithToken({
+      url: "groups",
+      method: "GET",
     });
+    console.log({ data });
+    chatActions.fetchGroups(dispatch, data.groups);
   } catch (err) {
     console.log("Group not retrieved:", err);
   }
-
-  return groups;
 };
 
-export const SetCurGroup = (dispatch, curGroupId) => {
+export const SetCurGroup = async (dispatch, curGroupId) => {
   chatActions.fetchCurGroup(dispatch, curGroupId);
-  var groupRef = db.collection("groups").doc(curGroupId);
   try {
-    groupRef.update({
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    const data = await requestWithToken({
+      url: "groups",
+      method: "PUT",
+      body: JSON.stringify({ curGroupId }),
     });
   } catch (err) {
     console.log("failed to set curGroup on server, ", err);
@@ -50,15 +31,13 @@ export const SetCurGroup = (dispatch, curGroupId) => {
 };
 
 export const CreateGroup = async (dispatch, uid1, uid2) => {
-  console.log({ uid1, uid2 });
-  const groupsRef = db.collection("groups");
   try {
-    const group = {
-      users: [uid1, uid2],
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    };
-    const groupRef = await groupsRef.add(group);
-    chatActions.fetchCurGroup(dispatch, groupRef.id);
+    const data = await requestWithToken({
+      url: "groups",
+      method: "POST",
+      body: JSON.stringify({ uid1, uid2 }),
+    });
+    chatActions.fetchCurGroup(dispatch, data.groupId);
   } catch (err) {
     console.log("Group not created:", err);
   }
