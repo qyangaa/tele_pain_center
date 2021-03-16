@@ -7,6 +7,7 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
     "algoliasearch": "^4.8.5",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "firebase": "^8.2.2",
     "moment": "^2.29.1",
@@ -54,5 +55,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000/"
+  "proxy": "https://us-central1-telepaincenter.cloudfunctions.net/api/"
 }

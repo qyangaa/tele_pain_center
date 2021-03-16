@@ -25,6 +25,11 @@ import { ConfigureStore } from "./redux/configureStore";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { getRrfProps } from "./services/Firebase/firebase";
 
+import axios from "axios";
+
+// axios.defaults.baseURL =
+//   "https://us-central1-telepaincenter.cloudfunctions.net/api";
+
 const store = ConfigureStore();
 
 class App extends Component {

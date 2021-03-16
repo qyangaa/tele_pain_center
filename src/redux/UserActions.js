@@ -1,4 +1,5 @@
 import * as ActionTypes from "./ActionTypes";
+import axios from "axios";
 
 export const fetchCurUser = async (dispatch, data) => {
   dispatch(curUserLoading(true));
@@ -24,3 +25,9 @@ export const removeCurUser = (err) => ({
   type: ActionTypes.REMOVE_CURUSER,
   payload: err,
 });
+
+const setAuthorizationHeader = (token) => {
+  const FBIdToken = `Bearer ${token}`;
+  localStorage.setItem("FBIdToken", FBIdToken);
+  axios.defaults.headers.common["Authorization"] = FBIdToken;
+};

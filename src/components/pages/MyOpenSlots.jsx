@@ -65,7 +65,7 @@ export default function MyOpenSlots() {
                 <td>
                   <input
                     type="checkbox"
-                    checked={selected.has(time.getTime())}
+                    // checked={selected.has(time.getTime())}
                     onChange={(e) => handleSelect(e.target.checked, time)}
                   />
                 </td>

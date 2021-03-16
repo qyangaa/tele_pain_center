@@ -1,16 +1,18 @@
 # Implementation
 
-# Chat
+## Chat
 
 - Add file/ photo
 
 ## Calendar
 
--
+- Bug: select all and deselect all
 
-## Records: File update
+## Records: File upload
 
 ## Live Video
+
+## UserProfile
 
 # Backend
 

@@ -4,6 +4,7 @@ import { db } from "./Firebase/firebase";
 import { useAuth } from "../contexts/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const user = {
   currentUser: null,
@@ -87,7 +88,7 @@ export const createProvider = async ({
 export const login = async ({ email, password }) => {
   //  TODO: check whether logout without cur user is a problem
   logout();
-  await firebase.login({
+  const res = await firebase.login({
     email,
     password,
   });
@@ -95,6 +96,7 @@ export const login = async ({ email, password }) => {
 
 export const logout = async () => {
   await firebase.logout();
+  delete axios.defaults.headers.common["Authorization"];
 };
 
 export function GetCurrentUser() {
