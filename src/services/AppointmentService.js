@@ -1,8 +1,9 @@
-import { db } from "./Firebase/firebase";
 import firebase from "firebase/app";
 
 import { ToastContainer, toast } from "react-toastify";
 import _ from "lodash";
+
+import { requestWithToken } from "./apiService";
 
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
@@ -11,15 +12,10 @@ Date.prototype.addHours = function (h) {
 
 export const getMyOpenSlots = async () => {
   try {
-    const token = await firebase.auth().currentUser.getIdToken();
-    const res = await fetch("provider/opentimeslots", {
+    const data = await requestWithToken({
+      url: "provider/opentimeslots",
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
     });
-    const data = await res.json();
     if (!data) return;
     const timeSlots = data.timeSlots.map((time) => new Date(time));
     return timeSlots;
@@ -30,13 +26,9 @@ export const getMyOpenSlots = async () => {
 
 export const removeSlots = async (timeSlots) => {
   try {
-    const token = await firebase.auth().currentUser.getIdToken();
-    const res = await fetch("provider/opentimeslots", {
+    await requestWithToken({
+      url: "provider/opentimeslots",
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
       body: JSON.stringify(timeSlots),
     });
   } catch (error) {
@@ -51,14 +43,9 @@ export const createAppointment = async ({
   time,
 }) => {
   try {
-    const token = await firebase.auth().currentUser.getIdToken();
-    console.log(time.getTime());
-    const res = await fetch("patient/appointments", {
+    const data = await requestWithToken({
+      url: "/patient/appointments",
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
       body: JSON.stringify({
         providerId,
         providerName,
@@ -66,9 +53,6 @@ export const createAppointment = async ({
         time: time.getTime(),
       }),
     });
-    console.log(res);
-    const data = await res.json();
-    if (res.status == 500) throw new Error(data.error);
     toast.dark("Appointment created successfully ");
   } catch (err) {
     console.log("Failed to create appointment, ", err);
@@ -76,20 +60,33 @@ export const createAppointment = async ({
   }
 };
 
+export const getAppointments = async () => {
+  try {
+    const data = await requestWithToken({
+      url: "/patient/appointments",
+      method: "GET",
+    });
+    if (!data) return;
+    const events = data.events.map((event) => {
+      return {
+        ...event,
+        start: new Date(event.start),
+        end: new Date(event.end),
+      };
+    });
+    return events;
+  } catch (err) {
+    console.log("Failed to get appointments");
+  }
+};
+
 export const cancelAppointment = async (apptId) => {
   try {
-    const token = await firebase.auth().currentUser.getIdToken();
-    const res = await fetch("patient/appointments", {
+    await requestWithToken({
+      url: "/patient/appointments",
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
       body: JSON.stringify({ appointmentId: apptId }),
     });
-    console.log(res);
-    const data = await res.json();
-    if (res.status == 500) throw new Error(data.error);
     toast("Appointment deleted successfully ");
   } catch (err) {
     console.log("Failed to cancel appointment, ", err);
@@ -99,18 +96,11 @@ export const cancelAppointment = async (apptId) => {
 
 export const addTimeSlots = async (props) => {
   try {
-    const token = await firebase.auth().currentUser.getIdToken();
-    const res = await fetch("provider/opentimeslots", {
+    await requestWithToken({
+      url: "provider/opentimeslots",
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
       body: JSON.stringify(props.timeSlots),
     });
-    console.log(res);
-    const data = await res.json();
-    if (res.status == 500) throw new Error(data.error);
     toast("Timeslots added successfully ");
   } catch (err) {
     console.log("Failed to add timeslots, ", err);

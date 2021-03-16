@@ -55,5 +55,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://us-central1-telepaincenter.cloudfunctions.net/api/"
+  "proxy": "http://localhost:5000/telepaincenter/us-central1/api/"
 }

@@ -114,3 +114,6 @@ export const SendMessages = async (dispatch, groupId, uid, text) => {
 
   return;
 };
+
+// Not moving onSnapshot to cloud functions:
+// https://stackoverflow.com/questions/61310444/if-i-implement-onsnapshot-real-time-listener-to-firestore-in-cloud-function-will
