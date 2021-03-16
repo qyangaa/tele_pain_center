@@ -30,7 +30,7 @@ export default function MyOpenSlots() {
   console.log({ selected });
 
   const handleDelete = async () => {
-    await removeSlots(curUid, Array.from(selected));
+    await removeSlots(Array.from(selected));
     const newTimeSlots = timeSlots.filter(
       (time) => !selected.has(time.getTime())
     );

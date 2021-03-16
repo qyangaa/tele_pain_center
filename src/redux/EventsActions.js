@@ -14,10 +14,15 @@ export const fetchEvents = async (dispatch, curUid) => {
       },
     });
     const data = await res.json();
-    console.log({ data });
-    // const events = await getUserAppointment({ curUid });
     if (!data) return;
-    dispatch(addEvents(data.events));
+    const events = data.events.map((event) => {
+      return {
+        ...event,
+        start: new Date(event.start),
+        end: new Date(event.end),
+      };
+    });
+    dispatch(addEvents(events));
   } catch (error) {
     console.log({ error });
   }

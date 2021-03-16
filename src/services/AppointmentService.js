@@ -9,57 +9,36 @@ Date.prototype.addHours = function (h) {
   return this;
 };
 
-export const getMyOpenSlots = async (curUid) => {
-  const providerRef = db.collection("providers").doc(curUid);
+export const getMyOpenSlots = async () => {
   try {
-    const provider = await providerRef.get();
-    if (provider.exists) {
-      const timeSlots = provider.data().availableTimeSlots;
-      return timeSlots
-        .map((time) => new Date(time))
-        .filter((t) => t >= new Date());
-    } else {
-      throw new Error("Appointment doesn't exist");
-    }
+    const token = await firebase.auth().currentUser.getIdToken();
+    const res = await fetch("provider/opentimeslots", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    });
+    const data = await res.json();
+    if (!data) return;
+    const timeSlots = data.timeSlots.map((time) => new Date(time));
+    return timeSlots;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const removeSlot = async (providerId, time) => {
-  const providerRef = db.collection("providers").doc(providerId);
-  const timeStamp = time.getTime();
+export const removeSlots = async (timeSlots) => {
   try {
-    const result = await providerRef.update(
-      {
-        availableTimeSlots: firebase.firestore.FieldValue.arrayRemove(
-          timeStamp
-        ),
+    const token = await firebase.auth().currentUser.getIdToken();
+    const res = await fetch("provider/opentimeslots", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
-      (error) => {
-        console.log(error);
-      }
-    );
-    return result;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const removeSlots = async (providerId, timeSlots) => {
-  const providerRef = db.collection("providers").doc(providerId);
-  try {
-    const result = await providerRef.update(
-      {
-        availableTimeSlots: firebase.firestore.FieldValue.arrayRemove(
-          ...timeSlots
-        ),
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    return result;
+      body: JSON.stringify(timeSlots),
+    });
   } catch (error) {
     console.log(error);
   }
@@ -85,10 +64,6 @@ export const createAppointment = async ({
   console.log({ timeStamp });
 
   try {
-    await appointmentsRef.add(data);
-    const result = await removeSlot(provider._id, time);
-    console.log({ result });
-    console.log(`appoinment added`);
   } catch (err) {
     console.log("Failed to create appointment, ", err);
     toast("Failed to create appointment, ", err);
@@ -96,18 +71,20 @@ export const createAppointment = async ({
 };
 
 export const cancelAppointment = async (apptId) => {
-  const appointmentRef = db.collection("appointments").doc(apptId);
-
   try {
-    const appt = await appointmentRef.get();
-    if (appt.exists) {
-      const providerId = appt.data().providerId;
-      const timeStamp = new Date(appt.data().timeStamp);
-      await addTimeSlot({ curUid: providerId, time: timeStamp });
-      await appointmentRef.delete();
-    } else {
-      throw new Error("Appointment doesn't exist");
-    }
+    const token = await firebase.auth().currentUser.getIdToken();
+    const res = await fetch("patient/appointments", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({ appointmentId: apptId }),
+    });
+    console.log(res);
+    const data = await res.json();
+    if (res.status == 500) throw new Error(data.error);
+    toast("Appointment deleted successfully ");
   } catch (err) {
     console.log("Failed to cancel appointment, ", err);
     toast("Failed to cancel appointment, ", err);
@@ -138,75 +115,23 @@ export const getUserAppointment = async (props) => {
   }
 };
 
-export const addTimeSlot = async (props) => {
-  const curUid = props.curUid;
-  const providerRef = db.collection("providers").doc(curUid);
-  const timeStamp = props.time.getTime();
-  try {
-    const result = await providerRef.update(
-      {
-        availableTimeSlots: firebase.firestore.FieldValue.arrayUnion(timeStamp),
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    console.log({ timeStamp, result });
-    console.log(`timeslot added`);
-  } catch (err) {
-    console.log("Failed to add timeslot, ", err);
-    toast("Failed to add timeslot, ", err);
-  }
-};
-
 export const addTimeSlots = async (props) => {
-  const curUid = props.curUid;
-  const providerRef = db.collection("providers").doc(curUid);
-  const timeSlots = props.timeSlots.map((slot) => slot.getTime());
-  console.log(timeSlots);
   try {
-    const result = await providerRef.update(
-      {
-        availableTimeSlots: firebase.firestore.FieldValue.arrayUnion(
-          ...timeSlots
-        ),
+    const token = await firebase.auth().currentUser.getIdToken();
+    const res = await fetch("provider/opentimeslots", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
       },
-      (error) => {
-        console.log(error);
-      }
-    );
-    console.log({ timeSlots, result });
-    console.log(`timeslots added`);
+      body: JSON.stringify(props.timeSlots),
+    });
+    console.log(res);
+    const data = await res.json();
+    if (res.status == 500) throw new Error(data.error);
+    toast("Timeslots added successfully ");
   } catch (err) {
     console.log("Failed to add timeslots, ", err);
     toast("Failed to add timeslots, ", err);
-  }
-};
-
-// Helper
-
-export const addRandomTimeSlot = async (props) => {
-  const curUid = "1FWDmDooZjdQh1RKojp1e8MOCq82";
-  const providerRef = db.collection("providers").doc(curUid);
-  const timeStamp = new Date(
-    "2021",
-    "02",
-    _.random(1, 30).toString(),
-    _.random(0, 24).toString()
-  ).getTime();
-  try {
-    const result = await providerRef.update(
-      {
-        availableTimeSlots: firebase.firestore.FieldValue.arrayUnion(timeStamp),
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    console.log({ timeStamp, result });
-    console.log(`timeslot added`);
-  } catch (err) {
-    console.log("Failed to add timeslot, ", err);
-    toast("Failed to add timeslot, ", err);
   }
 };
