@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Table } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { getMyOpenSlots, removeSlots } from "../../services/AppointmentService";
@@ -10,24 +10,25 @@ export default function MyOpenSlots() {
   const [timeSlots, setTimeSlots] = useState([]);
   const [selected, setSelected] = useState(new Set());
   const [selectionChanged, setSelectionChanged] = useState(false);
+  const [checked, setChecked] = useState(false);
   const curUid = useSelector((state) => state.firebase.auth.uid);
+  const checkRef = useRef(null);
   useEffect(async () => {
     const newTimeSlots = await getMyOpenSlots(curUid);
     setTimeSlots(newTimeSlots);
   }, [curUid]);
 
-  const handleSelect = (checked, time) => {
-    if (checked) {
-      selected.add(time.getTime());
-      setSelectionChanged(true);
-    } else {
-      selected.delete(time.getTime());
-      setSelectionChanged(true);
-    }
-    setSelectionChanged(false);
-  };
+  useEffect(() => {}, [selectionChanged]);
 
-  console.log({ selected });
+  const handleSelect = (time) => {
+    const curSelected = new Set(selected);
+    if (!selected.has(time.getTime())) {
+      curSelected.add(time.getTime());
+    } else {
+      curSelected.delete(time.getTime());
+    }
+    setSelected(curSelected);
+  };
 
   const handleDelete = async () => {
     await removeSlots(Array.from(selected));
@@ -65,8 +66,8 @@ export default function MyOpenSlots() {
                 <td>
                   <input
                     type="checkbox"
-                    // checked={selected.has(time.getTime())}
-                    onChange={(e) => handleSelect(e.target.checked, time)}
+                    checked={selected.has(time.getTime())}
+                    onClick={() => handleSelect(time)}
                   />
                 </td>
               </tr>
