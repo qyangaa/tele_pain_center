@@ -25,11 +25,6 @@ import { ConfigureStore } from "./redux/configureStore";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { getRrfProps } from "./services/Firebase/firebase";
 
-import axios from "axios";
-
-// axios.defaults.baseURL =
-//   "https://us-central1-telepaincenter.cloudfunctions.net/api";
-
 const store = ConfigureStore();
 
 class App extends Component {
@@ -50,11 +45,8 @@ class App extends Component {
                 <Route path="/chat" component={Chat} />
                 <Route path="/newprovider" component={NewProvider} />
                 <Route path="/registration" component={Registration} />
-                <ProtectedRoute path="/dashboard" component={Dashboard} />
-                <ProtectedRoute
-                  path="/update-profile"
-                  component={UpdateProfile}
-                />
+                <Route path="/dashboard" component={Dashboard} />
+                <Route path="/update-profile" component={UpdateProfile} />
                 <Route path="/forgot-password" component={ForgotPassword} />
                 <Route path="/login" component={Login} />
                 <Route path="/search" component={Providers} />
@@ -62,7 +54,7 @@ class App extends Component {
                 <Route path="/records" component={Records} />
                 <Route path="/myopenslots" component={MyOpenSlots} />
                 <Route path="/not-found" component={NotFound} />
-                <Redirect from="/" exact to="/tracking" />
+                <Redirect from="/" exact to="/search" />
                 <Redirect to="/not-found" />
               </Switch>
             </ReactReduxFirebaseProvider>

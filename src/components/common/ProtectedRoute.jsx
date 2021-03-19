@@ -1,18 +1,15 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function ProtectedRoute({ component: Component, ...rest }) {
-  const { currentUser } = useAuth();
+  const curUid = useSelector((state) => state.firebase.auth.uid);
+  console.log({ curUid });
   return (
     <Route
       {...rest}
       render={(props) => {
-        return currentUser ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/login" />
-        );
+        return curUid ? <Component {...props} /> : <Redirect to="/login" />;
       }}
     />
   );

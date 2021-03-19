@@ -38,7 +38,7 @@ export default function Calendar() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    fetchEvents(dispatch, curUid);
+    if (curUid) fetchEvents(dispatch, curUid);
   }, [curUid]);
 
   const openEventHandler = (event) => {

@@ -26,7 +26,7 @@ const CardItem = (item, smallWindow, button1, button2) => {
               {item.specialty}
             </Card.Subtitle>
             <Card.Text>{item.description}</Card.Text>
-            <Card.Text className="mb-1">{`${item.address1}, ${item.address2},${item.city}, ${item.state}, ${item.zip}`}</Card.Text>
+            <Card.Text className="mb-1">{`${item.address1} ${item.address2},${item.city}, ${item.state}, ${item.zip}`}</Card.Text>
             <Button variant="primary" onClick={button1.onClick(item.uid)}>
               {button1.text}
             </Button>{" "}

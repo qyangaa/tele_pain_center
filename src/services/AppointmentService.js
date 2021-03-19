@@ -29,7 +29,7 @@ export const removeSlots = async (timeSlots) => {
     await requestWithToken({
       url: "provider/opentimeslots",
       method: "DELETE",
-      body: JSON.stringify(timeSlots),
+      body: timeSlots,
     });
   } catch (error) {
     console.log(error);
@@ -46,12 +46,12 @@ export const createAppointment = async ({
     const data = await requestWithToken({
       url: "/patient/appointments",
       method: "POST",
-      body: JSON.stringify({
+      body: {
         providerId,
         providerName,
         patientName: curName,
         time: time.getTime(),
-      }),
+      },
     });
     toast.dark("Appointment created successfully ");
   } catch (err) {
@@ -76,7 +76,7 @@ export const getAppointments = async () => {
     });
     return events;
   } catch (err) {
-    console.log("Failed to get appointments");
+    console.log("Failed to get appointments", err);
   }
 };
 
@@ -85,7 +85,7 @@ export const cancelAppointment = async (apptId) => {
     await requestWithToken({
       url: "/patient/appointments",
       method: "DELETE",
-      body: JSON.stringify({ appointmentId: apptId }),
+      body: { appointmentId: apptId },
     });
     toast("Appointment deleted successfully ");
   } catch (err) {
@@ -99,7 +99,7 @@ export const addTimeSlots = async (props) => {
     await requestWithToken({
       url: "provider/opentimeslots",
       method: "POST",
-      body: JSON.stringify(props.timeSlots),
+      body: props.timeSlots,
     });
     toast("Timeslots added successfully ");
   } catch (err) {

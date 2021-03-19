@@ -1,23 +1,30 @@
 # Implementation
 
+## Bugs?
+
+- Redux (firebase auth) refreshes everytime we change page, auth state not persisting
+
 ## Chat
 
 - Add file/ photo
 
 ## Calendar
 
-- Bug: select all and deselect all
+## Records:
 
-## Records: File upload
+- View file list
+- File upload
 
 ## Live Video
 
 ## UserProfile
 
+- View user profile
+- Change profile image
+- Update profile
+
 # Backend
 
-- Firebase rules
-- Move Database calls in services to backend
 - Write cloud functions to write update to algolia
 
 # Refactor

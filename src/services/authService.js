@@ -96,16 +96,4 @@ export const login = async ({ email, password }) => {
 
 export const logout = async () => {
   await firebase.logout();
-  delete axios.defaults.headers.common["Authorization"];
-};
-
-export function GetCurrentUser() {
-  console.log("useAuth:", useAuth);
-  const { currentUser } = useAuth();
-  user = { user: currentUser };
-}
-
-export default {
-  GetCurrentUser,
-  user,
 };

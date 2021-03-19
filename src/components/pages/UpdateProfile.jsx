@@ -1,96 +1,157 @@
 import React, { useRef, useState } from "react";
-import { Card, Button, Form, Container, Alert } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { Card, Button, Image, Col, Row, Table, Form } from "react-bootstrap";
+import { updateUserProfile } from "../../services/userService";
+import { ToastContainer, toast } from "react-toastify";
 
-export default function UpdateProfile() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
-  const { currentUser, updateEmail, updatePassword } = useAuth();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const history = useHistory();
+export default function UpdateProfile({ currentUser, onClose }) {
+  const nameRef = useRef();
+  const address1Ref = useRef();
+  const address2Ref = useRef();
+  const cityRef = useRef();
+  const stateRef = useRef();
+  const zipRef = useRef();
+  const birthDateRef = useRef();
+  const sexRef = useRef();
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Password do not match");
-    }
-    setLoading(true);
-    setError("");
-    const promises = [];
-    const newEmail = emailRef.current.value;
-    const newPassword = passwordRef.current.value;
-    if (newEmail != currentUser.email) {
-      promises.push(updateEmail(newEmail));
-    }
-    if (newPassword && newPassword != currentUser.password) {
-      promises.push(updatePassword(newPassword));
-    }
+    currentUser.username = nameRef.current.value;
+    currentUser.address1 = address1Ref.current.value;
+    currentUser.address2 = address2Ref.current.value;
+    currentUser.city = cityRef.current.value;
+    currentUser.state = stateRef.current.value;
+    currentUser.zip = zipRef.current.value;
+    currentUser.birthDate = new Date(birthDateRef.current.value).getTime();
+    currentUser.sex = sexRef.current.value;
+    try {
+      await updateUserProfile(currentUser);
 
-    Promise.all(promises)
-      .then(() => {
-        //successful
-        setLoading(false);
-        setError("");
-        history.push("/");
-      })
-      .catch(() => {
-        //error
-        setError("Failed to create an account");
-        setError("");
-        setLoading(false);
-      })
-      .finally(() => {});
-  }
+      toast.dark("Profile updated successfully");
+      onClose();
+    } catch (error) {
+      console.log(error);
+      toast.dark("Something went wrong, please try again");
+    }
+  };
 
-  return (
-    <Container
-      className="d-flex align-items-center justify-content-center"
-      stype={{ minHeight: "100vh" }}
-    >
-      <div className="w-100" style={{ maxWidth: "400px" }}>
-        <Card>
-          <Card.Body>
-            <h2 className="text-center mb-4">Update Profile</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-              <Form.Group id="email">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  ref={emailRef}
-                  required
-                  defaultValue={currentUser.email}
-                />
-              </Form.Group>
-              <Form.Group id="password">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  ref={passwordRef}
-                  placeholder="Leave blank to keep the same"
-                />
-              </Form.Group>
-              <Form.Group id="password-confirm">
-                <Form.Label>Password Confirmation</Form.Label>
-                <Form.Control
-                  type="password"
-                  ref={passwordConfirmRef}
-                  placeholder="Leave blank to keep the same"
-                />
-              </Form.Group>
-              <Button disabled={loading} className="w-100" type="submit">
-                Update
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-        <div className="w-100 text-center mt-2">
-          <Link to="/"> Cancel </Link>
-        </div>
-      </div>
-    </Container>
-  );
+  const renderProfile = () => {
+    return (
+      <Card className="horizontal_card">
+        <Row className="align-items-center">
+          <Col xs={0} md={4} lg={3} style={{ margin: 20 }}>
+            <div>
+              <Image
+                src={currentUser.image}
+                className="profile_img"
+                style={{ alignSelf: "center" }}
+              />
+            </div>
+          </Col>
+          <Col>
+            <Card.Body>
+              <Form onSubmit={handleSubmit}>
+                <Card.Title>Update Profile</Card.Title>
+                <Table striped borderless hover>
+                  <tbody>
+                    <tr>
+                      <td>Name</td>
+                      <td>
+                        <input
+                          type="text"
+                          defaultValue={currentUser.username}
+                          ref={nameRef}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Address 1</td>
+                      <td>
+                        <input
+                          type="text"
+                          defaultValue={currentUser.address1}
+                          ref={address1Ref}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Address 2</td>
+                      <td>
+                        <input
+                          type="text"
+                          defaultValue={currentUser.address2}
+                          ref={address2Ref}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>City</td>
+                      <td>
+                        <input
+                          type="text"
+                          defaultValue={currentUser.city}
+                          ref={cityRef}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>State</td>
+                      <td>
+                        <input
+                          type="text"
+                          defaultValue={currentUser.state}
+                          ref={stateRef}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Zip code</td>
+                      <td>
+                        <input
+                          type="number"
+                          defaultValue={currentUser.zip}
+                          ref={zipRef}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Birthdate</td>
+                      <td>
+                        <input
+                          type="date"
+                          defaultValue={
+                            new Date(parseInt(currentUser.birthDate))
+                              .toISOString()
+                              .split("T")[0]
+                          }
+                          ref={birthDateRef}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Sex</td>
+                      <td>
+                        <input
+                          type="text"
+                          defaultValue={currentUser.sex}
+                          ref={sexRef}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+                <Button variant="primary" onClick={onClose}>
+                  Cancel
+                </Button>
+              </Form>
+            </Card.Body>
+          </Col>
+        </Row>
+      </Card>
+    );
+  };
+
+  return <>{renderProfile()} </>;
 }

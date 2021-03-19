@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 
 export const requestWithToken = async ({ url, method, body }) => {
   try {
+    if (body) body = JSON.stringify(body);
     const token = await firebase.auth().currentUser.getIdToken();
     const res = await fetch(url, {
       method: method,

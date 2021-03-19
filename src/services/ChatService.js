@@ -23,7 +23,7 @@ export const SetCurGroup = async (dispatch, curGroupId) => {
     const data = await requestWithToken({
       url: "groups",
       method: "PUT",
-      body: JSON.stringify({ curGroupId }),
+      body: { curGroupId },
     });
   } catch (err) {
     console.log("failed to set curGroup on server, ", err);
@@ -35,7 +35,7 @@ export const CreateGroup = async (dispatch, uid1, uid2) => {
     const data = await requestWithToken({
       url: "groups",
       method: "POST",
-      body: JSON.stringify({ uid1, uid2 }),
+      body: { uid1, uid2 },
     });
     chatActions.fetchCurGroup(dispatch, data.groupId);
   } catch (err) {
