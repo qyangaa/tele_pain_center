@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, Image, Col, Row, Table } from "react-bootstrap";
+import {
+  Card,
+  Button,
+  Image,
+  Col,
+  Row,
+  Table,
+  Tabs,
+  Tab,
+} from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import UpdateProfile from "./UpdateProfile";
+import UploadRecord from "./providerPages/UploadRecord";
 import { logout } from "../../services/authService";
 import { getUserProfile } from "../../services/userService";
+import { getFileUrl } from "../../services/recordService";
+import MyPatients from "./providerPages/MyPatients";
+import RecordsList from "./providerPages/RecordsList";
 
 export default function Dashboard() {
   const [error, setError] = useState("");
@@ -12,6 +25,9 @@ export default function Dashboard() {
   const [updating, setUpdating] = useState(false);
   const curUid = useSelector((state) => state.firebase.auth.uid);
   const history = useHistory();
+  const [records, setRecords] = useState([]);
+  const [patient, setPatient] = useState("");
+  const [key, setKey] = useState("Profile");
 
   useEffect(async () => {
     if (curUid) {
@@ -19,6 +35,17 @@ export default function Dashboard() {
       setCurrentUser(user);
     }
   }, [curUid]);
+
+  const handleRecords = (newRecords, patient) => {
+    setRecords(newRecords);
+    setPatient(patient);
+    setKey("Records");
+  };
+
+  const handleOpenFile = async (fileName) => {
+    const url = await getFileUrl(patient.uid, fileName);
+    window.open(url, "_blank");
+  };
 
   const renderProfile = () => {
     return (
@@ -68,20 +95,47 @@ export default function Dashboard() {
     return <div>Loading...</div>;
   };
 
+  const renderRecords = () => {};
+
   return (
     <>
-      {currentUser ? (
-        updating ? (
-          <UpdateProfile
-            currentUser={currentUser}
-            onClose={() => setUpdating(false)}
+      <Tabs id="controlled-tab" activeKey={key} onSelect={(k) => setKey(k)}>
+        <Tab eventKey="Profile" title="Profile">
+          {currentUser ? (
+            updating ? (
+              <UpdateProfile
+                currentUser={currentUser}
+                onClose={() => setUpdating(false)}
+              />
+            ) : (
+              renderProfile()
+            )
+          ) : (
+            renderLoading()
+          )}
+        </Tab>
+        <Tab eventKey="Patients" title="Patients">
+          {currentUser && currentUser.isProvider && (
+            <MyPatients
+              patients={currentUser.myPatients}
+              onGetRecords={handleRecords}
+            />
+          )}
+        </Tab>
+        <Tab eventKey="Records" title="Records">
+          <RecordsList
+            records={records}
+            patientName={patient.name}
+            onOpenFile={handleOpenFile}
           />
-        ) : (
-          renderProfile()
-        )
-      ) : (
-        renderLoading()
-      )}
+        </Tab>
+        <Tab eventKey="Upload" title="Record Upload">
+          <UploadRecord
+            patient={patient}
+            exitRecordUpload={() => setKey("Patients")}
+          />
+        </Tab>
+      </Tabs>
     </>
   );
 }

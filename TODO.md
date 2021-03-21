@@ -12,7 +12,7 @@
 
 ## Records:
 
-- View file list
+- Provider: delete file
 - File upload
 
 ## Live Video
