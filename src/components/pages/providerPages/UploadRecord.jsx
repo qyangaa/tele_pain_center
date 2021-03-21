@@ -27,8 +27,12 @@ export default function UploadRecord({ patient, exitRecordUpload }) {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    if (!systemFileName) {
+      toast.dark("Please upload file first");
+      return;
+    }
+    setLoading(true);
     const record = {};
     record.name = filenameRef.current.value;
     record.type = typeRef.current.value;

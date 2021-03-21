@@ -15,9 +15,10 @@ import UpdateProfile from "./UpdateProfile";
 import UploadRecord from "./providerPages/UploadRecord";
 import { logout } from "../../services/authService";
 import { getUserProfile } from "../../services/userService";
-import { getFileUrl } from "../../services/recordService";
+import { getFileUrl, deleteRecord } from "../../services/recordService";
 import MyPatients from "./providerPages/MyPatients";
 import RecordsList from "./providerPages/RecordsList";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Dashboard() {
   const [error, setError] = useState("");
@@ -45,6 +46,18 @@ export default function Dashboard() {
   const handleOpenFile = async (fileName) => {
     const url = await getFileUrl(patient.uid, fileName);
     window.open(url, "_blank");
+  };
+
+  const handleDeleteRecord = async (recordId) => {
+    try {
+      await deleteRecord(patient.uid, recordId);
+      handleRecords([], "");
+      setKey("Patients");
+      toast.dark("Record deleted successfully");
+    } catch (error) {
+      console.log({ error });
+      toast.dark("Something went wrong, please try again");
+    }
   };
 
   const renderProfile = () => {
@@ -95,8 +108,6 @@ export default function Dashboard() {
     return <div>Loading...</div>;
   };
 
-  const renderRecords = () => {};
-
   return (
     <>
       <Tabs id="controlled-tab" activeKey={key} onSelect={(k) => setKey(k)}>
@@ -127,6 +138,7 @@ export default function Dashboard() {
             records={records}
             patientName={patient.name}
             onOpenFile={handleOpenFile}
+            onDeleteRecord={handleDeleteRecord}
           />
         </Tab>
         <Tab eventKey="Upload" title="Record Upload">

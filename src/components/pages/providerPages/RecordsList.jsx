@@ -2,7 +2,12 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Table } from "react-bootstrap";
 
-export default function RecordsList({ records, patientName, onOpenFile }) {
+export default function RecordsList({
+  records,
+  patientName,
+  onOpenFile,
+  onDeleteRecord,
+}) {
   const curUid = useSelector((state) => state.firebase.auth.uid);
   return (
     <>
@@ -24,7 +29,11 @@ export default function RecordsList({ records, patientName, onOpenFile }) {
               <td>
                 <a onClick={() => onOpenFile(record.fileName)}>Open File</a>
               </td>
-              <td>{curUid === record.creatorId && <a>Delete File</a>}</td>
+              <td>
+                {curUid === record.creatorId && (
+                  <a onClick={() => onDeleteRecord(record.id)}>Delete File</a>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

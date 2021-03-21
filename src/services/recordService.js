@@ -78,7 +78,20 @@ export const uploadRecord = async (patientUid, record) => {
       method: "POST",
       body: record,
     });
-    console.log({ res });
+    return res;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const deleteRecord = async (patientUid, recordId) => {
+  try {
+    const res = await requestWithToken({
+      url: `/records/${patientUid}`,
+      method: "DELETE",
+      body: { recordId },
+    });
     return res;
   } catch (error) {
     console.log(error);
