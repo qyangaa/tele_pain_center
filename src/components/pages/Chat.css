@@ -124,7 +124,7 @@
   font-size: 1.5rem;
 }
 
-.chat form .send-button {
+.chat form .icon-button {
   height: 40px;
   margin: 0px 20px;
   font-size: larger;
@@ -132,7 +132,7 @@
   transition: 0.3s ease;
 }
 
-.chat form .send-button:hover {
+.chat form .icon-button:hover {
   color: var(--fullbg-yellow);
 }
 

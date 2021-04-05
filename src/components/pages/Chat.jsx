@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button, Form, FormControl } from "react-bootstrap";
 import Message from "../common/Message";
 import {
@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { BsDot } from "react-icons/bs";
 import { IoSend } from "react-icons/io5";
+import { AiFillPicture } from "react-icons/ai";
 
 import "./Chat.css";
 
@@ -22,6 +23,9 @@ export default function Chat(props) {
   const curGroup = useSelector((state) => state.curGroup.curGroup);
   const displayName = useSelector((state) => state.firebase.auth.displayname);
   const curUid = useSelector((state) => state.firebase.auth.uid);
+  const fileRef = useRef(null);
+
+  console.log(fileRef);
 
   const [input, setInput] = useState("");
 
@@ -142,11 +146,22 @@ export default function Chat(props) {
                   onChange={(event) => setInput(event.target.value)}
                   className="input-box"
                 />
+                <AiFillPicture
+                  disabled={!input}
+                  onClick={() => fileRef.click()}
+                  className="icon-button"
+                />
+                <input
+                  id="file"
+                  type="file"
+                  ref={fileRef}
+                  style={{ display: "none" }}
+                />
                 <IoSend
                   disabled={!input}
                   type="submit"
                   onClick={sendMessage}
-                  className="send-button"
+                  className="icon-button"
                 />
               </form>
             </div>

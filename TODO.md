@@ -10,18 +10,9 @@
 
 ## Calendar
 
-## Records:
-
-- Provider: delete file
-- File upload
-
 ## Live Video
 
-## UserProfile
-
-- View user profile
-- Change profile image
-- Update profile
+Establish session with user rather than room number
 
 # Backend
 
@@ -37,3 +28,4 @@
 - MyOpenSlots.jsx
 - Toast
 - Modal
+- Video chat
