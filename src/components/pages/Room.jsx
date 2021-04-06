@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Button } from "react-bootstrap";
 import { db } from "../../services/Firebase/firebase";
 import useUserMedia from "../common/useUserMedia";
+import firebase from "firebase/app";
 import { deleteCollection } from "../../services/Firebase/deleteCollection";
 
 const servers = {
@@ -136,13 +137,9 @@ export default function Room({ onClose, event }) {
   console.log({ remoteStream });
 
   const onEndMeeting = async () => {
-    const callDoc = db.collection("calls").doc(event._id);
-    const offerCandidates = callDoc.collection("offerCandidates");
-    const answerCandidates = callDoc.collection("answerCandidates");
-    await deleteCollection(db, offerCandidates);
-    const data = await callDoc.update({
-      offer: db.fieldValue.delete(),
-      answer: db.fieldValue.delete(),
+    const appointmentRef = db.collection("appointments").doc(event._id);
+    const data = await appointmentRef.update({
+      roomId: firebase.firestore.FieldValue.delete(),
     });
     onClose();
   };
