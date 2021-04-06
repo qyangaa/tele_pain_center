@@ -12,7 +12,7 @@
 
 ## Live Video
 
-Establish session with user rather than room number
+Establish session with user rather than room number (use appointment number)
 
 # Backend
 

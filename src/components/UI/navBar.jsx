@@ -20,7 +20,7 @@ const NavBar = ({ user }) => {
           <Nav.Link href="/calendar">Calendar</Nav.Link>
           <Nav.Link href="/Records">Records</Nav.Link>
           <Nav.Link href="/Chat">Chat</Nav.Link>
-          <Nav.Link href="/room">Meeting Room</Nav.Link>
+          <Nav.Link href="/waitingroom">Waiting Room</Nav.Link>
         </Nav>
         <Nav.Link href="/registration" className="icon">
           <RiLoginCircleLine />

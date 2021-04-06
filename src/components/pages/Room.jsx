@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Button } from "react-bootstrap";
 import { db } from "../../services/Firebase/firebase";
 import useUserMedia from "../common/useUserMedia";
+import { deleteCollection } from "../../services/Firebase/deleteCollection";
 
 const servers = {
   iceServers: [
@@ -12,7 +13,7 @@ const servers = {
   iceCandidatePoolSize: 10,
 };
 
-export default function Room() {
+export default function Room({ onClose, event }) {
   const localVideo = useRef();
   const remoteVideo = useRef();
   const callIdRef = useRef("");
@@ -52,7 +53,8 @@ export default function Room() {
     const callDoc = db.collection("calls").doc();
     const offerCandidates = callDoc.collection("offerCandidates");
     const answerCandidates = callDoc.collection("answerCandidates");
-
+    const appointmentRef = db.collection("appointments").doc(event._id);
+    await appointmentRef.update({ roomId: callDoc.id });
     callIdRef.current.value = callDoc.id;
 
     pc.onicecandidate = (event) => {
@@ -92,8 +94,10 @@ export default function Room() {
   };
 
   const handleAnswer = async () => {
-    const callId = callIdRef.current.value.trim();
-    const callDoc = db.collection("calls").doc(callId);
+    const appointmentRef = db.collection("appointments").doc(event._id);
+    const data = (await appointmentRef.get()).data();
+    const roomId = data.roomId;
+    const callDoc = db.collection("calls").doc(roomId);
     const answerCandidates = callDoc.collection("answerCandidates");
     const offerCandidates = callDoc.collection("offerCandidates");
 
@@ -129,8 +133,23 @@ export default function Room() {
     localVideo.current.play();
   };
 
+  console.log({ remoteStream });
+
+  const onEndMeeting = async () => {
+    const callDoc = db.collection("calls").doc(event._id);
+    const offerCandidates = callDoc.collection("offerCandidates");
+    const answerCandidates = callDoc.collection("answerCandidates");
+    await deleteCollection(db, offerCandidates);
+    const data = await callDoc.update({
+      offer: db.fieldValue.delete(),
+      answer: db.fieldValue.delete(),
+    });
+    onClose();
+  };
+
   return (
     <div className="videos">
+      <Button onClick={onEndMeeting}>End meeting</Button>
       <Button onClick={handleCall}>Call</Button>
       <Button onClick={handleAnswer}>Answer</Button>
       <input type="text" ref={callIdRef} />

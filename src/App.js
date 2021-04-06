@@ -13,6 +13,7 @@ import ForgotPassword from "./components/pages/ForgotPassword";
 import NewProvider from "./components/pages/NewProvider";
 import MyOpenSlots from "./components/pages/MyOpenSlots";
 import Room from "./components/pages/Room";
+import WaitingRoom from "./components/pages/WaitingRoom";
 
 import "./App.css";
 import Records from "./components/pages/records";
@@ -45,6 +46,7 @@ class App extends Component {
                 <Route path="/calendar" component={Calendar} />
                 <Route path="/chat" component={Chat} />
                 <Route path="/room" component={Room} />
+                <Route path="/waitingroom" component={WaitingRoom} />
                 <Route path="/newprovider" component={NewProvider} />
                 <Route path="/registration" component={Registration} />
                 <Route path="/dashboard" component={Dashboard} />
