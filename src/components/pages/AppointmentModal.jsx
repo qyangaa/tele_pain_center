@@ -46,7 +46,11 @@ export default function AppointmentModal({ onClose }) {
 
   const handleSubmit = async () => {
     const selectedSlot = getTimeSlot();
-    console.log(selectedSlot.getTime());
+    // console.log(selectedSlot.getTime());
+    if (!selectedSlot) {
+      onClose();
+      return;
+    }
     try {
       await createAppointment({
         providerId: provider._id,

@@ -7,10 +7,11 @@ const MODAL_STYLES = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  background: "#122",
+  background: "var(--dark-bg-color)",
   padding: "50px",
   zIndex: 1000,
   color: "#000",
+  borderRadius: "20px",
 };
 
 const OVERLAY_STYLES = {
@@ -23,13 +24,23 @@ const OVERLAY_STYLES = {
   zIndex: 1000,
 };
 
+const CLOSE_STYLE = {
+  position: "absolute",
+  top: "15px",
+  right: "20px",
+  color: "#FFFFFF",
+};
+
 export default function SimpleModal({ children, onClose }) {
   return ReactDom.createPortal(
     <>
       <div style={OVERLAY_STYLES} />
+
       <div style={MODAL_STYLES}>
-        <div>{children} </div>
-        <Button onClick={onClose}>Close</Button>
+        <div>{children}</div>
+        <a onClick={onClose} style={CLOSE_STYLE}>
+          Close
+        </a>
       </div>
     </>,
     document.getElementById("portal")
