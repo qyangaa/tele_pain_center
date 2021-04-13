@@ -1,0 +1,45 @@
+.room-container {
+  background: var(--light-bg-semitransparent7);
+  margin: 30px auto;
+  width: 90vw;
+  height: 80vh;
+  position: relative;
+  box-shadow: 1px 1px 12px var(--dark-bg-semitransparent);
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+#btn-end-meeting {
+  position: absolute;
+  right: 10px;
+  border: 3px solid var(--dark-text-color-emphasis);
+  color: var(--dark-text-color-emphasis);
+}
+
+.video-container {
+  position: relative;
+  width: 80vw;
+  height: 60vh;
+  align-self: center;
+  /* margin: auto auto; */
+}
+
+video#remoteVideo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 80vw;
+  height: 60vh;
+  background-color: black;
+  border: 5px solid var(--light-text-color-focus);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+video#localVideo {
+  position: absolute;
+  max-width: 20%;
+  right: 20px;
+  bottom: 20px;
+}

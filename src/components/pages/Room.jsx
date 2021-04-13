@@ -3,7 +3,8 @@ import { Button } from "react-bootstrap";
 import { db } from "../../services/Firebase/firebase";
 import useUserMedia from "../common/useUserMedia";
 import firebase from "firebase/app";
-import { deleteCollection } from "../../services/Firebase/deleteCollection";
+import "./Room.css";
+import { FusionTablesLayer } from "react-google-maps";
 
 const servers = {
   iceServers: [
@@ -17,14 +18,20 @@ const servers = {
 export default function Room({ onClose, event }) {
   const localVideo = useRef();
   const remoteVideo = useRef();
-  const callIdRef = useRef("");
+  const [remoteStream, setRemoteStream] = useState(new MediaStream());
   const localStream = useUserMedia({
     video: true,
     audio: true,
   });
-  const [remoteStream, setRemoteStream] = useState(new MediaStream());
 
   let pc = new RTCPeerConnection(servers);
+
+  pc.ontrack = (event) => {
+    event.streams[0].getTracks().forEach((track) => {
+      remoteStream.addTrack(track);
+    });
+    remoteVideo.current.srcObject = remoteStream;
+  };
 
   if (localStream && localVideo.current && !localVideo.current.srcObject) {
     localVideo.current.srcObject = localStream;
@@ -32,7 +39,6 @@ export default function Room({ onClose, event }) {
 
     localStream.getTracks().forEach((track) => {
       pc.addTrack(track, localStream);
-      console.log({ track });
     });
   }
 
@@ -40,25 +46,29 @@ export default function Room({ onClose, event }) {
     remoteVideo.current.srcObject = remoteStream;
   }
 
-  pc.ontrack = (event) => {
-    console.log({ event });
-    event.streams[0].getTracks().forEach((track) => {
-      remoteStream.addTrack(track);
-    });
-    // setRemoteStream(new MediaStream());
-    console.log({ remoteStream });
-    remoteVideo.current.srcObject = remoteStream;
+  useEffect(async () => {
+    if (localStream) await enterRoom();
+    return () => {
+      onEndMeeting();
+    };
+  }, [localStream]);
+
+  const enterRoom = async () => {
+    const appointmentRef = db.collection("appointments").doc(event._id);
+    const doc = await appointmentRef.get();
+    if (doc.data().roomId) await handleAnswer(doc.data().roomId);
+    else await handleCall(appointmentRef);
   };
 
-  const handleCall = async () => {
+  const handleCall = async (appointmentRef) => {
+    // console.log("handleCall");
     const callDoc = db.collection("calls").doc();
     const offerCandidates = callDoc.collection("offerCandidates");
     const answerCandidates = callDoc.collection("answerCandidates");
-    const appointmentRef = db.collection("appointments").doc(event._id);
     await appointmentRef.update({ roomId: callDoc.id });
-    callIdRef.current.value = callDoc.id;
 
     pc.onicecandidate = (event) => {
+      // console.log("adding candidates");
       event.candidate && offerCandidates.add(event.candidate.toJSON());
     };
 
@@ -71,13 +81,13 @@ export default function Room({ onClose, event }) {
       type: offerDescription.type,
     };
 
-    await callDoc.set({ offer });
+    await callDoc.set({ ...event, offer });
 
     callDoc.onSnapshot(async (snapshot) => {
-      console.log("Got updated room:", snapshot.data());
+      // console.log("Got updated room:", snapshot.data());
       const data = snapshot.data();
       if (!pc.currentRemoteDescription && data?.answer) {
-        console.log("Set remote description: ", data.answer);
+        // console.log("Set remote description: ", data.answer);
         const anserDescription = new RTCSessionDescription(data.answer);
         await pc.setRemoteDescription(anserDescription);
       }
@@ -86,7 +96,7 @@ export default function Room({ onClose, event }) {
     answerCandidates.onSnapshot((snapshot) => {
       snapshot.docChanges().forEach(async (change) => {
         if (change.type === "added") {
-          console.log("Got answer:", change.doc.data());
+          // console.log("Got answer:", change.doc.data());
           const candidate = new RTCIceCandidate(change.doc.data());
           await pc.addIceCandidate(candidate);
         }
@@ -94,10 +104,8 @@ export default function Room({ onClose, event }) {
     });
   };
 
-  const handleAnswer = async () => {
-    const appointmentRef = db.collection("appointments").doc(event._id);
-    const data = (await appointmentRef.get()).data();
-    const roomId = data.roomId;
+  const handleAnswer = async (roomId) => {
+    // console.log("handleAnswer", { roomId });
     const callDoc = db.collection("calls").doc(roomId);
     const answerCandidates = callDoc.collection("answerCandidates");
     const offerCandidates = callDoc.collection("offerCandidates");
@@ -134,8 +142,6 @@ export default function Room({ onClose, event }) {
     localVideo.current.play();
   };
 
-  console.log({ remoteStream });
-
   const onEndMeeting = async () => {
     const appointmentRef = db.collection("appointments").doc(event._id);
     const data = await appointmentRef.update({
@@ -145,24 +151,28 @@ export default function Room({ onClose, event }) {
   };
 
   return (
-    <div className="videos">
-      <Button onClick={onEndMeeting}>End meeting</Button>
-      <Button onClick={handleCall}>Call</Button>
-      <Button onClick={handleAnswer}>Answer</Button>
-      <input type="text" ref={callIdRef} />
-      <span>
-        <h3>Local Stream</h3>
-        <video
-          id="localVideo"
-          ref={localVideo}
-          onCanPlay={handleCanPlay}
-          playsInline
-        ></video>
-      </span>
-      <span>
-        <h3>Remote Stream</h3>
-        <video id="remoteVideo" ref={remoteVideo} autoPlay playsInline></video>
-      </span>
+    <div>
+      {/* <Button onClick={handleCall}>Call</Button>
+      <Button onClick={handleAnswer}>Answer</Button> */}
+      <div className="room-container">
+        <Button onClick={onEndMeeting} id="btn-end-meeting">
+          End meeting
+        </Button>
+        <div className="video-container">
+          <video
+            id="remoteVideo"
+            ref={remoteVideo}
+            autoPlay
+            playsInline
+          ></video>
+          <video
+            id="localVideo"
+            ref={localVideo}
+            onCanPlay={handleCanPlay}
+            playsInline
+          ></video>
+        </div>
+      </div>
     </div>
   );
 }
