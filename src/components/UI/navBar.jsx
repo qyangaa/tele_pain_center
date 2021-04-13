@@ -8,7 +8,7 @@ import { RiLoginCircleLine, RiMedicineBottleFill } from "react-icons/ri";
 const NavBar = ({ user }) => {
   return (
     <Navbar expand="lg">
-      <Navbar.Brand href="#home">
+      <Navbar.Brand href="/dashboard">
         <RiMedicineBottleFill />
         Tele Pain Center
       </Navbar.Brand>
