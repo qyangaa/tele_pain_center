@@ -22,7 +22,7 @@ export default function WaitingRoom() {
         {isRoomOpen ? (
           <Room onClose={handleCloseRoom} event={nextEvent} />
         ) : (
-          <div>
+          <div className="general">
             <h1>Your next appointment with {nextEvent.title}</h1>
             <Button onClick={() => setIsRoomOpen(true)}> Enter Room </Button>
           </div>
@@ -32,10 +32,16 @@ export default function WaitingRoom() {
   };
 
   const renderNoEvent = () => {
-    return <h1>You have no upcoming appointment!</h1>;
+    return;
+    <div className="general">
+      <h1>You have no upcoming appointment!</h1>;
+    </div>;
   };
   const renderLoading = () => {
-    return <h1>Retrieving appointments</h1>;
+    return;
+    <div className="general">
+      <h1>Retrieving appointments</h1>;
+    </div>;
   };
 
   return (

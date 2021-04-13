@@ -34,6 +34,9 @@ export default function Dashboard() {
     if (curUid) {
       const user = await getUserProfile();
       setCurrentUser(user);
+      if (!user.isProvider) {
+        setPatient({ name: "You", uid: curUid });
+      }
     }
   }, [curUid]);
 
@@ -125,28 +128,32 @@ export default function Dashboard() {
             renderLoading()
           )}
         </Tab>
-        <Tab eventKey="Patients" title="Patients">
-          {currentUser && currentUser.isProvider && (
+        {currentUser && currentUser.isProvider && (
+          <Tab eventKey="Patients" title="Patients">
             <MyPatients
               patients={currentUser.myPatients}
               onGetRecords={handleRecords}
             />
-          )}
-        </Tab>
-        <Tab eventKey="Records" title="Records">
-          <RecordsList
-            records={records}
-            patientName={patient.name}
-            onOpenFile={handleOpenFile}
-            onDeleteRecord={handleDeleteRecord}
-          />
-        </Tab>
-        <Tab eventKey="Upload" title="Record Upload">
-          <UploadRecord
-            patient={patient}
-            exitRecordUpload={() => setKey("Patients")}
-          />
-        </Tab>
+          </Tab>
+        )}
+        {patient && (
+          <Tab eventKey="Records" title="Records">
+            <RecordsList
+              records={records}
+              patientName={patient.name}
+              onOpenFile={handleOpenFile}
+              onDeleteRecord={handleDeleteRecord}
+            />
+          </Tab>
+        )}
+        {patient && (
+          <Tab eventKey="Upload" title="Record Upload">
+            <UploadRecord
+              patient={patient}
+              exitRecordUpload={() => setKey("Patients")}
+            />
+          </Tab>
+        )}
       </Tabs>
     </>
   );

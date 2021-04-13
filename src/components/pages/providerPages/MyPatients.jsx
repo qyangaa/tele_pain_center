@@ -8,29 +8,27 @@ export default function MyPatients({ patients, onGetRecords }) {
     onGetRecords(records, patient);
   };
   return (
-    <Table striped borderless hover>
-      <thead>
-        <tr>
-          <th>Patients</th>
-        </tr>
-      </thead>
-      <tbody>
-        {patients.map((patient) => (
-          <tr key={patient.uid}>
-            <td>
-              <a className="btn"> {patient.name} </a>
-            </td>
-            <td>
-              <a className="btn" onClick={() => getPatientRecords(patient)}>
-                Records
-              </a>
-            </td>
-            <td>
-              <a className="btn"> Add File </a>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+    <div className="general">
+      <h1>My Patients</h1>
+      <Table striped borderless hover>
+        <tbody>
+          {patients.map((patient) => (
+            <tr key={patient.uid}>
+              <td>
+                <a className="btn"> {patient.name} </a>
+              </td>
+              <td>
+                <a className="btn" onClick={() => getPatientRecords(patient)}>
+                  Records
+                </a>
+              </td>
+              <td>
+                <a className="btn"> Add File </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </div>
   );
 }

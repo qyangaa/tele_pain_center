@@ -55,7 +55,7 @@ class App extends Component {
                 <Route path="/login" component={Login} />
                 <Route path="/search" component={Providers} />
                 <Route path="/tracking" component={Tracking} />
-                <Route path="/records" component={Records} />
+                {/* <Route path="/records" component={Records} /> */}
                 <Route path="/myopenslots" component={MyOpenSlots} />
                 <Route path="/not-found" component={NotFound} />
                 <Redirect from="/" exact to="/search" />

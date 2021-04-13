@@ -10,8 +10,8 @@ export default function RecordsList({
 }) {
   const curUid = useSelector((state) => state.firebase.auth.uid);
   return (
-    <>
-      <h3>Records of Patient {patientName}</h3>
+    <div className="general">
+      <h1>Medical Records of {patientName}</h1>
       <Table striped borderless hover>
         <thead>
           <tr>
@@ -38,6 +38,6 @@ export default function RecordsList({
           ))}
         </tbody>
       </Table>
-    </>
+    </div>
   );
 }

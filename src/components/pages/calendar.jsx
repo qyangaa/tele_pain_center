@@ -6,6 +6,7 @@ import { Button } from "react-bootstrap";
 import * as BigCalendar from "react-big-calendar";
 import moment from "moment";
 import { fetchEvents, selectEvent } from "../../redux/EventsActions";
+import { getUserProfile } from "../../services/userService";
 import {
   cancelAppointment,
   addTimeSlots,
@@ -29,6 +30,7 @@ export default function Calendar() {
   const history = useHistory();
   const eventsState = useSelector((state) => state.eventsState);
   const curUid = useSelector((state) => state.firebase.auth.uid);
+  const [isProvider, setIsProvider] = useState(false);
   const [selectedSlots, setSelectedSlots] = useState(null);
   const [selectedDates, setSelectedDates] = useState(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
@@ -37,8 +39,12 @@ export default function Calendar() {
   const [workingHours, setWorkingHours] = useState({ start: 9, end: 18 });
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (curUid) fetchEvents(dispatch, curUid);
+  useEffect(async () => {
+    if (curUid) {
+      await fetchEvents(dispatch, curUid);
+      const user = await getUserProfile();
+      setIsProvider(user.isProvider);
+    }
   }, [curUid]);
 
   const openEventHandler = (event) => {
@@ -151,9 +157,11 @@ export default function Calendar() {
           <Button onClick={() => setIsTimeSlotsModalOpen(false)}>Cancel</Button>
         </SimpleModal>
       )}
-      <Button onClick={() => history.push("/myopenslots")}>
-        My Open Time Slots
-      </Button>
+      {isProvider && (
+        <Button onClick={() => history.push("/myopenslots")}>
+          My Open Time Slots
+        </Button>
+      )}
     </div>
   );
 }
