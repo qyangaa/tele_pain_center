@@ -151,9 +151,8 @@ export default function Room({ onClose, event }) {
   };
 
   return (
-    <div>
-      {/* <Button onClick={handleCall}>Call</Button>
-      <Button onClick={handleAnswer}>Answer</Button> */}
+    <div className="general">
+      <h1>Meeting room: {event.title}</h1>
       <div className="room-container">
         <Button onClick={onEndMeeting} id="btn-end-meeting">
           End meeting
