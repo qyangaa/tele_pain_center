@@ -106,11 +106,11 @@ export default function Calendar() {
     setIsTimeSlotsModalOpen(true);
   };
 
-  return (
+  const renderCalendar = () => (
     <div>
       <BigCalendar.Calendar
         localizer={localizer}
-        events={eventsState.events}
+        events={eventsState.events ? eventsState.events : []}
         startAccessor="start"
         endAccessor="end"
         selectable
@@ -164,4 +164,6 @@ export default function Calendar() {
       )}
     </div>
   );
+
+  return <>{renderCalendar()} </>;
 }

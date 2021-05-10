@@ -17,10 +17,11 @@ export const createNewUser = async ({ email, password, username }) => {
   try {
     await firebase
       .createUser({ email, password }, { username, email })
-      .then(function (data) {
+      .then(async function (data) {
         uid = data.user.uid;
-        usersRef.doc(data.user.uid).set({
+        await usersRef.doc(data.user.uid).set({
           username: username,
+          isProvider: false,
         });
       })
       .catch(function (err) {

@@ -32,23 +32,25 @@ export default function WaitingRoom() {
   };
 
   const renderNoEvent = () => {
-    return;
-    <div className="general">
-      <h1>You have no upcoming appointment!</h1>;
-    </div>;
+    return (
+      <div className="general">
+        <h1>You have no upcoming appointment!</h1>
+      </div>
+    );
   };
   const renderLoading = () => {
-    return;
-    <div className="general">
-      <h1>Retrieving appointments</h1>;
-    </div>;
+    return (
+      <div className="general">
+        <h1>Retrieving appointments</h1>;
+      </div>
+    );
   };
 
   return (
     <div>
       {eventsState.isLoading
         ? renderLoading()
-        : eventsState.events.length === 0
+        : !eventsState.events || eventsState.events.length === 0
         ? renderNoEvent()
         : renderEvent()}
     </div>

@@ -18,7 +18,7 @@ export const getRecords = async (patientUid) => {
 export const updateUserProfile = async (user, image) => {
   try {
     const data = await requestWithToken({
-      url: "/patient/profile",
+      url: "patient/profile",
       method: "PUT",
       body: user,
     });
@@ -26,7 +26,7 @@ export const updateUserProfile = async (user, image) => {
       const formData = new FormData();
       formData.append("file", image);
       const imageData = await fileRequestWithToken({
-        url: "/user/image",
+        url: "user/image",
         method: "post",
         body: formData,
       });
@@ -60,7 +60,7 @@ export const uploadRecordFile = async (patientUid, file) => {
     const formData = new FormData();
     formData.append("file", file);
     const fileData = await fileRequestWithToken({
-      url: `/file/${patientUid}`,
+      url: `file/${patientUid}`,
       method: "POST",
       body: formData,
     });
@@ -88,7 +88,7 @@ export const uploadRecord = async (patientUid, record) => {
 export const deleteRecord = async (patientUid, recordId) => {
   try {
     const res = await requestWithToken({
-      url: `/records/${patientUid}`,
+      url: `records/${patientUid}`,
       method: "DELETE",
       body: { recordId },
     });

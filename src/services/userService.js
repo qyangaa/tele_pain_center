@@ -17,7 +17,7 @@ export const getUserProfile = async () => {
 export const updateUserProfile = async (user, image) => {
   try {
     const data = await requestWithToken({
-      url: "/patient/profile",
+      url: "patient/profile",
       method: "PUT",
       body: user,
     });
@@ -25,7 +25,7 @@ export const updateUserProfile = async (user, image) => {
       const formData = new FormData();
       formData.append("file", image);
       const imageData = await fileRequestWithToken({
-        url: "/user/image",
+        url: "user/image",
         method: "post",
         body: formData,
       });

@@ -44,7 +44,7 @@ export const createAppointment = async ({
 }) => {
   try {
     const data = await requestWithToken({
-      url: "/patient/appointments",
+      url: "patient/appointments",
       method: "POST",
       body: {
         providerId,
@@ -63,10 +63,9 @@ export const createAppointment = async ({
 export const getAppointments = async () => {
   try {
     const data = await requestWithToken({
-      url: "/patient/appointments",
+      url: "patient/appointments",
       method: "GET",
     });
-    if (!data) return;
     const events = data.events.map((event) => {
       return {
         ...event,
@@ -83,7 +82,7 @@ export const getAppointments = async () => {
 export const cancelAppointment = async (apptId) => {
   try {
     await requestWithToken({
-      url: "/patient/appointments",
+      url: "patient/appointments",
       method: "DELETE",
       body: { appointmentId: apptId },
     });
