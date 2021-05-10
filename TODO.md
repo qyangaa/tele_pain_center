@@ -1,26 +1,8 @@
-# Implementation
-
-## Bugs?
-
-- Redux (firebase auth) refreshes everytime we change page, auth state not persisting
-
-## Chat
-
-- Add file/ photo
-
-## Calendar
-
-## Live Video
-
-Establish session with user rather than room number (use appointment number)
+add entry for patient to open access for provider
 
 # Backend
 
 - Write cloud functions to write update to algolia
-
-# Refactor
-
-- Provider.jsx is too big
 
 # Styling
 

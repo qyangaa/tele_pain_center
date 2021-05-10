@@ -13,8 +13,9 @@ export const searchAlgolia = async (query, dispatch) => {
   try {
     const searchResults = await index.search(query);
 
-    searchResults.hits.forEach((hit) => {
+    searchResults.hits.forEach((hit, index) => {
       hit._id = hit.uid;
+      hit.index = index;
     });
     providerActions.fetchProviders(dispatch, {
       providers: searchResults.hits,
