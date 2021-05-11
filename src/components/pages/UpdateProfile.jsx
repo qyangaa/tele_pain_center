@@ -140,6 +140,7 @@ export default function UpdateProfile({ currentUser, onClose }) {
                         <input
                           type="date"
                           defaultValue={
+                            currentUser.birthdate &&
                             new Date(parseInt(currentUser.birthDate))
                               .toISOString()
                               .split("T")[0]

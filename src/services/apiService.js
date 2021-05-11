@@ -5,7 +5,6 @@ const server = "https://us-central1-telepaincenter.cloudfunctions.net/api/";
 export const requestWithToken = async ({ url, method, body }) => {
   try {
     if (body) body = JSON.stringify(body);
-    console.log({ url });
     const token = await firebase.auth().currentUser.getIdToken();
     const res = await fetch(server + url, {
       method: method,
@@ -18,7 +17,6 @@ export const requestWithToken = async ({ url, method, body }) => {
     });
     if (res.status == 500) throw new Error("server error");
     const data = await res.json();
-    console.log({ data });
     return data;
   } catch (error) {
     throw error;

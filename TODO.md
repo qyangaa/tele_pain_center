@@ -1,13 +1,12 @@
-add entry for patient to open access for provider
+# Bug fix:
 
-# Backend
+Profile update for patients (birthdate: invalid date)
+Calendar not showing new appointment immediatedly
 
-- Write cloud functions to write update to algolia
+# CI/CD
 
-# Styling
+Set up github workflow for npm installation
 
-- Calendar.jsx
-- MyOpenSlots.jsx
-- Toast
-- Modal
-- Video chat
+# refactor
+
+- clean up imports

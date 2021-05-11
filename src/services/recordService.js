@@ -74,7 +74,7 @@ export const uploadRecordFile = async (patientUid, file) => {
 export const uploadRecord = async (patientUid, record) => {
   try {
     const res = await requestWithToken({
-      url: `/records/${patientUid}`,
+      url: `records/${patientUid}`,
       method: "POST",
       body: record,
     });

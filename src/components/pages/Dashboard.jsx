@@ -15,7 +15,11 @@ import UpdateProfile from "./UpdateProfile";
 import UploadRecord from "./providerPages/UploadRecord";
 import { logout } from "../../services/authService";
 import { getUserProfile } from "../../services/userService";
-import { getFileUrl, deleteRecord } from "../../services/recordService";
+import {
+  getFileUrl,
+  deleteRecord,
+  getRecords,
+} from "../../services/recordService";
 import MyPatients from "./providerPages/MyPatients";
 import RecordsList from "./providerPages/RecordsList";
 import { ToastContainer, toast } from "react-toastify";
@@ -36,13 +40,26 @@ export default function Dashboard() {
       setCurrentUser(user);
       if (!user.isProvider) {
         setPatient({ name: "You", uid: curUid });
+        const curRecords = await getRecords(curUid);
+        setRecords(curRecords);
       }
     }
   }, [curUid]);
 
-  const handleRecords = (newRecords, patient) => {
-    setRecords(newRecords);
-    setPatient(patient);
+  useEffect(async () => {
+    if (currentUser && !currentUser.isProvider) {
+      setPatient({ name: "You", uid: curUid });
+      const curRecords = await getRecords(curUid);
+      setRecords(curRecords);
+      console.log({ records });
+    }
+  }, [curUid, key]);
+
+  const handleRecords = async (newRecords, patient) => {
+    if (currentUser.isProvider) {
+      setRecords(newRecords);
+      setPatient(patient);
+    }
     setKey("Records");
   };
 
@@ -55,7 +72,7 @@ export default function Dashboard() {
     try {
       await deleteRecord(patient.uid, recordId);
       handleRecords([], "");
-      setKey("Patients");
+      setKey(currentUser.isProvider ? "Patients" : "Profile");
       toast.dark("Record deleted successfully");
     } catch (error) {
       console.log({ error });
@@ -83,13 +100,21 @@ export default function Dashboard() {
                 <tbody>
                   <tr>
                     <td>Address</td>
-                    <td>{`${currentUser.address1} ${currentUser.address2},${currentUser.city}, ${currentUser.state}, ${currentUser.zip}`}</td>
+                    <td>{`${currentUser.address1 && currentUser.address1} ${
+                      currentUser.address2 && currentUser.address2
+                    },${currentUser.city && currentUser.city}, ${
+                      currentUser.state && currentUser.state
+                    }, ${currentUser.zip && currentUser.zip}`}</td>
                   </tr>
                   <tr>
                     <td>Birthdate</td>
-                    <td>{`${new Date(
-                      parseInt(currentUser.birthDate)
-                    ).toLocaleDateString()}`}</td>
+                    <td>{`${
+                      !currentUser.birthDate
+                        ? "NA"
+                        : new Date(
+                            parseInt(currentUser.birthDate)
+                          ).toLocaleDateString()
+                    }`}</td>
                   </tr>
                   <tr>
                     <td>Sex</td>
@@ -150,7 +175,9 @@ export default function Dashboard() {
           <Tab eventKey="Upload" title="Record Upload">
             <UploadRecord
               patient={patient}
-              exitRecordUpload={() => setKey("Patients")}
+              exitRecordUpload={() =>
+                setKey(currentUser.isProvider ? "Patients" : "Records")
+              }
             />
           </Tab>
         )}
