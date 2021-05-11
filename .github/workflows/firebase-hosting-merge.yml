@@ -16,6 +16,10 @@ jobs:
       - name: Build
         env:
           CI: false
+          REACT_APP_ALGOLIA_APPID: ${{secrets.REACT_APP_ALGOLIA_APPID}}
+          REACT_APP_ALGOLIA_SEARCH_API_KEY: ${{secrets.REACT_APP_ALGOLIA_SEARCH_API_KEY}}
+          REACT_APP_ALGOLIA_INDEX_NAME: ${{secrets.REACT_APP_ALGOLIA_INDEX_NAME}}
+          REACT_APP_GOOGLE_APIKEY: ${{secrets.REACT_APP_GOOGLE_APIKEY}}
         run: npm run build
       - name: Deploy to firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
